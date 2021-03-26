@@ -1,0 +1,928 @@
+'''
+Union find
+
+* Template:
+class ConnectingGraph:
+    def __init__(self, n):
+        self.father = {}
+        for i in range(n + 1):
+            self.father[i] = i
+
+    def connect(self, a, b):
+        roota, rootb = self.find(a), self.find(b)
+        if roota != rootb:
+            self.father[roota] = rootb
+
+    def query(self, a, b):
+        return self.find(a) == self.find(b)
+
+    def find(self,x):
+        if self.father[x] == x:
+            return x
+
+        self.father[x] = self.find(self.father[x])
+        return self.father[x]
+
+* Trie Tree
+
+from collections import OrderedDict
+class TrieNode:
+    def __init__(self):
+        self.children = OrderedDict()
+        self.isWord = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, word):
+        node = self.root
+        for letter in word:
+            node.children[letter] = node.children.get(letter, TrieNode())
+            node = node.children[letter]
+        node.isWord = True
+
+    def search(self, word):
+        node = self.root
+        for letter in word:
+            if letter not in node.children:
+                return False
+            node = node.children[letter]
+        
+        return node.isWord
+
+    def startsWith(self, prefix):
+        node = self.root
+        for letter in prefix:
+            if letter not in node.children:
+                return False
+            node = node.children[letter]
+        
+        return True
+
+'''
+# 589. 连接图  
+# [2020年11月8日 2021年2月22日]
+# https://www.lintcode.com/problem/connecting-graph/description
+# https://www.jiuzhang.com/solutions/connecting-graph/#tag-lang-python
+class ConnectingGraph:
+    def __init__(self, n):
+        self.father = {}
+        for i in range(n + 1):
+            self.father[i] = i
+
+    def connect(self, a, b):
+        roota, rootb = self.find(a), self.find(b)
+        if roota != rootb:
+            self.father[roota] = rootb
+
+    def query(self, a, b):
+        return self.find(a) == self.find(b)
+
+    def find(self,x):
+        if self.father[x] == x:
+            return x
+
+        self.father[x] = self.find(self.father[x])
+        return self.father[x]
+
+# 590. 连接图 II  
+# [2020年11月9日 2021年2月22日]
+# https://www.lintcode.com/problem/connecting-graph-ii/description
+# https://www.jiuzhang.com/solutions/connecting-graph-ii/#tag-lang-python
+class ConnectingGraph2:
+    """
+    有三处错误： 1） nodenum合并；2）query访问的是根节点的值，而不是当前节点的值；3）find 函数是dfs，需要有返回
+    """
+    def __init__(self, n):
+        self.father  = {}
+        self.nodenum = {}
+        for i in range( n + 1 ):
+            self.father[i] = i
+            self.nodenum[i] = 1 # `self.nodenum = 1`
+
+    def connect(self, a, b):
+        root_a, root_b = self.find(a), self.find(b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
+            self.nodenum[root_b] += self.nodenum[root_a]
+            # self.nodenum[root_b] += 1
+
+    def query(self, a):
+        """
+        return: 图中含 a 的联通区域内节点个数
+        """
+        return self.nodenum[self.find(a)]
+
+    def find(self,x):
+        if self.father[x] == x:
+            return x
+        
+        self.father[x] = self.find( self.father[x] )
+        return self.father[x]
+
+    def find2(self,x):
+        x2 = x
+        if self.father[x] == x:
+            return x
+        while self.father[x] != x:
+            x = self.father[x]
+
+        while x2 != x:
+            temp = self.father[x2]
+            self.father[x2] = x
+            x2 = temp
+        return x
+
+
+# 591. 连接图 III 
+# [2020年11月9日 2021年2月22日]
+# https://www.lintcode.com/problem/connecting-graph-iii/description
+# https://www.jiuzhang.com/solutions/connecting-graph-iii/#tag-lang-python
+class ConnectingGraph3:
+    def __init__(self, n):
+        self.father = {}
+        self.count = n
+        for i in range(n+1):
+            self.father[ i ] = i
+    
+    def connect(self, a, b):
+        root_a, root_b = self.find(a), self.find(b)
+        if root_a  != root_b:
+            self.father[root_a] = root_b
+            # self.father[root_a] = self.father[root_b]
+            self.count -= 1
+   
+    def query(self):
+        """
+        return: 图中联通区域个数
+        """
+        return self.count
+
+    def find(self,x):
+        if self.father[x] == x:
+            return x
+        
+        self.father[x] = self.find( self.father[x] )
+        return self.father[x]
+
+
+# 433/200. 岛屿的个数 # TODO: DFS
+# [2020年11月9日 2021年2月22日]
+# https://www.lintcode.com/problem/number-of-islands/; https://leetcode-cn.com/problems/number-of-islands/
+# https://www.jiuzhang.com/solutions/number-of-islands/#tag-lang-python
+# version: Union find
+class Solution:
+    def __init__(self):
+        self.ans = 0
+        self.father = {}
+
+    def numIslands(self, grid):
+        if not grid or not grid[0]: return 0
+
+        n, m = len(grid), len(grid[0])
+
+        for i in range(n):
+            for j in range(m):
+                self.father[i*m +j] = i*m +j
+                if grid[i][j]:
+                    self.ans += 1
+
+        for i in range(n):
+            for j in range(m):
+                if grid[i][j]:
+                    if i + 1 < n and grid[i+1][j]:
+                        self.connect( i*m + j, (i+1)*m + j )
+                    if j +1 < m and grid[i][j+1]:
+                        self.connect( i*m + j, i*m + (j+1) )
+        return self.ans
+
+    def connect(self, a, b):
+        root_a, root_b = self.find(a), self.find(b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
+            self.ans -= 1
+    
+    def find(self, x):
+        if self.father[x] == x:
+            return x
+        
+        self.father[x] = self.find( self.father[x] )
+        return self.father[x]
+# version: BFS
+from collections import deque
+DIRECTIONS = [(1, 0), (0, -1), (-1, 0), (0, 1)]
+class Solution:
+    def numIslands(self, grid):
+        if not grid or not grid[0]: return 0
+
+        isLands, visited = 0, set()
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if not grid[i][j] or (i,j) in visited:
+                    continue
+                self.bfs(grid, i, j, visited)
+                isLands += 1
+        return isLands
+    
+    def bfs(self, grid, x, y, visited):
+        queue = deque([(x, y)])
+        visited.add((x, y))
+
+        while queue:
+            x, y = queue.popleft()
+            for dx, dy in DIRECTIONS:
+                nxt_x, nxt_y = x + dx, y + dy
+                if not self.isNotValid(grid, nxt_x, nxt_y, visited):
+                    continue
+                queue.append( (nxt_x, nxt_y) )
+                visited.add( (nxt_x, nxt_y) )
+                
+    def isNotValid(self, grid, x, y, visited):
+        n, m = len(grid), len(grid[0])
+        if not ( 0 <= x < n and 0<= y < m ) or (x,y) in visited:
+            return False
+        return grid[x][y] # ! Leetcode & Lintcode Diff `== '1'`
+# version DFS,  深度可能会比较深，容易导致 StackOverflow
+class Solution:
+    def numIslands(self, grid):
+        if not grid or not grid[0]:
+            return 0
+        
+        self.n, self.m = len(grid), len(grid[0])
+        self.visited = [[False] * self.m for _ in range(self.n)]
+        
+        islands = 0
+        for row in range(self.n):
+            for col in range(self.m):
+                if self.is_island(grid, row, col):
+                    self.visited[row][col] = True
+                    self.dfs(grid, row, col)
+                    islands += 1
+                    
+        return islands
+        
+    def is_island(self, grid, x, y):
+        if not (0 <= x < self.n and 0 <= y < self.m):
+            return False
+        if not grid[x][y]:
+            return False
+        return not self.visited[x][y]
+
+    def dfs(self, grid, x, y):
+        dx = [1, 0, -1, 0]
+        dy = [0, 1, 0, -1]
+        for direction in range(4):
+            newx = x + dx[direction]
+            newy = y + dy[direction]
+            
+            if self.is_island(grid, newx, newy):
+                self.visited[newx][newy] = True
+                self.dfs(grid, newx, newy)
+                # no backtracking
+
+
+# 434. 岛屿的个数II 
+# [2020年11月9日 2021年2月22日]
+# https://www.lintcode.com/problem/number-of-islands-ii/description
+# https://www.jiuzhang.com/solutions/number-of-islands-ii/#tag-lang-python
+DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+class Solution:
+    def numIslands2(self, n, m, operators):
+        """
+        @param n, m, operators: An integer, An integer,an array of point
+        @return: an integer array
+        """
+        results, island = [], set()
+        self.size, self.father  = 0, {}
+
+        for operator in operators:
+            x, y = operator.x, operator.y
+            if (x, y) in island:
+                results.append(self.size)
+                continue
+            
+            island.add((x, y))
+            self.father[(x, y)] = (x, y)
+            self.size += 1
+
+            for delta_x, delta_y in DIRECTIONS:
+                x_, y_ = x + delta_x, y + delta_y
+                if (x_, y_) in island:
+                    self.union((x_, y_), (x, y))
+            results.append(self.size)
+        return results
+
+    def union(self, point_a, point_b):
+        root_a, root_b = self.find(point_a), self.find(point_b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
+            self.size -= 1
+        
+    def find(self, point):
+        path = []
+        while point != self.father[point]:
+            path.append(point)
+            point = self.father[point]
+            
+        for p in path:
+            self.father[p] = point
+            
+        return point
+
+
+# 178/261. 图是否是树 
+# [2020年11月9日 2021年2月23日]
+# https://www.lintcode.com/problem/graph-valid-tree/description; https://leetcode-cn.com/problems/graph-valid-tree/
+# https://www.jiuzhang.com/solutions/graph-valid-tree/#tag-lang-python
+class Solution:
+    def validTree(self, n, edges):
+        """
+        @param n, edges: An integer, a list of undirected edges
+        @return: true if it's a valid tree, or false
+        """
+        if len(edges) != n-1: return False
+
+        self.father = {i: i for i in range(n)}
+        # self.father = {1: i for i in range(n)} # type error
+        self.size = n
+
+        for a, b in edges:
+            self.union( a, b )
+        
+        return self.size == 1
+    
+    def union(self, a, b):
+        root_a, root_b = self.find(a), self.find(b)
+        if root_a != root_b:
+            self.father[root_a] = root_b
+            self.size -= 1
+        
+    def find(self, x):
+        if self.father[x] == x:
+            return x
+        
+        self.father[x] = self.find(self.father[x])
+        return self.father[x]
+
+
+# 477. 被围绕的区域 ⭐
+# [2020年11月9日 2021年2月23日]
+# https://www.lintcode.com/problem/surrounded-regions/description https://leetcode-cn.com/problems/surrounded-regions/
+# https://www.jiuzhang.com/solutions/surrounded-regions/#tag-lang-python
+# DESC 给一个二维的矩阵，包含 'X' 和 'O', 找到所有被 'X' 围绕的区域，并用 'X' 替换其中所有的 'O'
+# version: 高频题班 # TODO
+class Solution:
+    # @param {list[list[str]]} board a 2D board containing 'X' and 'O'
+    # @return nothing 
+    def surroundedRegions(self, board):
+        if not any(board): return
+
+        n, m = len(board), len(board[0])
+        # obtian the boundary of board
+        queue = [ij for k in range(max(n,m)) for ij in ((0, k), (n-1, k), (k, 0), (k, m-1))]
+        
+        while queue:
+            i, j = queue.pop()
+            if 0 <= i < n and 0 <= j < m and board[i][j] == 'O':
+                # print( i, j, board[i][j] )
+                board[i][j] = 'W'
+                queue += (i, j-1), (i, j+1), (i-1, j), (i+1, j)
+
+        board[:] = [['XO'[c == 'W'] for c in row] for row in board]
+# version: Union find
+DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+class UnionFind:
+    def __init__(self, n):
+        self.father = {i:i for i in range(n)}
+    
+    def find(self, x):
+        if x == self.father[x]:
+            return x
+        
+        self.father[x] = self.find(self.father[x])
+        return self.father[x]
+    
+    def connect( self, a, b ):
+        root_a, root_b = self.find(a), self.find(b)
+        if root_a != root_b:
+            self.father[min(root_a, root_b)] = max(root_a, root_b)
+
+class Solution:
+    def solve(self, board):
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        # if not board or not board[0]: return board
+
+        m, n = len(board), len(board[0])
+        if m <= 2 or n <=2: return board
+
+        uf = UnionFind(m*n+1)
+        dummy = m*n
+
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == "X": 
+                    continue
+                
+                if i in [0, m-1] or j in [0, n-1]:
+                    uf.connect( i*n + j, dummy )
+                
+                for dx, dy in DIRECTIONS:
+                    nxt_x, nxt_y = i+dx, j+dy
+                    if 0<nxt_x<m and 0<nxt_y<n and board[nxt_x][nxt_y] == 'O':
+                        uf.connect( i*n + j, nxt_x*n + nxt_y )
+
+        for x in range(m):
+            for y in range(n):
+                if board[x][y] == "O" and uf.find(x * n + y) != dummy:
+                    board[x][y] = "X"
+
+
+# 1070/721. 账户合并 ⭐
+# [2020年10月21日 2020年11月9日 2021年2月23日]
+# https://www.lintcode.com/problem/accounts-merge/description https://leetcode-cn.com/problems/accounts-merge/
+# https://www.jiuzhang.com/solution/accounts-merge/#tag-lang-python
+# DESC: 1) emails_to_ids; 2) ids union; 3) get_id_to_mail(key: find root user id)
+class UnionFind:
+    def __init__(self, n):
+        self.father = {i:i for i in range(n)}
+
+    def __str__(self):
+        return str(self.father)
+
+    def find(self, x):
+        if self.father[x] == x:
+            return x
+
+        self.father[x] = self.find(self.father[x])
+        
+        return self.father[x]
+
+    def union(self, a, b):
+        root_a, root_b = self.find(a), self.find(b)
+
+        if root_a != root_b:
+            self.father[root_a] = root_b
+
+class Solution:
+    def accountsMerge(self, accounts):
+        uf = UnionFind(len(accounts))
+
+        email_to_ids = self.get_email_to_ids(accounts)
+
+        for _, ids in email_to_ids.items():
+            root_id = ids[0]
+            for id in ids[1:]:
+                uf.union(id, root_id)
+
+        id_to_emails = self.get_id_to_email_set(accounts, uf)
+
+        merge_accounts = []
+        for user_id, emails in id_to_emails.items():
+            merge_accounts.append( 
+                [ accounts[user_id][0], *sorted(emails) ]
+             )
+        
+        return merge_accounts
+
+    def get_id_to_email_set(self, accounts, uf):
+        id_to_email_set = {}
+        for user_id, record in enumerate( accounts ):
+            root_user = uf.find(user_id) # ! key point
+            id_to_email_set[root_user] = id_to_email_set.get(root_user, set())
+
+            for email in record[1:]:
+                id_to_email_set[root_user].add(email)
+        
+        return id_to_email_set
+
+    def get_email_to_ids(self, accounts):
+        email_to_ids = {}
+        for user_id, record in enumerate( accounts ):
+            for email in record[1:]:
+                email_to_ids[email] = email_to_ids.get( email, [] )
+                email_to_ids[email].append(user_id)
+
+        return email_to_ids       
+
+
+# 629. 最小生成树 
+# [2021年2月23日]
+# https://www.lintcode.com/problem/minimum-spanning-tree/description
+class Connection:
+    def __init__(self, city1, city2, cost):
+        self.city1, self.city2, self.cost = city1, city2, cost
+
+def cmp(a, b):
+    if a.cost != b.cost:
+        # return `num` instead `boolean`
+        return a.cost - b.cost
+    
+    if a.city1 != b.city1:
+        if a.city1 < b.city1:
+            return -1
+        return 1
+    
+    if a.city2 < b.city2:
+        return -1
+    return 1
+
+class UnionFind:
+    def __init__(self, n):
+        self.father = {i:i for i in range(n)}
+    
+    def union(self, a, b):
+        root_a, root_b = self.find(a), self.find(b)
+        if root_a != root_b:
+            self.father[root_b] = root_a
+            return True
+            
+        return False
+        
+    def find(self, x):
+        if x == self.father[x]:
+            return x
+        
+        self.father[x] = self.find( self.father[x] )
+        
+        return self.father[x]
+
+class Solution:
+    # @param {Connection[]} connections given a list of connections
+    # include two cities and cost
+    # @return {Connection[]} a list of connections from results
+    def lowestCost(self, connections):
+        import functools
+        connections.sort(key = functools.cmp_to_key(cmp))
+        # self.printConnections( connections )
+        
+        city_map, city_size = self.create_city_map(connections)
+        uf = UnionFind(len(city_map))
+
+        res = []
+        for i in connections:
+            if uf.union( city_map[i.city1], city_map[i.city2] ):
+                res.append(i)
+        
+        root = uf.find(0)
+        for i in range(city_size):
+            if uf.find(i) == root: continue
+            return []
+        
+        return res
+
+    def create_city_map(self, connections):
+        city_map, city_index = {}, 0
+
+        for i in connections:
+            if i.city1 not in city_map:
+                city_map[i.city1] = city_index
+                city_index += 1
+
+            if i.city2 not in city_map:
+                city_map[i.city2] = city_index
+                city_index += 1
+        
+        return city_map, city_index
+
+    def printConnections(self, lst):
+        for c in lst:
+            print( f"[{c.city1}, {c.city2}]: {c.cost}" )
+
+
+"""Trie"""
+# 442/208. 实现 Trie（前缀树）
+# [2020年11月9日 2021年2月23日 2021年2月24日]
+# https://www.lintcode.com/problem/implement-trie-prefix-tree/description https://leetcode-cn.com/problems/implement-trie-prefix-tree/
+from collections import OrderedDict
+class TrieNode:
+    def __init__(self):
+        self.children = OrderedDict()
+        self.isWord = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    
+    def insert(self, word):
+        node = self.root
+        for c in word:
+            node.children[c]  = node.children.get(c, TrieNode())
+            node = node.children[c] 
+        node.isWord = True
+    
+    def search(self, word):
+        node = self.root
+        for c in word:
+            node = node.children.get(c)
+            if node is None:
+                return False
+        return node.isWord
+
+    def startsWith(self, prefix):
+        node = self.root
+        for c in prefix:
+            node = node.children.get(c)
+            if node is None:
+                return False
+        return True
+
+
+# 473/211. 单词的添加与查找 
+# [2020年11月10日 2021年2月23日]
+# https://www.lintcode.com/problem/add-and-search-word-data-structure-design/description https://leetcode-cn.com/problems/implement-trie-prefix-tree/
+from collections import OrderedDict
+class TrieNode:
+    def __init__(self):
+        self.children = OrderedDict()
+        self.isWord = False
+
+class WordDictionary:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def addWord(self, word):
+        node = self.root
+        for letter in word:
+            if letter not in node.children:
+                node.children[letter] = TrieNode()
+            node = node.children[letter]
+        node.isWord = True
+
+    def search(self, word):
+        if word is None: return False
+        
+        return self.dfs_helper(self.root, word, 0)
+
+    def dfs_helper(self, node, word, index):
+        if node is None: return False
+        if index >= len(word): return node.isWord 
+
+        letter = word[index]
+        if letter != '.': 
+            return self.dfs_helper(node.children.get(letter), word, index+1) # `get` instead of `[]`
+        
+        for i in node.children:
+            if self.dfs_helper(node.children.get(i), word, index+1):
+                return True
+        
+        return False
+
+
+# 132/212. 单词搜索 II 
+# [2021年2月23日]
+# https://www.lintcode.com/problem/word-search-ii/description https://leetcode-cn.com/problems/word-search-ii/
+# version hashmap
+DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+class Solution:
+    def findWords(self, board, words):
+        if not board or not board[0]: return []
+
+        self.word_set, self.prefix_set = set(words), set()
+        for word in words:
+            for i in range(len(word)):
+                self.prefix_set.add( word[:i+1] )
+
+        result = set()
+        self.m, self.n = len(board), len(board[0])
+        for i in range(self.m):
+            for j in range(self.n):
+                self.dfs(board, i, j, board[i][j], set([(i,j)]), result)
+
+        return list(result)
+
+    def dfs(self, board, x, y, word, visited, result):
+        if word not in self.prefix_set: return
+
+        if word in self.word_set:
+            result.add(word)
+
+        for dx, dy in DIRECTIONS:
+            nxt_x, nxt_y = x+dx, y+dy
+            if not self.isValid(board, nxt_x, nxt_y) or (nxt_x, nxt_y) in visited:
+                continue
+            
+            visited.add((nxt_x, nxt_y))
+            self.dfs(board, nxt_x, nxt_y, word+board[nxt_x][nxt_y], visited, result)
+            visited.remove((nxt_x, nxt_y))
+    
+    def isValid(self, board, x, y):
+        return 0 <= x < self.m and 0 <= y < self.n
+        
+# version 用Trie 版本 # find the difference
+DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_word = False
+        self.word = None
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+    
+    def add(self, word):
+        node = self.root
+        for letter in word:
+            if letter not in node.children:
+                node.children[letter] = TrieNode()
+            node = node.children[letter]
+        node.is_word = True
+        node.word = word
+    
+    def find(self, word):
+        node = self.root
+        for letter in word:
+            if node.children.get(letter) is None:
+                return None
+        return node
+
+class Solution:
+    def findWords(self, board, words):
+        if board is None or not board[0]: return []
+            
+        trie = Trie()
+        for word in words:
+            trie.add(word)
+
+        result = set()
+        for i in range(len(board)):	
+            for j in range(len(board[0])):
+                self.search(board, i, j, trie.root.children.get(board[i][j]), set([(i, j)]), result,)
+                
+        return list(result)
+        
+    def search(self, board, x, y, node, visited, result):
+        if node is None: return
+        
+        if node.is_word:
+            result.add(node.word)
+        
+        for delta_x, delta_y in DIRECTIONS:	
+            x_, y_ = x + delta_x, y + delta_y
+            if not self.inside(board, x_, y_) or (x_, y_) in visited:
+                continue
+            
+            visited.add((x_, y_))
+            self.search(board, x_, y_, node.children.get(board[x_][y_]), visited, result,)
+            visited.remove((x_, y_))
+            
+    def inside(self, board, x, y):
+        return 0 <= x < len(board) and 0 <= y < len(board[0])
+
+
+# 634/425. 单词矩阵 / 单词方块 ⭐⭐⭐ # TODO
+# https://www.lintcode.com/problem/word-squares/description https://leetcode-cn.com/problems/word-squares/
+# https://www.jiuzhang.com/solution/word-squares/#tag-lang-python
+# Version 1
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_word = False
+        self.word_list = []
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+        
+    def add(self, word):
+        node = self.root
+        for c in word:
+            if c not in node.children:
+                node.children[c] = TrieNode()
+            node = node.children[c]
+            node.word_list.append(word)
+        node.is_word = True
+
+    def find(self, word):
+        node = self.root
+        for c in word:
+            node = node.children.get(c)
+            if node is None:
+                return None
+        return node
+        
+    def get_words_with_prefix(self, prefix):
+        node = self.find(prefix)
+        return [] if node is None else node.word_list
+        
+class Solution:
+    def wordSquares(self, words):
+        trie = Trie()
+        for word in words:
+            trie.add(word)
+        
+        results = []
+        for word in words:
+            self.search(trie, [word], results)
+        
+        return results
+        
+    def search(self, trie, combination, ressults):
+        cur_row_index, n = len(combination), len(combination[0])
+
+        if cur_row_index == n:
+            ressults.append(list(combination))
+            return
+        
+        # ! 剪枝 Pruning, it's ok to remove it, but will be slower
+        for row_index in range(cur_row_index, n):
+            prefix = ''.join([combination[i][row_index] for i in range(cur_row_index)])
+            if trie.find(prefix) is None:
+                return
+        
+        prefix = ''.join([combination[i][cur_row_index] for i in range(cur_row_index)])
+        for word in trie.get_words_with_prefix(prefix):
+            combination.append(word)
+            self.search(trie, combination, ressults)
+            combination.pop()
+
+# Version 2
+class Solution:
+    def initPrefix(self, words):
+        for word in words:
+            if "" not in self.hash: self.hash[""] = []
+            self.hash[""] += [str(word)] 
+            
+            prefix = ""
+            for c in word:
+                prefix += c 
+                if prefix not in self.hash: self.hash[prefix] = []
+                self.hash[prefix] += [str(word)]
+                
+    def checkPrefix(self, x, nextWord, l):
+        for i in range(x + 1, l):
+            prefix = ""
+            for item in self.path:
+                prefix += item[i]
+            prefix += nextWord[i]
+            if (prefix not in self.hash):
+                return False 
+        return True
+    
+    def dfs(self, x, l):
+        if x == l:
+            self.ans.append(list(self.path))
+            return
+        
+        prefix = ""
+        
+        for item in self.path:
+            prefix += item[x]
+        
+        for item in self.hash[prefix]:
+            if not self.checkPrefix(x, item, l):
+                continue
+            
+            self.path.append(item)
+            self.dfs(x + 1, l)
+            self.path.pop()
+            
+    def wordSquares(self, words):
+        self.hash = {}
+        self.path = []
+        self.ans = []
+        
+        if not words:
+            return self.ans
+        
+        self.initPrefix(words)
+        self.dfs(0, len(words[0]))
+        
+        return self.ans
+
+
+# 527. 序列化Trie
+# https://www.lintcode.com/problem/trie-serialization/
+class Solution:
+    def serialize(self, root):
+        if root is None:
+            return ""
+
+        data = ""
+        for key, value in root.children.items():
+            data += key + self.serialize(value)
+
+        return "<%s>" % data
+
+    def deserialize(self, data):
+        if data is None or len(data) == 0:
+            return None
+
+        root = TrieNode()
+        current = root
+        path =[]
+        for c in data:
+            if c == '<':
+                path.append(current)
+            elif c == '>':
+                path.pop()
+            else:
+                current = TrieNode()
+                if len(path) == 0:
+                    print( c, path)
+                path[-1].children[c] = current
+
+
