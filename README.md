@@ -1,0 +1,2 @@
+# learningNote
+Doing by learnig
