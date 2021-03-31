@@ -969,3 +969,26 @@ class Solution:
         pass
 
 
+# 路径总和 II · Path Sum II
+# https://www.lintcode.com/problem/1357/
+class Solution:
+    def pathSum(self, root, sum):
+        def mysum(nums):
+            count = 0
+            for n in nums:
+                count += n
+            
+            return count
+        
+        def findPath( root, path ):
+            if root.left is None and root.right is None:
+                if mysum(path + [root.val]) == sum:
+                    res.append( [t for t in path+[root.val]] )
+                
+            if root.left: findPath(root.left, path + [root.val])
+            if root.right: findPath(root.right, path + [root.val])
+        
+        res = []
+        if root:findPath(root, [])
+
+        return res

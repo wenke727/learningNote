@@ -1,42 +1,27 @@
-from typing import Collection
-
-
-from collections import deque
-
 class Solution:
-    """
-    @param length: the length of board
-    @param connections: the connections of the positions
-    @return: the minimum steps to reach the end
-    """
-    def modernLudo(self, length, connections):
-        queue = deque([1])
-        dist = {1: 0}
+    def firstWillWin(self, values):
+        if not values: return False
 
-        graph = {}
-        for o, d in connections:
-            graph[o] = graph.get(o, set())
-            graph[o].add(d)
+        first, second = self.dfs(values, 0, len(values), {})
+
+        return first > second
+    
+    def dfs(self, values, left, right, memo):
+        if left == right: return values[left], 0
+
+        if (left, right) in memo: return memo[(left, right)]
+
+        first1, second1 = self.dfs(values, left+1, right, memo)
+        first2, second2 = self.dfs(values, left, right-1, memo)
+
+        total = values[left] + first1 + second1
+        first = max(
+            values[left] + second1,
+            values[right] + second2
+        )
+
+        memo[(left, right)] = first, total-first
+
+        return first, total-first
+
         
-        while queue:
-            cur = queue.popleft()
-
-            if cur in graph:
-                for nxt in graph[cur]:
-                    if nxt in dist and dist[nxt] <= dist[cur]:
-                        continue
-
-                    queue.append(nxt)
-                    dist[nxt] = dist[cur] 
-
-            for i in range(1, 7):
-                nxt = cur + i
-                if nxt <= length:
-                    if nxt in dist and dist[nxt] <= dist[cur] + 1:
-                        continue
-
-                    queue.append(nxt)
-                    dist[nxt] = dist[cur] + 1
-
-
-        return dist[length]                    

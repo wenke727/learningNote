@@ -28,7 +28,7 @@ class Solution:
         f[0], f[1] = A[0], max(A[0], A[1])
         
         for i in range(2, len(A)):
-            f[i % 3] = max( f[(i - 1) % 3], (f[(i - 2) % 3] + A[i]) )
+            f[i % 3] = max( f[(i-1) % 3], (f[(i - 2) % 3] + A[i]) )
             
         return f[(len(A) - 1) % 3]
 
@@ -97,7 +97,6 @@ class Solution:
     @return: An integer
     """
     def climbStairs(self, n):
-        # write your code here
         if n == 0:
             return 1
         if n <= 2:
@@ -115,9 +114,7 @@ class Solution:
         return res
     
     def steps(self, n, memo):
-        if n in memo: 
-            return memo[n]
-        
+        if n in memo:  return memo[n]
         memo[n] = self.steps( n-1, memo ) + self.steps( n-2, memo )
 
         return memo[n]
@@ -144,7 +141,7 @@ class Solution:
         for i in range(1, n):
             for j in range(1, m):
                 if matrix[i][j]:
-                    dp[i][j] = min(dp[i - 1][j], dp[i][j - 1], dp[i-1][j - 1]) + 1
+                    dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1
                 else:
                     dp[i][j] = 0
             edge = max(edge, max(dp[i]))
@@ -166,7 +163,7 @@ class Solution:
             f[i % 2][0] = matrix[i][0]
             for j in range(1, m):
                 if matrix[i][j]:
-                    f[i % 2][j] = min(f[(i - 1) % 2][j], f[i % 2][j - 1], f[(i - 1) % 2][j - 1]) + 1
+                    f[i % 2][j] = min(f[(i-1) % 2][j], f[i % 2][j-1], f[(i-1) % 2][j-1]) + 1
                 else:
                     f[i % 2][j] = 0
             edge = max(edge, max(f[i % 2]))
@@ -227,7 +224,7 @@ class Solution:
                 if i == 0 or j == 0:
                     dp[i][j] = 1
                 else:
-                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+                    dp[i][j] = dp[i-1][j] + dp[i][j-1]
         
         return dp[m - 1][n - 1]
 
@@ -246,9 +243,9 @@ class Solution:
 
         f[0][0] = grid[0][0]
         for i in range(1, m):
-            f[i][0] = f[i - 1][0] + grid[i][0]
+            f[i][0] = f[i-1][0] + grid[i][0]
         for j in range(1, n):
-            f[0][j] = f[0][j - 1] + grid[0][j]
+            f[0][j] = f[0][j-1] + grid[0][j]
 
         # 状态转移
         for i in range(1, m):
@@ -258,8 +255,8 @@ class Solution:
         return f[m - 1][n - 1]
 
 
-# 119. 编辑距离 # TODO
-# [2021年1月4日]
+# 119. 编辑距离 
+# [2021年1月4日 2021年3月30日]
 # DESC 给出两个单词word1和word2，计算出将word1 转换为word2的最少操作次数
 # https://www.lintcode.com/problem/edit-distance/description 
 # https://www.jiuzhang.com/solution/edit-distance/#tag-lang-python
@@ -275,14 +272,15 @@ class Solution:
 
         for i in range(1, n + 1):
             for j in range(1, m + 1):
-                if word1[i - 1] == word2[j - 1]:
+                if word1[i-1] == word2[j-1]:
                     # equal, delete, add
-                    f[i][j] = min( f[i - 1][j - 1], f[i - 1][j] + 1, f[i][j - 1] + 1 )
+                    f[i][j] = min( f[i-1][j-1], f[i-1][j]+1, f[i][j-1]+1 )
                 else:
-                    f[i][j] = min( f[i - 1][j - 1], f[i - 1][j], f[i][j - 1]) + 1
+                    f[i][j] = min( f[i-1][j-1], f[i-1][j], f[i][j-1]) + 1
                         
         return f[n][m]
 
+# TODO
 class Node:
     def __init__(self, value, choice):
         self.value = value
@@ -310,7 +308,7 @@ class Solution:
                     dp[i+1][j+1] =  Node(d.value, 0)
                 else:
                     dp[i+1][j+1] = self.minNode( d, u, l )
-        # self.print_result(word1, word2, dp)
+        self.print_result(word1, word2, dp)
             
         return dp[n][m].value
         
@@ -325,19 +323,6 @@ class Solution:
         return Node(val+1, 3)
         
     def print_result( self, word1, word2, dp ):
-        for i in range(len(dp)):
-            res = []
-            for j in dp[i]:
-                res.append( j.value) 
-            print(res)
-        print()
-        for i in range(len(dp)):
-            res = []
-            for j in dp[i]:
-                res.append( j.choice) 
-            print(res)
-        
-        
         rows, cols = len(dp), len(dp[0])
         i , j = rows-1, cols-1
         print( f"change {word1} to {word2}:" )
@@ -371,37 +356,58 @@ class Solution:
             
 
 """记忆化搜索"""
+# 397. 最长上升连续子序列
 # [2021年3月22日]
 # https://www.lintcode.com/problem/longest-continuous-increasing-subsequence/
 class Solution:
-    """
-    @param A: An array of Integer
-    @return: an integer
-    """
     def longestIncreasingContinuousSubsequence(self, A):
-        # write your code here
         size = len(A)
-        if size < 1:
-            return 0 
-            
-        if size < 2:
-            return 1 
+        if size < 1: return 0 
+        if size < 2: return 1 
             
         dp1, dp2 = 1, 1 
-        
         glomax = 0 
         
         for i in range(1, size):
-            dp1 = dp1 + 1 if A[i] > A[i - 1] else 1 
-            dp2 = dp2 + 1 if A[i] < A[i - 1] else 1 
+            dp1 = dp1 + 1 if A[i] > A[i-1] else 1 
+            dp2 = dp2 + 1 if A[i] < A[i-1] else 1 
             glomax = max(glomax, max(dp1, dp2))
             
         return glomax
 
+
 # 398. 最长上升连续子序列 II
-# [2020年11月6日]
+# [2020年11月6日 2021年3月29日]
 # https://www.lintcode.com/problem/longest-continuous-increasing-subsequence-ii/description
 # https://www.jiuzhang.com/solutions/longest-continuous-increasing-subsequence-ii/#tag-lang-python
+# version classical: dfs
+class Solution:
+    def longestIncreasingPath(self, matrix):
+        if not matrix or not matrix[0]: return 0
+
+        n, m = len(matrix), len(matrix[0])
+        memo, longest = {}, 0
+        for i in range(n):
+            for j in range(m):
+                longest = max(longest, self.dfs(matrix, i, j, memo))
+        return longest
+
+    def dfs(self, matrix, x, y, memo):
+        if (x,y) in memo: return memo[(x,y)]
+
+        longest = 1 
+        for dx, dy in [(1, 0), (0, -1), (-1, 0), (0, 1)]:
+            x_nxt, y_nxt = x + dx, y + dy
+            if not self.inside(matrix, x_nxt, y_nxt) or matrix[x_nxt][y_nxt] >= matrix[x][y]:
+                continue
+            longest = max( longest, self.dfs( matrix, x_nxt, y_nxt, memo ) + 1 )
+
+        memo[(x,y)] = longest
+        return longest
+
+    def inside(self, matrix, x, y):
+        return 0 <= x < len(matrix) and 0 <= y < len(matrix[0])
+
 # version 动态数组 BFS
 class Solution:
     def longestContinuousIncreasingSubsequence2(self, matrix):
@@ -431,40 +437,11 @@ class Solution:
 
     def inside(self, matrix, x, y):
         return 0 <= x < len(matrix) and 0 <= y < len(matrix[0])
-# version classical: dfs
-class Solution:
-    def longestIncreasingPath(self, matrix):
-        if not matrix or not matrix[0]: return 0
-
-        n, m = len(matrix), len(matrix[0])
-        memo = {}
-        longest = 0
-        for i in range(n):
-            for j in range(m):
-                longest = max(longest, self.dfs(matrix, i, j, memo))
-        return longest
-
-    def dfs(self, matrix, x, y, memo):
-        if (x,y) in memo:
-            return memo[(x,y)]
-
-        longest = 1 
-        for dx, dy in [(1, 0), (0, -1), (-1, 0), (0, 1)]:
-            x_nxt, y_nxt = x + dx, y + dy
-            if not self.inside(matrix, x_nxt, y_nxt) or matrix[x_nxt][y_nxt] >= matrix[x][y]:
-                continue
-            longest = max( longest, self.dfs( matrix, x_nxt, y_nxt, memo ) + 1 )
-
-        memo[(x,y)] = longest
-        return longest
-
-    def inside(self, matrix, x, y):
-        return 0 <= x < len(matrix) and 0 <= y < len(matrix[0])
 
 
 """博弈类DP"""
 # 394. 硬币排成线
-# [2020年11月5日]
+# [2020年11月5日 2021年3月29日]
 # https://www.lintcode.com/problem/coins-in-a-line/description
 # https://www.jiuzhang.com/solution/coins-in-a-line/#tag-lang-python
 # version 1
@@ -473,14 +450,10 @@ class Solution:
         return self.dfs(n, {})
 
     def dfs( self, n, memo ):
-        if n in memo:
-            return memo[n]
+        if n in memo: return memo[n]
             
-        if n == 0: 
-            return False
-
-        if n == 1 or n == 2:
-            return True
+        if n == 0:  return False
+        if n == 1 or n == 2: return True
 
         case1 = self.dfs(n-2, memo) and self.dfs(n-3, memo)
         case2 = self.dfs(n-3, memo) and self.dfs(n-4, memo)
@@ -497,9 +470,42 @@ class Solution:
         return dp[n % 3]
 
 
-# 395. 硬币排成线 II # TODO
+# 395. 硬币排成线 II 
+# [2021年03月29号]
 # https://www.lintcode.com/problem/coins-in-a-line-ii/description
 # https://www.jiuzhang.com/solution/coins-in-a-line-ii/#tag-lang-python
+# version 记忆化搜索，自顶向下
+class Solution:
+    def firstWillWin(self, values):
+        if not values: return False
+
+        if len(values) <= 2: return True
+
+        first, sencond = self.dfs(values, 0, {})
+        return first > sencond
+
+    def dfs(self, values, index, memo):
+        if index in memo:
+            return memo[index]
+
+        if index >= len(values):
+            return 0, 0
+        if index == len(values) - 1:
+            return values[index], 0
+        if index == len(values) - 2:
+            return values[index] + values[index+1], 0
+
+        first1, second1 = self.dfs(values, index + 1, memo) 
+        first2, second2 = self.dfs(values, index + 2, memo)
+
+        total = values[index] + first1 + second1
+        first = max( 
+            (values[index] + second1), 
+            (values[index] + values[index+1] + second2) 
+            )
+
+        memo[index] = (first, total - first)
+        return memo[index]
 # version 普通方式
 class Solution:
     """
@@ -507,7 +513,7 @@ class Solution:
     @return: a boolean which equals to true if the first player will win
     """
     def firstWillWin(self, values):
-        size = len(values);
+        size = len(values)
         if size <= 2:
             return True
         
@@ -544,72 +550,18 @@ class Solution:
                 values[i] + values[i + 1] + prefix_sum[(i + 2) % 3] - f[(i + 2) % 3],
             )
         return f[0] > prefix_sum[0] - f[0]
-# version 记忆化搜索，自顶向下
-class Solution:
-    """
-    @param values: a vector of integers
-    @return: a boolean which equals to true if the first player will win
-    """
-    def firstWillWin(self, values):
-        if not values: return False
-
-        if len(values) <= 2: return True
-
-        first, sencond = self.dfs(values, 0, {})
-        return first > sencond
-
-    def dfs(self, values, index, memo):
-        if index in memo:
-            return memo[index]
-
-        if index >= len(values):
-            return 0, 0
-        if index == len(values) - 1:
-            return values[index], 0
-        if index == len(values) - 2:
-            return values[index] + values[index+1], 0
-
-        first1, second1 = self.dfs(values, index + 1, memo) 
-        first2, second2 = self.dfs(values, index + 2, memo)
-
-        total = values[index] + first1 + second1
-        first = max( (values[index] + second1), (values[index] + values[index+1] + second2) )
-
-        memo[index] = (first, total - first)
-        return memo[index]
 
 
 # 396. 硬币排成线 III #TODO⭐️⭐️⭐️
+# [2021年03月29号]
 # https://www.lintcode.com/problem/coins-in-a-line-iii/description
 # https://www.jiuzhang.com/solution/coins-in-a-line-iii/#tag-lang-python
-# version
-class Solution:
-    """
-    @param values: a vector of integers
-    @return: a boolean which equals to true if the first player will win
-    """
-    def firstWillWin(self, values):
-        n = len(values)
-        if n < 2:
-            return True
-        # dp[i][j] -- best total values the player can get in (values[i], values[j])
-        dp = [[0 for x in range(n)] for y in range(n)]
-        total = sum(values)
-        for i in range(n-1, -1, -1):
-            for j in range(i, n):
-                if i == j:
-                    dp[i][j] = values[i]
-                elif i+1 == j:
-                    dp[i][j] = max(values[i:i+2])
-                else:
-                    dp[i][j] = max([values[i] + min([dp[i+2][j], dp[i+1][j-1]]), 
-                                    values[j] + min([dp[i+1][j-1], dp[i][j-2]])])
-        return dp[0][n-1] > total/2
 # version 使用记忆化搜索的版本
 class Solution:
     def firstWillWin(self, values):
         if not values: return False
-        first, second = self.dfs(values, 0, len(values) - 1, {})
+        # first, second = self.dfs(values, 0, len(values), {})
+        first, second = self.dfs(values, 0, len(values)-1, {})
         return first > second
         
     def dfs(self, values, left, right, memo):
@@ -623,22 +575,40 @@ class Solution:
         first2, second2 = self.dfs(values, left, right - 1, memo)
         
         total = first1 + second1 + values[left]
-        first = max(values[left] + second1, values[right] + second2)
+        first = max(
+            values[left] + second1, 
+            values[right] + second2
+            )
         
         memo[(left, right)] = first, total - first
         return first, total - first
+# version
+class Solution:
+    def firstWillWin(self, values):
+        n = len(values)
+        if n < 2: return True
+        
+        # dp[i][j] -- best total values the player can get in (values[i], values[j])
+        dp = [[0 for x in range(n)] for y in range(n)]
+        total = sum(values)
+        for i in range(n-1, -1, -1):
+            for j in range(i, n):
+                if i == j:
+                    dp[i][j] = values[i]
+                elif i+1 == j:
+                    dp[i][j] = max(values[i:i+2])
+                else:
+                    dp[i][j] = max([values[i] + min([dp[i+2][j], dp[i+1][j-1]]), 
+                                    values[j] + min([dp[i+1][j-1], dp[i][j-2]])])
+        return dp[0][n-1] > total/2
 
 
 
 """ladder exercise"""
-
 # 191/152. 乘积最大子序列
+# [2021年03月29号]
 # https://www.lintcode.com/problem/maximum-product-subarray/description?_from=ladder&&fromId=4
 class Solution:
-    """
-    @param nums: An array of integers
-    @return: An integer
-    """
     def maxProduct(self, nums):
         if not nums:
             return None
@@ -657,7 +627,8 @@ class Solution:
             
         return global_max
 
-# 676. 解码方式 II
+
+# 676. 解码方式 II # TODO
 # https://www.lintcode.com/problem/decode-ways-ii/description?_from=ladder&&fromId=4
 # https://www.jiuzhang.com/solution/decode-ways-ii/#tag-lang-python
 class Solution(object):
@@ -669,8 +640,8 @@ class Solution(object):
         dp = [0] * (n + 1)
         dp[0] = 1
         for i in range(1, n + 1):
-            if s[i - 1] == '*':
-                dp[i] = (dp[i] + 9 * dp[i - 1]) % mod
+            if s[i-1] == '*':
+                dp[i] = (dp[i] + 9 * dp[i-1]) % mod
                 if i >= 2:
                     t = 0
                     if s[i - 2] == '*':
@@ -680,14 +651,14 @@ class Solution(object):
                     elif s[i - 2] == '2':
                         dp[i] = (dp[i] + 6 * dp[i - 2]) % mod
             else:
-                if s[i - 1] >= '1' and s[i - 1] <= '9':
-                    dp[i] = (dp[i] + dp[i - 1]) % mod
+                if s[i-1] >= '1' and s[i-1] <= '9':
+                    dp[i] = (dp[i] + dp[i-1]) % mod
                 if i >= 2:
                     if s[i - 2] == '*':
                         t = 0
-                        if s[i - 1] >= '0' and s[i - 1] <= '6':
+                        if s[i-1] >= '0' and s[i-1] <= '6':
                             dp[i] = (dp[i] + 2 * dp[i - 2]) % mod
-                        elif s[i - 1] >= '7' and s[i - 1] <= '9':
+                        elif s[i-1] >= '7' and s[i-1] <= '9':
                             dp[i] = (dp[i] + dp[i - 2]) % mod
                     else:
                         twoDigits = int(s[i - 2 : i])
