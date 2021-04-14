@@ -1,3 +1,25 @@
+## AI 路线图
+## [AI-Expert-Roadmap](https://i.am.ai/roadmap/)
+GIT adress: https://github.com/AMAI-GmbH/AI-Expert-Roadmap
+
+### Introduction
+![](./.fig/intro.svg)
+### Fundamentals
+![](./.fig/fundamentals.svg)
+### Data Science Roadmap
+![](./.fig/datascience.svg)
+### Machine Learning Roadmap
+![](./.fig/machine_learning.svg)
+
+### Deep Learning Roadmap
+![](./.fig/deep_learning.svg)
+
+### Data Engineer Roadmap
+![](./.fig/data_engineer.svg)
+
+### Big Data Engineer Roadmap
+![](./.fig/data_engineer.svg)
+
 ## 工程基础
 Ref: https://zhuanlan.zhihu.com/p/192633890
 ![road map](./.fig/metro_map.jpg)

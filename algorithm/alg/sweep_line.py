@@ -1,3 +1,15 @@
+"""
+* 扫描问题的思路
+    1. 事件往往是以区间的形式存在
+    2. 区间两端代表事件的开始和结束
+    3. 需要排序
+"""
+class Interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
+
 # 156 · 合并区间
 # [2021年4月12日]
 # https://www.lintcode.com/problem/156/
@@ -18,6 +30,8 @@ class Solution:
 # 30 · 插入区间
 # [2021年4月12日]
 # https://www.lintcode.com/problem/30/
+# DESC 给出一个无重叠的按照区间起始端点排序的区间列表。
+# DESC 在列表中插入一个新的区间，你要确保列表中的区间仍然有序且不重叠
 class Solution:
     """
     Insert a new interval into a sorted non-overlapping interval list.
@@ -73,7 +87,6 @@ class Solution:
         for interval in a + b:
             events.append((interval.start, True))
             events.append((interval.end, False))
-        
         events.sort(key = lambda interval : (interval[0], interval[1]))
         
         output = []
@@ -112,6 +125,7 @@ class Solution:
 # 903 · 范围加法
 # [2021年4月13日]
 # https://www.lintcode.com/problem/903/
+# desc 每个更新操作表示为一个三元组：[startIndex, endIndex, inc]
 class Solution:
     """
     @param length: the length of the array
@@ -139,6 +153,7 @@ class Solution:
 # [2021年4月13日]
 # https://www.lintcode.com/problem/meeting-rooms-ii/description
 # https://www.jiuzhang.com/solution/meeting-rooms-ii/#tag-lang-python
+# DESC 给定一系列的会议时间间隔intervals，找到所需的最小的会议室数量
 class Solution:
     """
     @param intervals: an array of meeting time intervals
@@ -161,18 +176,39 @@ class Solution:
 
 # 1064 · 我的日程表 II
 # https://www.lintcode.com/problem/1064/
+import bisect
+class MyCalendarTwo(object):
+  def __init__(self):
+    self.attr = []
+    self.count = []
+
+  def book(self, start, end):
+    start_idx = bisect.bisect_right(self.attr, start)
+    self.attr.insert(start_idx, start)
+    self.count.insert(start_idx, 1)
+
+    end_idx = bisect.bisect_left(self.attr, end)
+    self.attr.insert(end_idx, end)
+    self.count.insert(end_idx, -1)
+    
+    res, count = True, 0
+    for c in self.count:
+      count += c
+      if count >= 3:
+        res = False
+        break
+    
+    if not res:
+      self.attr.pop(end_idx)
+      self.count.pop(end_idx)
+      self.attr.pop(start_idx)
+      self.count.pop(start_idx)
+    
+    return res
 
 
 # 寻找右区间 · Find Right Interval
 # https://www.jiuzhang.com/solution/find-right-interval/
-"""
-Definition of Interval.
-class Interval(object):
-    def __init__(self, start, end):
-        self.start = start
-        self.end = end
-"""
-
 class Solution:
     """
     @param intervals: a list of intervals
