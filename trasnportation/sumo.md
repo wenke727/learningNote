@@ -195,4 +195,60 @@ sumo-gui -c osm.sumocfg
 sumo-gui -c D:\\Program Files\\Eclipse\\Sumo\\tools\\2021-03-29-16-23-14\\osm.sumocfg
 ```
 
+****
+# 路口拓宽操作
+区域：科技中片区
+
+* step 1
+```
+
+SUMO_HOME = "/usr/share/sumo"
+osm_file = './osm_bbox.osm.xml'
+name = 'osm'
+
+pre_process = f' rm -r ./{name}; mkdir {name}; cp {osm_file} ./{name}/{osm_file}; cd ./{name}'
+
+cmd = f"""
+    {SUMO_HOME}/bin/netconvert  -t {SUMO_HOME}/data/typemap/osmNetconvert.typ.xml --geometry.remove --roundabouts.guess --ramps.guess -v \
+    --junctions.join --tls.guess-signals --tls.discard-simple --tls.join --output.original-names --junctions.corner-detail 5 --output.street-names \
+    --tls.default-type actuated --osm-files {osm_file} --keep-edges.by-vclass passenger -o {name}.net.xml
+"""
+
+# create node, edge files
+cmd_tranfer0 = f"""{SUMO_HOME}/bin/netconvert --sumo-net-file {name}.net.xml --plain-output-prefix {name}; """
+```
+
+* step 2
+    * osm.nod.xml
+        add
+        ```
+        <node id="8349563238" x="2349.5" y="2131.77" type="priority"/>
+        ```
+    * osm.edge.xml
+        modified
+        ```
+        <!-- 
+        <edge id="208128052#0" from="1937711039" to="2184499023" name="科技中二路" priority="11" type="highway.secondary" numLanes="1" speed="27.78" shape="2355.35,1978.87 2355.07,1986.04 2349.49,2131.77 2349.18,2139.81 2344.45,2263.19 2343.93,2276.72" disallow="tram rail_urban rail rail_electric rail_fast ship">
+        <lane index="0">
+            <param key="origId" value="208128052"/>
+        </lane>
+        </edge> 
+        -->
+
+        <edge id="208128052#0" from="1937711039" to="8349563238" name="科技中二路" priority="11" type="highway.secondary" numLanes="1" speed="27.78" shape="2355.35,1978.87 2355.07,1986.04 2349.49,2131.77" disallow="tram rail_urban rail rail_electric rail_fast ship">
+            <lane index="0">
+                <param key="origId" value="208128052"/>
+            </lane>
+        </edge>
+
+        <edge id="208128052#1" from="8349563238" to="2184499023" name="科技中二路" priority="11" type="highway.secondary" numLanes="2" speed="27.78" shape="2349.49,2131.77 2349.18,2139.81 2344.45,2263.19 2343.93,2276.72" disallow="tram rail_urban rail rail_electric rail_fast ship">
+            <lane index="0">
+                <param key="origId" value="208128052"/>
+            </lane>
+            <lane index="1">
+                <param key="origId" value="208128052"/>
+            </lane>
+        </edge>
+        ```
+
 

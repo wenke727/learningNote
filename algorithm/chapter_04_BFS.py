@@ -1262,5 +1262,80 @@ class Solution:
 
 
 
+# 1029 · 寻找最便宜的航行旅途（最多经过k个中转站）
+# [2021年4月8日]
+# https://www.lintcode.com/problem/1029/
+from heapq import heappop, heappush
+class Solution:
+    def build_graph(self, flights):
+        graph = {}
+        for start, end, cost in flights:
+            if start not in graph:
+                graph[start] = [(cost, end)]
+            else:
+                graph[start].append( (cost, end) )
 
+        return graph
 
+    def findCheapestPrice(self, n, flights, src, dst, K):
+        """
+            @param n: a integer
+            @param flights: a 2D array
+            @param src: a integer
+            @param dst: a integer
+            @param K: a integer
+            @return: return a integer
+        """
+        graph = self.build_graph(flights)
+        if src not in graph: return -1
+
+        heap = []
+        for cost, nxt in graph[src]:
+            heappush(heap, (cost, nxt, 0))
+        
+        while heap:
+            cost, cur, level = heappop(heap)
+            if level > K:
+                continue
+            if cur == dst:
+                return cost
+            
+            if cur in graph:
+                for nxt_cost, nxt_stop in graph[cur]:
+                    heappush(heap, (cost+nxt_cost, nxt_stop, level+1))
+        
+        return -1
+
+import heapq
+class Solution:
+    def networkDelayTime(self, times, N, K):
+        if not times: return 0
+            
+        graph = collections.defaultdict(list)
+        for s, e, cost in times:
+            graph[s].append((e, cost))
+
+        dist, seen = {}, set()
+        queue = [(0, K)]
+        
+        while queue:
+            cost, cur = heapq.heappop(queue)
+            if cur in seen: continue
+            
+            dist[cur] = cost
+            seen.add(cur)
+            
+            for nxt, time in graph[cur]:
+                if nxt in seen:
+                    continue
+                
+                if nxt in dist and dist[nxt] < time + cost:
+                    continue
+                
+                dist[nxt] = time + cost
+                heapq.heappush(queue, (time + cost, nxt))
+                
+        if len(dist) != N:
+            return -1
+            
+        return max(dist.values())

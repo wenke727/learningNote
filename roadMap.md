@@ -1,5 +1,6 @@
 ## 工程基础
 Ref: https://zhuanlan.zhihu.com/p/192633890
+![road map](./.fig/metro_map.jpg)
 ****
 ### Python
 * 学习掌握Python的基本语法，可以通过各类入门教程来看，个人推荐《Learn Python the Hard Way》。

@@ -9,7 +9,7 @@ import sys
 逆向 => 分治
 """
 # 476/877 石子归并
-# [2020年11月6日， 2020年11月24日]
+# [2020年11月6日, 2020年11月24日, 2021年3月31日]
 # https://www.lintcode.com/problem/stone-game/description
 # https://www.jiuzhang.com/solution/stone-game/#tag-lang-python
 # version: DFS
@@ -19,11 +19,8 @@ class Solution:
         return self.dfs(piles, 0, len(piles)-1, {})
 
     def dfs(self, piles, start, end, memo):
-        if (start, end) in memo:
-            return memo[(start, end)]
-
-        if start >= end:
-            return 0
+        if (start, end) in memo: return memo[(start, end)]
+        if start >= end: return 0
 
         cost = sum(piles[start : end+1])
         mimimun = sys.maxsize
@@ -68,12 +65,12 @@ class Solution:
         for i in range(n):
             range_sum[i][i] = A[i]
             for j in range(i + 1, n):
-                range_sum[i][j] = range_sum[i][j - 1] + A[j]
+                range_sum[i][j] = range_sum[i][j-1] + A[j]
         return range_sum
 
 
 # 168/312. 吹气球
-# [2020年11月6日]
+# [2020年11月6日 2021年3月31日]
 # https://www.lintcode.com/problem/burst-balloons/description
 # https://www.jiuzhang.com/solution/burst-balloons/#tag-lang-python
 # version 2
@@ -111,7 +108,7 @@ class Solution:
         for i in range(n - 1, -1, -1):
             for j in range(i, n):
                 for k in range(i, j + 1):
-                    left = nums[i - 1] if i > 0 else 1
+                    left = nums[i-1] if i > 0 else 1
                     right = nums[j + 1] if j < n - 1 else 1
                     dp[i][j] = max(dp[i][j], dp[i][k - 1] + dp[k + 1][j] + left * nums[k] * right)
     
@@ -133,37 +130,30 @@ class Solution:
         return dp[0][n - 1]
 
 
-# 430. 攀爬字符串 # TODO
+# 430. 攀爬字符串 
+# [2021年3月31日]
 # https://www.lintcode.com/problem/scramble-string/description
 # https://www.jiuzhang.com/solution/scramble-string/#tag-lang-python
 class Solution:
-    """
-    @param s1: A string
-    @param s2: Another string
-    @return: whether s2 is a scrambled string of s1
-    """
     def isScramble(self, s1, s2):
-        # write your code here
         return self.dfs(s1, s2, {})
     
     def dfs(self, s1, s2, memo):
+        if (s1, s2) in memo: return memo[(s1, s2)]
         
-        if (s1, s2) in memo:
-            return memo[(s1, s2)]
+        if len(s1) != len(s2): return False
         
-        if len(s1) != len(s2):
-            return False
-        
-        if s1 == s2:
-            return True
+        if s1 == s2: return True
         
         s1_list = list(s1)
         s2_list = list(s2)
         if s1_list.sort() != s2_list.sort():
             return False
         
+        # for i in range(len(s1)): # the begin point is 1
         for i in range(1, len(s1)):
-            if (self.dfs(s1[:i], s2[:i], memo) and self.dfs(s1[i:], s2[i:], memo)) or (self.dfs(s1[:i], s2[-i:], memo) and self.dfs(s1[i:], s2[:-i], memo)):
+            if (self.dfs(s1[:i], s2[:i], memo) and self.dfs(s1[i:], s2[i:], memo)) or \
+               (self.dfs(s1[:i], s2[-i:], memo) and self.dfs(s1[i:], s2[:-i], memo)):
                 memo[(s1, s2)] = True
                 return True
         
@@ -171,49 +161,53 @@ class Solution:
         return False
 
 
+# 741 · 计算最大值II
+# https://www.lintcode.com/problem/741/
+class Solution:
+    """
+    @param str: a string of numbers
+    @return: the maximum value
+    """
+    def maxValue(self, str):
+        n = len(str)
+        dp = [[0 for i in range(n)] for j in range(n)]
+        for i in range(n):
+            dp[i][i] = ord(str[i]) - ord('0')
+
+        for l in range(2, n + 1):
+            for i in range(n - l + 1):
+                j = i + l - 1
+                for k in range(i, j):
+                    dp[i][j] = max(dp[i][j],  
+                                   dp[i][k] + dp[k + 1][j],
+                                   dp[i][k] * dp[k + 1][j]
+                                )
+        
+        return dp[0][n - 1]
+
+
 """匹配类动态规划"""
 # 77/1143. 最长公共子序列
-# [2020年11月6日 2021年1月2日]
+# [2020年11月6日 2021年1月2日 2021年3月31日]
 # https://www.lintcode.com/problem/longest-common-subsequence/description
 # https://www.jiuzhang.com/solution/longest-common-subsequence/#tag-lang-python
-# version 1
 class Solution:
     def longestCommonSubsequence(self, A, B):
         n, m = len(A), len(B)
-        
         dp = [[0] * (m + 1), [0] * (m + 1)]
         
         for i in range(1, n + 1):
             for j in range(1, m + 1):
-                if A[i - 1] == B[j - 1]:
-                    dp[i % 2][j] = dp[(i - 1) % 2][j - 1] + 1
+                if A[i-1] == B[j-1]:
+                    dp[i%2][j] = dp[(i-1)%2][j-1] + 1
                 else:
-                    dp[i % 2][j] = max(dp[i % 2][j - 1], dp[(i - 1) % 2][j], dp[(i - 1) % 2][j - 1])
+                    dp[i%2][j] = max(dp[i%2][j-1], dp[(i-1) % 2][j], dp[(i-1) % 2][j-1])
         
         return dp[n % 2][m]
-# version 
-class Solution:
-    """
-    @param A: A string
-    @param B: A string
-    @return: The length of longest common subsequence of A and B
-    """
-    def longestCommonSubsequence(self, A, B):
-        n, m = len(A), len(B)
-        f = [[0] * (n + 1) for i in range(m + 1)]
-
-        for i in range(1, n + 1):
-            for j in range(1, m + 1):
-                f[i][j] = max(f[i][j - 1], f[i - 1][j])
-        
-                if A[i - 1] == B[j - 1]:
-                    f[i][j] = max(f[i][j], f[i - 1][j - 1] + 1)
-        
-        return f[n][m]
 
 
 # 119. 编辑距离 
-# [2020年11月6日 2021年1月2日 2021年1月4日]
+# [2020年11月6日 2021年1月2日 2021年1月4日 2021年3月31日]
 # https://www.lintcode.com/problem/edit-distance/description
 # https://www.jiuzhang.com/solution/edit-distance/#tag-lang-python
 class Solution:
@@ -225,16 +219,17 @@ class Solution:
             dp[0][j] = j
         
         for i in range(1, n+1):
-            dp[i % 2][0] = i
+            dp[i%2][0] = i
             for j in range(1, m+1):
-                d, u, l = dp[(i-1) % 2][j-1], dp[(i-1) % 2][j], dp[i % 2][j-1]
+                d, u, l = dp[(i-1)%2][j-1], dp[(i-1)%2][j], dp[i%2][j-1]
                 
                 if word1[i-1] == word2[j-1]:
-                    dp[i % 2][j] = min( d, u + 1, l + 1 )
+                    dp[i%2][j] = min(d, u+1, l+1)
                 else:
-                    dp[i % 2][j] = min( d, u, l ) + 1
+                    dp[i%2][j] = min(d, u, l) + 1
         
         return dp[n % 2][m]
+
 # version: 入门
 class Solution:
     def minDistance(self, word1, word2):
@@ -256,7 +251,8 @@ class Solution:
                     dp[i+1][j+1] = min(d, u, l) + 1
         
         return dp[n][m]
-# version 带打印功能 # TODO DFS + memoization version，求出所有具体的操作方式 
+
+# version 带打印功能  DFS + memoization version，求出所有具体的操作方式 
 class Node:
     def __init__(self, value, choice):
         self.value = value
@@ -280,17 +276,10 @@ class Solution:
         for i in range(n):
             for j in range(m):
                 d, u, l = dp[i][j], dp[i][j+1], dp[i+1][j]
-                # if i == n-1 and j == m-1:
-                    # print( d.value, u.value, l.value )
-                    
-                    
                 if word1[i] == word2[j]:
                     dp[i+1][j+1] =  Node(d.value, 0)
                 else:
                     dp[i+1][j+1] = self.minNode( d, u, l )
-                    
-                # if i == n-1 and j == m-1:
-                #     print( d.value, u.value, l.value, dp[i+1][j+1].value, dp[i+1][j+1].choice )
         
         self.print_result(word1, word2, dp)
             
@@ -307,49 +296,40 @@ class Solution:
         return Node(val+1, 3)
         
     def print_result( self, word1, word2, dp ):
-        for i in range(len(dp)):
-            res = []
-            for j in dp[i]:
-                res.append( j.value) 
-            print(res)
-        print()
-        for i in range(len(dp)):
-            res = []
-            for j in dp[i]:
-                res.append( j.choice) 
-            print(res)
-        
-        
         rows, cols = len(dp), len(dp[0])
         i , j = rows-1, cols-1
         print( f"change {word1} to {word2}:" )
         
+        info = []
         while i != 0 and j != 0:
             c1, c2 = word1[i-1], word2[j-1]
             choice = dp[i][j].choice
-            print( f"word1[{i-1}]:" )
+            info.append( f"word1[{i-1}]:" )
             if choice == 0:
-                print( f'\tskip {c1}, [{i},{j}]' )
+                info.append( f'\tskip {c1}, [{i},{j}]' )
                 i-=1; j-=1
             elif choice == 1:
-                print( f'\treplace {c1} with {c2}, [{i},{j}]' )
+                info.append( f'\treplace {c1} with {c2}, [{i},{j}]' )
                 i-=1; j-=1
             elif choice == 2:
-                print( f'\tdelete {c1}, [{i},{j}]' )
+                info.append( f'\tdelete {c1}, [{i},{j}]' )
                 i-=1
             else:
-                print( f"\tinsert {c2}, [{i},{j}]" )
+                info.append( f"\tinsert {c2}, [{i},{j}]" )
                 j-=1
         
         while i > 0:
-            print( f"word1[{i-1}]:" )
-            print( f'\tdelete {word1[i-1]}, [{i},{j}]' )
+            info.append( f"word1[{i-1}]:" )
+            info.append( f'\tdelete {word1[i-1]}, [{i},{j}]' )
             i-=1
             
         while j > 0:
-            print( f"word1[0]:" )
-            print( f'\tinsert {word2[j-1]}, [{i},{j}]' )
-            j-=1      
+            info.append( f"word1[0]:" )
+            info.append( f'\tinsert {word2[j-1]}, [{i},{j}]' )
+            j-=1    
+
+        for i in info[::-1]:
+            print(i)  
 
 
 # 623. K步编辑 # TODO
@@ -403,10 +383,10 @@ class Solution:
             if node.children[i] is not None:
                 next[0] = dp[0] + 1
                 for j in range(1, n + 1):
-                    if ord(target[j - 1]) - ord('a') == i:
-                        next[j] = min(dp[j - 1], min(next[j - 1] + 1, dp[j] + 1))
+                    if ord(target[j-1]) - ord('a') == i:
+                        next[j] = min(dp[j-1], min(next[j-1] + 1, dp[j] + 1))
                     else:
-                        next[j] = min(dp[j - 1] + 1, min(next[j - 1] + 1, dp[j] + 1))
+                        next[j] = min(dp[j-1] + 1, min(next[j-1] + 1, dp[j] + 1))
 
                 self.find(node.children[i], result, k, target, next)
 
@@ -509,9 +489,10 @@ class Solution:
 
 """背包类Dp"""
 # 92. 背包问题
-# [2020年11月6日]
+# [2020年11月6日 2021年4月7日]
 # https://www.lintcode.com/problem/backpack/description
 # https://www.jiuzhang.com/solution/backpack/#tag-lang-python
+# 在n个物品中挑选若干物品装入背包，最多能装多满？假设背包的大小为m
 # version 1
 class Solution:
     """
@@ -522,7 +503,6 @@ class Solution:
     def backPack(self, m, A):
         n = len(A)
         dp = [[False] * (m + 1) for _ in range(n + 1)]
-        
         dp[0][0] = True
 
         for i in range(1, n+1):
@@ -531,9 +511,9 @@ class Solution:
         for i in range(1, n+1):
             for j in range(1, m+1):
                 if j >= A[i-1]:
-                    dp[i][j] = dp[i - 1][j] or dp[i - 1][j - A[i-1] ]
+                    dp[i][j] = dp[i-1][j] or dp[i-1][j - A[i-1] ]
                 else:
-                    dp[i][j] = dp[i - 1][j] 
+                    dp[i][j] = dp[i-1][j] 
         
         for i in range(m, -1, -1):
             if dp[n][i]:
@@ -590,29 +570,23 @@ class Solution:
 
 
 # 125. 背包问题 II
-# [2020年11月6日 2020年1月5号]
+# [2020年11月6日 2020年1月5号 2021年4月8日]
 # https://www.lintcode.com/problem/backpack-ii/description
 # https://www.jiuzhang.com/solution/backpack-ii/#tag-lang-python
+# 有 n 个物品和一个大小为 m 的背包. 给定数组 A 表示每个物品的大小和数组 V
 # version 1
 class Solution:
-    """
-    @param m: An integer m denotes the size of a backpack
-    @param A: Given n items with size A[i]
-    @return: The maximum size
-    """
     def backPackII(self, m, A, V):
         n = len(A)
         dp = [[0] * (m + 1) for _ in range(n + 1)]
         
-        dp[0][0] = True
-
         for i in range(1, n+1):
             dp[i][0] = 0
             for j in range(1, m+1):
-                dp[i][j] = dp[i - 1][j] 
+                dp[i][j] = dp[i-1][j] 
                 if j >= A[i-1]:
                     # ! 仔细品品dp的含义，dp[i][j]: 对于前i个物品，当前书包的容量为w，这个情况下装下的最大价值
-                    dp[i][j] = max( dp[i][j], dp[i - 1][j - A[i-1]] + V[i-1])
+                    dp[i][j] = max( dp[i][j], dp[i-1][j - A[i-1]] + V[i-1])
         return dp[n][m]
 # version 3
 class Solution:
@@ -627,20 +601,22 @@ class Solution:
         dp = [[0] * (m + 1), [0] * (m + 1)]
 
         for i in range(1, n + 1):
-            dp[i % 2][0] = 0
+            dp[i%2][0] = 0
         
             for j in range(1, m + 1):
-                dp[i % 2][j] = dp[(i - 1) % 2][j]
-                if A[i - 1] <= j:
-                    dp[i % 2][j] = max( dp[i % 2][j], dp[(i - 1) % 2][j - A[i - 1]] + V[i - 1] )
+                dp[i%2][j] = dp[(i-1) % 2][j]
+                if A[i-1] <= j:
+                    dp[i%2][j] = max( dp[i%2][j], dp[(i-1) % 2][j - A[i-1]] + V[i-1] )
         
         return dp[n % 2][m]
 
 
 # 562. 背包问题 IV
-# [2020年11月7日]
+# [2020年11月7日  2021年4月8日]
 # https://www.lintcode.com/problem/backpack-iv/description
 # https://www.jiuzhang.com/solution/backpack-iv/#tag-lang-python
+# 给出 n 个物品, 以及一个数组, nums[i]代表第i个物品的大小, 保证大小均为正数并且没有重复, 正整数 target 表示背包的大小, 找到能填满背包的方案数
+# 每一个物品可以使用无数次
 class Solution:
     def backPackIV(self, nums, target):
         if not nums: return 0
@@ -650,26 +626,40 @@ class Solution:
         dp[0][0] = 1
 
         for i in range(1, n + 1):
-            dp[i % 2][0] = 1
+            dp[i%2][0] = 1
             for j in range(1, target + 1):
-                dp[i % 2][j] = dp[(i - 1) % 2][j]
-                if j >= nums[i - 1]:
-                    dp[i % 2][j] += dp[i % 2][j - nums[i - 1]]
+                dp[i%2][j] = dp[(i-1) % 2][j]
+                if j >= nums[i-1]:
+                    dp[i%2][j] += dp[i%2][j - nums[i-1]]
         return dp[n % 2][target]
 
 
 # 89. K数之和
-# [2020年11月7日]
+# [2020年11月7日 2021年4月8日]
 # https://www.lintcode.com/problem/k-sum/description
 # https://www.jiuzhang.com/solution/k-sum/#tag-lang-python
+# 在这 n 个数里面找出 k 个数，使得这 k 个数的和等于目标数字
 # DESC 使用滚动数组的三维背包
 class Solution:
-    """
-    @param A: An integer array
-    @param k: A positive integer (k <= length(A))
-    @param target: An integer
-    @return: An integer
-    """
+    def kSum(self, A, k, target):
+        n = len(A)
+        dp = [
+            [[0] * (target + 1) for _ in range(k + 1)] for i in range(n+1)
+        ]
+
+        for i in range(n+1):
+            dp[i][0][0] = 1
+        
+        for i in range(1, n+1):
+            for j in range(1, min(k+1, i+1)):
+                for s in range(1, target+1):
+                    dp[i][j][s] = dp[i-1][j][s]
+                    if s >= A[i-1]:
+                        dp[i][j][s] += dp[i-1][j-1][s-A[i-1]]
+        
+        return dp[-1][-1][-1]
+
+class Solution:
     def kSum(self, A, k, target):
         n = len(A)
         dp = [
@@ -680,19 +670,21 @@ class Solution:
         # dp[i][j][s], 前 i 个数里挑出 j 个数，和为 s
         dp[0][0][0] = 1
         for i in range(1, n + 1):
-            dp[i % 2][0][0] = 1
+            dp[i%2][0][0] = 1
             for j in range(1, min(k + 1, i + 1)):
                 for s in range(1, target + 1):
-                    dp[i % 2][j][s] = dp[(i - 1) % 2][j][s]
+                    dp[i%2][j][s] = dp[(i-1) % 2][j][s]
 
-                    if s >= A[i - 1]:
-                        dp[i % 2][j][s] += dp[(i - 1) % 2][j - 1][s - A[i - 1]]
+                    if s >= A[i-1]:
+                        dp[i%2][j][s] += dp[(i-1) % 2][j-1][s - A[i-1]]
                         
         return dp[n % 2][k][target]
 
 # 91. 最小调整代价 # TODO
 # https://www.lintcode.com/problem/minimum-adjustment-cost/description
 # https://www.jiuzhang.com/solution/minimum-adjustment-cost/#tag-lang-python
+# 给一个整数数组，调整每个数的大小，使得相邻的两个数的差不大于一个给定的整数target，
+# 调整每个数的代价为调整前后的差的绝对值，求调整代价之和最小是多少
 class Solution:
     """
     @param: A: An integer array
@@ -716,7 +708,7 @@ class Solution:
                     right = min(100, j + target)
                     for k in range(left, right + 1):
                         # 当A[i-1]=k时，答案为A[i-1]=k的代价dp[i-1][k]，加上A[i]=j的调整代价abs(j-A[i])
-                        dp[i][j] = min(dp[i][j], dp[i - 1][k] + abs(j - A[i]))
+                        dp[i][j] = min(dp[i][j], dp[i-1][k] + abs(j - A[i]))
         
         mincost = sys.maxsize
         for i in dp[n - 1]:
