@@ -4,5 +4,6 @@ Doing by learnig
 
 
 Ref: https://github.com/wois/ai-roadmap
+![road map](./.fig/RoadToDataScientist.png)
 ![road map](./.fig/metro_map.jpg)
 

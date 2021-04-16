@@ -1,5 +1,8 @@
 # XML解析库
 
+
+****
+
 # Celery 分布式爬虫
 [使用celery构建分布式爬虫抓取空气质量指数](https://www.jianshu.com/p/f225fcc3c97d)
 
@@ -12,6 +15,9 @@ ps auxww | grep 'celery' | awk '{print $2}' | xargs kill -9
 * Tutorial
 [任务队列神器：Celery 入门到进阶指南](https://blog.csdn.net/chinesehuazhou2/article/details/115153198)
 
+
+
+****
 
 # GITHUB
 * [ProxyPool IP代理池](https://github.com/Python3WebSpider/ProxyPool)
@@ -46,4 +52,11 @@ ps auxww | grep 'celery' | awk '{print $2}' | xargs kill -9
     json.loads(response.content)
     ```
 
+
+****
+
+
+# [shapely](https://shapely.readthedocs.io/en/stable/manual.html)
+* `parallel_offset`
+Returns a LineString or MultiLineString geometry at a distance from the object on its right or its left side.
 
