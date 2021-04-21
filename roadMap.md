@@ -4,6 +4,8 @@ GIT adress: https://github.com/AMAI-GmbH/AI-Expert-Roadmap
 
 ### Introduction
 ![](./.fig/intro.svg)
+* changeLog
+  
 ### Fundamentals
 ![](./.fig/fundamentals.svg)
 ### Data Science Roadmap

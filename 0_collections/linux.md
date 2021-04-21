@@ -3,6 +3,7 @@
 ## Jupyter
 
 * AI learing: http://192.168.135.34:8888/tree?
+  folder: `/home/pcl/Data/0_Learning/jupyer_folder`
 * Pytorch: http://192.168.135.34:8888/tree?
 
 ## 操作命令
