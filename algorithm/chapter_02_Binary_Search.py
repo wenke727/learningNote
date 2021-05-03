@@ -37,7 +37,8 @@ class Solution:
         return -1
 
 
-# 61. 搜索区间
+
+# 61. 搜索区间 🌟
 # [2020年10月22日 2020年2月22日]
 # https://www.lintcode.com/problem/search-for-a-range/description
 class Solution:
@@ -56,7 +57,7 @@ class Solution:
 
         while start + 1 < end:
             mid = (start+end) //2
-            # ! the target side first
+            # ! the target side first, three cases: <, = , >
             if nums[mid] < target:
                 start = mid
             else:
@@ -88,15 +89,15 @@ class Solution:
     @return: An integer which is the first bad version.
     """
     def findFirstBadVersion(self, n):
-        left, right = 0, n
-        while left+1 < right:
-            mid = (left + right) // 2
-            if isBadVersion(mid):
-                right = mid
+        start, end = 0, n
+        while start + 1 < end:
+            mid = (start + end) // 2
+            if SVNRepo.isBadVersion(mid):
+                end = mid
             else:
-                left = mid
+                start = mid
         
-        return left if isBadVersion(left) else right
+        return start if SVNRepo.isBadVersion(start) else end
 
 
 # 460/658. 在排序数组中找最接近的K个数
@@ -127,45 +128,6 @@ class Solution:
             else:
                 end = mid
         
-        # error: `>`-> `>=`
-        if arr[start] >= target: return start
-        if arr[end] >= target: return end
-        return len(arr)
-
-    def isLeftCloser(self, arr, target, left, right):
-        if left < 0:
-            return False
-        if right >= len(arr):
-            return True
-        return target - arr[left] <= arr[right] - target
-
-# version Leetcode
-class Solution:
-    def findClosestElements(self, arr, k, target):
-        right = self.findUpperClosest( arr, target )
-        print(right, arr[right])
-        left = right - 1
-        results = []
-        
-        for _ in range(k):
-            if self.isLeftCloser(arr, target, left, right):
-                results.append(arr[left])
-                left -= 1
-            else:
-                results.append(arr[right])
-                right += 1
-        results.sort()
-
-        return results
-
-    def findUpperClosest(self, arr, target):
-        start, end = 0, len(arr)-1
-        while start + 1 < end:
-            mid =(start + end) // 2
-            if arr[mid] < target:
-                start = mid
-            else:
-                end = mid
         # error: `>`-> `>=`
         if arr[start] >= target: return start
         if arr[end] >= target: return end
@@ -209,11 +171,8 @@ class Solution:
 # 159/152. 寻找旋转排序数组中的最小值
 # [2020年10月22日]
 # https://www.lintcode.com/problem/find-minimum-in-rotated-sorted-array/description https://leetcode-cn.com/problems/maximum-product-subarray/
+# DESC [0 1 2 4 5 6 7] -> [4 5 6 7 0 1 2]
 class Solution:
-    """
-    @param nums: a rotated sorted array
-    @return: the minimum number in the array
-    """
     def findMin(self, nums):
         start, end = 0, len(nums) - 1
 
@@ -309,7 +268,6 @@ class Solution:
 # https://www.lintcode.com/problem/total-occurrence-of-target/description
 class Solution:
     def totalOccurrence(self, A, target):
-        # write your code here
         n = len(A) 
         if not n: return 0
         last = self.findLastTargetNum(A, target, n)

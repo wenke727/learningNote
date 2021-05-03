@@ -60,3 +60,13 @@ ps auxww | grep 'celery' | awk '{print $2}' | xargs kill -9
 * `parallel_offset`
 Returns a LineString or MultiLineString geometry at a distance from the object on its right or its left side.
 
+
+# Pandas
+## 格式设置
+在使用dataframe时遇到datafram在列太多的情况下总是自动换行显示的情况，导致数据阅读困难
+在代码中设置显示的长宽等, [REF](https://blog.csdn.net/lihuarongaini/article/details/101298171)
+```
+pd.set_option('display.max_rows', 500)
+pd.set_option('display.max_columns', 500)
+pd.set_option('display.width', 1000)
+```

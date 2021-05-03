@@ -534,5 +534,182 @@ class StandardBloomFilter:
        
         return True
 
+# 计数型布隆过滤器 · Counting Bloom Filter
+# https://www.lintcode.com/problem/555/
+import random
+class HashFunction:  
+    def __init__(self, cap, seed):
+        self.cap = cap
+        self.seed = seed
+    
+    def hash(self, value):
+        ret = 0
+        for i in value:
+            ret += self.seed * ret + ord(i)
+            ret %= self.cap
+
+        return ret   
+
+
+class CountingBloomFilter:
+    def __init__(self, k):
+        self.hashFunc = []
+        for i in range(k):
+            self.hashFunc.append(HashFunction(random.randint(10000, 20000), i * 2 + 3))
+        
+        self.bits = [0 for i in range(20000)]
+        
+    def add(self, word):
+        for f in self.hashFunc:
+            position = f.hash(word)
+            self.bits[position] += 1
+            
+    def remove(self, word):
+        for f in self.hashFunc:
+            position = f.hash(word)
+            self.bits[position] -= 1
+
+    def contains(self, word):
+        for f in self.hashFunc:
+            position = f.hash(word)
+            if self.bits[position] <= 0:
+                return False
+       
+        return True
+
+
+# 215 · 限制器
+# https://www.lintcode.com/problem/215/
+from collections import defaultdict
+from bisect import bisect_left
+
+class Solution:
+    """
+    @param: timestamp: the current timestamp
+    @param: event: the string to distinct different event
+    @param: rate: the format is [integer]/[s/m/h/d]
+    @param: increment: whether we should increase the counter
+    @return: true or false to indicate the event is limited or not
+    """
+    def __init__(self,):
+        self.event_to_timestamps = defaultdict(list)
+        self.windows = {
+            's':1,
+            'm':60,
+            'h':3600,
+            'd':86400
+        }
+        
+    def isRatelimited(self, timestamp, event, rate, increment):
+        max_count = int(rate[:-2])
+        window = self.windows[rate[-1]]
+        
+        is_limited = self.is_valid(timestamp, event, max_count, window)
+        
+        if not is_limited and increment:
+            self.event_to_timestamps[event].append(timestamp)
+        
+        return is_limited
+        
+    
+    def is_valid(self, timestamp, event, max_count, window):
+        start_time = timestamp - window + 1 
+        idx = bisect_left(self.event_to_timestamps[event], start_time)
+        cnt = len(self.event_to_timestamps[event]) - idx
+        
+        return cnt >= max_count
+
+# 519 · 一致性哈希
+# https://www.lintcode.com/problem/519/
+from heapq import heappop, heappush
+class Solution:
+    """
+    @param: n: a positive integer
+    @return: n x 3 matrix
+    """
+    def consistentHashing(self, n):
+        if not n:
+            return 
+        
+        shard = [0, 359, 1]
+        heap = []
+
+        heappush(heap, (shard[0]-shard[1], shard[2], shard))
+
+        for i in range(2, n+1):
+            _, _, old = heappop(heap)
+            old_start, old_end, old_id = old
+
+            new = ( (old_start+old_end)//2 + 1, old_end, i )
+            old = ( old_start, (old_start+old_end)//2, old_id )
+            heappush(heap, (old[0]-old[1], old[2], old))
+            heappush(heap, (new[0]-new[1], new[2], new))
+        
+        res = []
+        for i in heap:
+            res += [ i[2] ]
+        
+        return res
+        
+
+# 520 · 一致性哈希 II
+# https://www.lintcode.com/problem/520/
+import random
+class Solution:
+    @classmethod
+    def create(cls, n, k):
+        """
+        @param {int} n a positive integer
+        @param {int} k a positive integer
+        @return {Solution} a Solution object
+        """
+        solution = cls()
+        solution.ids = {}
+        solution.mechines = {}
+        solution.n = n
+        solution.k = k
+        
+        return solution
+
+    def addMachine(self, machine_id):
+        """
+        @param: machine_id: An integer
+        @return: a list of shard ids
+        """
+        ids = []
+        for i in range(self.k):
+            index = random.randint(0, self.n - 1)
+            while index in self.ids:
+                index = random.randint(0, self.n-1)
+            
+            ids.append(index)
+            self.ids[index] = True
+
+        ids.sort()
+        self.mechines[machine_id] = ids
+        
+        return ids
+
+    def getMachineIdByHashCode(self, hashcode):
+        """
+        @param: hashcode: An integer
+        @return: A machine id
+        """
+        machine_id = -1
+        distance = self.n+1
+
+        for key, val_lst in self.mechines.items():
+            import bisect
+            index = bisect.bisect_left(val_lst, hashcode) % len(val_lst)
+
+            d = val_lst[index] - hashcode
+            if d < 0:
+                d += self.n
+
+            if d < distance:
+                machine_id = key
+                distance = d
+
+        return machine_id
 
 

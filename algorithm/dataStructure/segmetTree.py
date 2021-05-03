@@ -322,3 +322,52 @@ class Solution:
         return min(self.query(root.left, start, end), self.query(root.right, start, end))
 
 
+# 构造队列 · Construction Queue
+# https://www.lintcode.com/problem/998/
+class SegmentTree():
+    def __init__(self, start, end):
+        self.start, self.end = start, end
+        self.left, self.right = None, None
+        self.val = 0
+
+class Solution:
+    def getQueue(self, n, arr1, arr2):
+        arr = [(arr1[i], arr2[i]) for i in range(n)]
+        arr = sorted(arr, self.cmp)
+        root = self.build(0, n-1)
+        ans = [0 for i in range(n)]
+        for i in range(n):
+            x, y = arr[i]
+            ans[self.query(y+1, root)] = x
+
+    def cmp(self, a, b):
+        return b[0] > a[0]
+    
+    def build(self, left, right):
+        if left > right:
+            return None
+        root = SegmentTree(left, end)
+        root.val = 1
+
+        if left != right:
+            mid = (left+right) >> 1
+            root.left = self.build(left, mid)
+            root.right = self.build(mid+1, right)
+            root.val = root.left.val + root.right.val
+        
+        return root
+    
+    def query(self, x, root):
+        if root.start == root.end:
+            root.val == 0
+            return root.start
+        
+        pos = 0
+        if x <= root.left.val:
+            pos = self.query(x, root.left)
+        else:
+            pos = self.query(x-root.left.val, root.right)
+        
+        root.val = root.left.val + root.right.val
+
+        return pos
