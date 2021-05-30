@@ -1,14 +1,31 @@
 # Amax server
 
+## 软件安装
+
+- [Ubuntu 下安装 gdal 与python GDAL](https://www.cnblogs.com/Assist/p/14034447.html)
+
+  ```
+  sudo add-apt-repository ppa:ubuntugis/ppa 
+  sudo apt-get update
+  sudo apt-get install gdal-bin
+  sudo apt-get install libgdal-dev
+  export CPLUS_INCLUDE_PATH=/usr/include/gdal
+  export C_INCLUDE_PATH=/usr/include/gdal
+  gdal-config --version  #(get version)
+  pip install GDAL==version
+  ```
+
 ## 服务
+
 - postgresql
+
   ```
   /etc/init.d/postgresql start
+  or sudo systemctl start postgresql
   # passwd: the amax passwd
   ```
-## ssh
 
-- 自启动
+- ssh自启动
 
   ```
   vi /etc/rc.local
@@ -92,6 +109,12 @@
   du -sh [目录名] # 返回该目录的大小
   du -sm [文件夹] # 返回该文件夹总M数
   du -h [目录名] # 查看指定文件夹下的所有文件大小（包含子文件夹）
+  ```
+
+- 查找代码的函数
+
+  ```
+  find RoadNetworkCreator_by_View/ -name "*.py"|xargs wc -l
   ```
 
 - scp
@@ -198,4 +221,18 @@
     docker run --restart=always
     # 2.2如果容器已经启动，可以使用命令更新参数
     docker update --restart=always 容器id    
+    ```
+- [端口映射](https://www.jb51.net/article/142462.htm)
+    ```
+    iptables -t nat --list-rules PREROUTING
+    
+    iptables -t nat --list-rules DOCKER
+    iptables -t nat -A DOCKER ! -i docker0 -p tcp -m tcp --dport 5000 -j DNAT --to-destination 172.17.0.3:5000
+
+    iptables -t nat --list-rules POSTROUTING
+    iptables -t nat -A POSTROUTING -s 172.17.0.3/32 -d 172.17.0.3/32 -p tcp -m tcp --dport 5000 -j MASQUERADE
+
+
+    iptables --list-rules DOCKER
+    iptables -t filter -A DOCKER -d 172.17.0.3/32 ! -i docker0 -o docker0 -p tcp -m tcp --dport 5000 -j ACCEPT
     ```
