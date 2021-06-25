@@ -1,10 +1,12 @@
-# XML解析库
+# Python常用库指南
+
+## XML解析库
 
 ****
+
 # [multiprocessing](https://docs.python.org/zh-cn/3.8/library/multiprocessing.html)
 
 - if __name__ == '__main__' 部分是必需的解释，
-
 
 # Celery 分布式爬虫
 
@@ -17,14 +19,14 @@ ps auxww | grep 'celery' | awk '{print $2}' | xargs kill -9
 ps auxww | grep 'vscode' | awk '{print $2}' | xargs kill -9
 ```
 
-* Tutorial
+- Tutorial
 [任务队列神器：Celery 入门到进阶指南](https://blog.csdn.net/chinesehuazhou2/article/details/115153198)
 
 ****
 
-# GITHUB
+## GITHUB
 
-* [ProxyPool IP代理池](https://github.com/Python3WebSpider/ProxyPool)
+- [ProxyPool IP代理池](https://github.com/Python3WebSpider/ProxyPool)
     参考教程：
     <https://zhuanlan.zhihu.com/p/59951949?utm_source=wechat_session>；
     <https://cuiqingcai.com/7048.html>
@@ -61,9 +63,9 @@ ps auxww | grep 'vscode' | awk '{print $2}' | xargs kill -9
 
 ****
 
-# [shapely](https://shapely.readthedocs.io/en/stable/manual.html)
+## [shapely](https://shapely.readthedocs.io/en/stable/manual.html)
 
-* `parallel_offset`
+- `parallel_offset`
 Returns a LineString or MultiLineString geometry at a distance from the object on its right or its left side.
 
 # Pandas
@@ -78,3 +80,8 @@ pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 ```
+
+## numpy
+
+- 求差集
+  `np.setdiff1d()`
