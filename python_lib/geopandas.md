@@ -1,0 +1,252 @@
+# Geopandas
+
+## 学习资源
+
+- [Geopandas docs](https://geopandas.org/docs.html)
+- [DataScienceStudyNotes](https://github.com/CNFeffery/DataScienceStudyNotes)
+- [ ] [数据结构篇](https://www.cnblogs.com/feffery/p/11898190.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD74%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87)
+- [ ] [坐标参考系篇](https://www.cnblogs.com/feffery/p/12285828.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD75%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%9D%90%E6%A0%87%E5%8F%82%E8%80%83%E7%B3%BB%E7%AF%87)
+- [ ] [文件IO](https://www.cnblogs.com/feffery/p/12301966.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD77%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6IO)
+- [ ] [空间计算篇（上）](https://www.cnblogs.com/feffery/p/12909284.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD84%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E7%A9%BA%E9%97%B4%E8%AE%A1%E7%AE%97%E7%AF%87%EF%BC%88%E4%B8%8A%EF%BC%89)
+- [ ] [空间计算篇（下）](https://www.cnblogs.com/feffery/p/13129271.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD88%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E7%A9%BA%E9%97%B4%E8%AE%A1%E7%AE%97%E7%AF%87%EF%BC%88%E4%B8%8B%EF%BC%89)
+- [ ] [基础可视化](https://www.cnblogs.com/feffery/p/12361421.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD78%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%9F%BA%E7%A1%80%E5%8F%AF%E8%A7%86%E5%8C%96)
+- [ ] [geoplot篇(上)](https://www.cnblogs.com/feffery/p/12779150.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD82%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94geoplot%E7%AF%87(%E4%B8%8A))
+- [ ] [geoplot篇(下)](https://www.cnblogs.com/feffery/p/12901334.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD83%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94geoplot%E7%AF%87(%E4%B8%8B))
+- [ ] [深入浅出分层设色](https://www.cnblogs.com/feffery/p/12381322.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD79%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E6%B7%B1%E5%85%A5%E6%B5%85%E5%87%BA%E5%88%86%E5%B1%82%E8%AE%BE%E8%89%B2)
+- [ ] [geopandas&geoplot近期重要更新](https://www.cnblogs.com/feffery/p/13233271.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD89%EF%BC%89geopandas%26geoplot%E8%BF%91%E6%9C%9F%E9%87%8D%E8%A6%81%E6%9B%B4%E6%96%B0)
+- [x] [利用geopandas与PostGIS进行交互](https://www.cnblogs.com/feffery/p/13468203.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD93%EF%BC%89%E5%88%A9%E7%94%A8geopandas%E4%B8%8EPostGIS%E8%BF%9B%E8%A1%8C%E4%BA%A4%E4%BA%92)
+- [x] [在geopandas中叠加在线地图](https://www.cnblogs.com/feffery/p/13763601.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD96%EF%BC%89%E5%9C%A8geopandas%E4%B8%AD%E5%8F%A0%E5%8A%A0%E5%9C%A8%E7%BA%BF%E5%9C%B0%E5%9B%BE)
+
+## 基础操作
+
+### 设置CRS
+  
+  ``` python
+  df_edges.set_crs('EPSG:4326', inplace=True)
+  ```
+
+### [sindex](https://geopandas.org/docs/reference/api/geopandas.GeoDataFrame.sindex.html?highlight=sindex)
+
+  ``` python
+  georadius = georadius*dis_factor
+  boxes = traj.geometry.apply(lambda i: box(i.x-georadius, i.y-georadius,i.x+georadius, i.y+georadius))
+  df_candidates = boxes.apply(lambda x: edges.sindex.query(x, predicate='intersects')).explode()
+  ```
+
+### [和PostGIS交互](https://www.cnblogs.com/feffery/p/13468203.html)
+
+PostGIS作为postgresql针对地理空间数据的拓展功能，可以帮助我们有效管理和固化空间矢量数据，以及开展空间数据分析，而geopandas作为Python生态中优秀的空间数据分析处理工具，自然在与PostGIS进行交互方面开发了相应的功能。
+
+``` python
+import geopandas as gpd
+from sqlalchemy import create_engine
+ENGINE = create_engine('postgresql://postgres:123456@192.168.135.16:5432/road_network')
+
+"""
+写入数据
+  name: 字符型，用于指定推送到PostGIS后的表名称
+  con: sqlalchemy.engine.Engine对象，用于建立与数据库的连接
+  if_exists: 字符型，用于指定当数据库中已存在同名表时的相应策略，'fail'表示抛出错误，'replace'指替换，'append'指向原表追加，默认为fail
+  schema: 字符型，用于指定schema，默认为'public'
+  index: bool型，用于指定是否保留index信息
+  index_label: 字符型或序列，当index被设置为True时为index信息指定字段名称
+"""
+df_panos.to_postgis( name='panos', con=engine, if_exists='replace' )
+
+"""
+读取数据:
+  sql: 字符型，对应从空间数据库中提取数据的SQL语句
+  con: 同to_postgis()
+  geom_col: 字符型，用于指定将哪一列作为GeoDataFrame的矢量列
+  crs: 用于指定坐标参考系，同GeoDataFrame的坐标参考系设定方式
+  index_col: 字符型或列表，用于指定将哪些列作为索引
+  parse_dates: 列表，用于预解析时间类型数据
+"""
+gpd.read_postgis( f"SELECT * FROM {matching[feature]} ", geom_col='geometry', con=ENGINE )
+```
+
+## [绘图](https://www.cnblogs.com/feffery/p/12361421.html)
+
+### 基础可视化
+
+- GeoSeries
+
+  ```python
+  """
+  figsize: 传入(宽度, 高度)形式的元组或列表，用于控制绘制出图像的宽度和高度，单位均为英寸
+  facecolor: 设置几何对象的填充色，可接受颜色名称和十六进制色彩，设置为'none'时不填充颜色
+  edgecolor: 设置几何对象的边界色，对面数据和点数据效果较为明显，不建议对线数据设置该参数，传入格式同facecolor
+  linewidth: 设置几何对象边界宽度，对面数据和点数据效果较为明显，不建议对线数据设置该参数
+  linestyle: 字符串类型，用于设置几何对象边界及线数据的线型
+  markersize: 设置点数据的大小
+  marker: 字符串类型，用于设置点数据的形状
+  alpha: 设置对应几何对象全局的色彩透明度，0-1，越大越不透明
+  label: 适用于纯粹的线数据或点数据，在需要添加图例时适用，用作各个对象在图例中显示的名称
+  hatch: 字符型，用于设置面数据内部的填充线样式下文的例子中将具体举例说明
+  ax: matplotlib坐标轴对象，如果需要在同一个坐标轴内叠加多个图层就需要用这个参数传入先前待叠加的ax
+  """
+  ```
+
+- GeoDataFrame
+
+  ``` python
+  """
+  column: 用于指定映射地图视觉元素的数值信息，可以是对应GeoDataFrame的列名，或是直接传入与几何对象一一对应得数值序列，默认为None
+  cmap: 传入映射视觉元素时的色彩方案，具体使用方式下文中会做详细介绍
+  categorical: bool型，True表示指定映射目标列采取离散表示，对于数值型的列有意义，当对应目标列为类别型时自动变为True
+  legend: bool型，为True时会为地图添加图例
+  scheme: str型，用于指定地区分布图分层设色的数值划分方案，下文中会做详细介绍
+  k: int型，用于指定分层设色的色阶数量
+  vmin: None或float，用于指定分层设色的数值范围下限，默认为None即以对应数据中的最小值为下限
+  vmax: None或float，用于指定分层设色的数值范围上限，默认为None即以对应数据中的最大值为上限
+  legend_kwds: 字典型，传入与图例相关的个性化参数
+  classification_kwds: 字典型，传入与分层设色相关的个性化参数
+  missing_kwds: 字典型，传入与缺失值处理相关的个性化参数，用于对缺失值部分的视觉映射做个性化设置
+  """
+  ```
+
+### [叠加在线地图](https://www.cnblogs.com/feffery/p/13763601.html)
+
+其他样式可参考: [网页](https://www.cnblogs.com/feffery/p/13763601.html)
+绘图步骤
+
+- 正常读入矢量数据后，一定要先变换投影为web墨卡托即`EPSG:3857`，
+- 接着正常绘图
+- 最后, ax对象传入ctx.add_basemap中，并添加了参数source代表对应在线瓦片地图的url，参数zoom来控制地图缩放精度级别。
+
+``` python
+import geopandas as gpd
+import contextily as ctx
+import matplotlib.pyplot as plt
+
+cq = gpd.read_file('重庆市.geojson').to_crs('EPSG:3857')
+
+fig, ax = plt.subplots(figsize=(10, 10))
+ax = cq.plot(ax=ax, alpha=0.1, edgecolor='k')
+ax.axis('off')
+
+ctx.add_basemap(ax, 
+                source='https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+                zoom=8)
+
+fig.savefig('图2 叠加在线地图示例.png', pad_inches=0, bbox_inches='tight', dpi=300)
+```
+
+
+
+## 空间计算
+
+- [空间连接](https://www.cnblogs.com/feffery/p/13129271.html)
+  而空间连接不同于常规表连接，其合并同一行的依据不是检查指定的列数值是否相等，而是基于不同矢量表其矢量列之间的空间拓扑关系，譬如相交、包含等
+  - 参数
+    >left_df: GeoDataFrame，传入空间连接对应的左表
+    right_df: GeoDataFrame，传入空间连接对应的右表
+    how: 字符型，用于决定连接方式，'inner'表示内连接，且连接结果表中的矢量列来自左表；'left'表示左连接，且结果表中的矢量列来自左表；'right'表示右连接，最终结果表中的矢量列来自右表
+    op: 字符型，用于设定拓扑判断的规则，`intersects`代表相交，即几何对象之间存在共有的边或内部点；`contains`代表包含，即一个几何对象至少有一个点位于另一个几何对象内部，且其本身没有任何点落在另一个结几何对象的外部；`within`表示在内部，是'contains'的相反情况，即左表被右表矢量'contains'
+    lsuffix: 字符型，代表当左右表连接之后存在重名列时，为左表重名的列添加的后缀，默认为'left'
+    rsuffix: 字符型，意义类似lsuffix，默认为'right'
+  - 案例
+  
+    ``` python
+    path_set = PathSet(cache_folder='/home/pcl/traffic/GBA_tranportation/cache', file_name='wkt_step')
+    df_path  = path_set.convert_to_gdf()
+    shenzhen_boundary = gpd.read_file('../input/ShenzhenBoundary_wgs_citylevel.geojson')
+
+    df_path = gpd.sjoin(df_path, shenzhen_boundary, op='within')
+
+    ```
+
+- [空间裁切](https://www.cnblogs.com/feffery/p/13129271.html)
+  在空间数据分析中，裁切也是非常常用的操作，譬如我们想要获取某个公交站周围500米半径内部的路网矢量，就可以使用到裁切
+  - 参数
+    >gdf: GeoDataFrame或GeoSeries，代表将要被裁切的矢量数据集
+    mask: GeoDataFrame、GeoSeries或shapely中的Polygon、Multi-Polygon对象，代表蒙版矢量
+    keep_geom_type: 同叠加分析overlay中的同名参数
+
+  - 案例
+  
+    ``` python
+    # 裁切所有出租车站点500米缓冲区内部的路网线数据
+    taxi_station_500buffer_roads = gpd.clip(gdf=Berlin_footway, mask=taxi_station_500_buffer)
+    ```
+
+- [simplify](https://www.cnblogs.com/feffery/p/12909284.html)
+  geopandas中沿用shapely中的simplify()方法，帮助我们对过于复杂的线和面进行简化，和QGIS中简化矢量的方法一样，simplify()使用了科学的Douglas-Peucker算法，基于预先设定的阈值𝜖，在递归判断的过程中删掉所有小于𝜖的点
+
+    ```python
+    import numpy as np
+    import matplotlib.patches as mpatches
+
+    np.random.seed(10) # 固定随机数种子
+    # 创建线
+    line = shapely.geometry.LineString([(_, np.random.uniform(-1, 1)) for _ in range(10)])
+    # 绘制简化前
+    ax = gpd.GeoSeries([line]).plot(color='red')
+    # 绘制简化后
+    ax = gpd.GeoSeries([line]).simplify(tolerance=0.5).plot(color='blue', 
+                                                            ax=ax,
+                                                            linestyle='--')
+
+    # 制作图例映射对象列表
+    LegendElement = [plt.Line2D([], [], color='red', label='简化前'),
+                    plt.Line2D([], [], color='blue', linestyle='--', label='简化后')]
+
+    # 将制作好的图例映射对象列表导入legend()中，并配置相关参数
+    ax.legend(handles = LegendElement, 
+            loc='lower left', 
+            fontsize=10)
+
+    ax.set_ylim((-2.5, 1))
+    ax.axis('off')
+    plt.savefig('图7.png', dpi=300, bbox_inches='tight', pad_inches=0)
+    ```
+
+## 常用函数
+
+``` python
+import geopandas as gpd
+from shapely.geometry import Point
+from haversine import haversine, Unit
+
+def gdf_to_geojson(gdf, fn):
+    if 'geojson' not in fn:
+        fn = f'{fn}.geojson'
+    
+    gdf.to_file(fn, driver="GeoJSON")
+
+    return 
+
+
+def df_query(df, key, value):
+    return df.query( f"{key} == @value" )
+
+
+def linestring_length(df:gpd.GeoDataFrame, add_to_att=False, key='length'):
+    """caculate the length of LineString
+    @return: pd:Series, length
+    """
+    if df.crs is None:
+        df.set_crs(epsg=4326, inplace=True)
+    dis =  df.to_crs('epsg:3395').length
+    
+    if add_to_att:
+        df.loc[:, key] = dis
+        return
+    
+    return dis
+
+
+def coords_pair_dist(o, d, xy=True):
+    if isinstance(o, Point) and isinstance(d, Point):
+        return haversine((o.y, o.x), (d.y, d.x), unit=Unit.METERS)
+    
+    if (isinstance(o, tuple) and isinstance(d, tuple)) or \
+       (isinstance(o, list) and isinstance(d, list)):
+        if xy:
+            return haversine(o[::-1], d[::-1], unit=Unit.METERS)
+        else:
+            return haversine(o, d, unit=Unit.METERS)
+    
+    return np.inf
+
+```
