@@ -16,14 +16,15 @@ Note：
 """
 
 # 14/704. 二分查找 
-# [2020年10月21日 2020年2月22日]
+# [2020年10月21日 2020年2月22日 2021年8月2日]
 # https://www.lintcode.com/problem/classical-binary-search/description
 # https://leetcode-cn.com/problems/binary-search/
 class Solution:
     def search(self, nums, target):
-        if not nums: return -1
+        if not nums: 
+            return -1
+        
         start, end = 0, len(nums)-1
-
         while start + 1 < end:
             mid = (start + end)//2
             if nums[mid] < target:
@@ -37,9 +38,8 @@ class Solution:
         return -1
 
 
-
 # 61. 搜索区间 🌟
-# [2020年10月22日 2020年2月22日]
+# [2020年10月22日 2020年2月22日 2021年8月2日]
 # https://www.lintcode.com/problem/search-for-a-range/description
 class Solution:
     """
@@ -49,7 +49,9 @@ class Solution:
     """
     def searchRange(self, A, target):
         n = len(A) 
-        if not n: return [-1, -1] # error: the case []
+        if not n: 
+            return [-1, -1] # error: the case []
+        
         return [self.findFirstTargetNum(A, target, n), self.findLastTargetNum(A, target, n)]   
 
     def findFirstTargetNum(self, nums, target, n):
@@ -57,13 +59,17 @@ class Solution:
 
         while start + 1 < end:
             mid = (start+end) //2
-            # ! the target side first, three cases: <, = , >
+            # three cases: <, = , >
             if nums[mid] < target:
                 start = mid
             else:
                 end = mid
-        if nums[start] == target: return start
-        if nums[end] == target: return end
+        
+        if nums[start] == target: 
+            return start
+        if nums[end] == target: 
+            return end
+        
         return -1 
 
     def findLastTargetNum(self, nums, target, n):
@@ -75,13 +81,17 @@ class Solution:
                 end = mid
             else:
                 start = mid
-        if nums[end] == target: return end
-        if nums[start] == target: return start
+        
+        if nums[end] == target: 
+            return end
+        if nums[start] == target: 
+            return start
+        
         return -1 
 
 
 # 74. 第一个错误的代码版本
-# [2020年10月21日]
+# [2020年10月21日 2021年8月2日]
 # https://www.lintcode.com/problem/first-bad-version/description
 class Solution:
     """
@@ -101,8 +111,8 @@ class Solution:
 
 
 # 460/658. 在排序数组中找最接近的K个数
-# [2020年10月22日]
-# https://www.lintcode.com/problem/find-k-closest-elements/description https://leetcode-cn.com/problems/find-k-closest-elements/
+# [2020年10月22日 2021年8月2日]
+# https://www.lintcode.com/problem/find-k-closest-elements/description
 # version Lintcode
 class Solution:
     def kClosestNumbers(self, arr, target, k):
@@ -129,8 +139,11 @@ class Solution:
                 end = mid
         
         # error: `>`-> `>=`
-        if arr[start] >= target: return start
-        if arr[end] >= target: return end
+        if arr[start] >= target: 
+            return start
+        if arr[end] >= target: 
+            return end
+        
         return len(arr)
 
     def isLeftCloser(self, arr, target, left, right):
@@ -142,7 +155,7 @@ class Solution:
 
 
 # 447. 在大数组中查找
-# [2020年10月21日]
+# [2020年10月21日 2021年8月2日]
 # https://www.lintcode.com/problem/search-in-a-big-sorted-array/note
 class Solution:
     """
@@ -169,8 +182,8 @@ class Solution:
 
 
 # 159/152. 寻找旋转排序数组中的最小值
-# [2020年10月22日]
-# https://www.lintcode.com/problem/find-minimum-in-rotated-sorted-array/description https://leetcode-cn.com/problems/maximum-product-subarray/
+# [2020年10月22日 2021年8月2日]
+# https://www.lintcode.com/problem/find-minimum-in-rotated-sorted-array/description
 # DESC [0 1 2 4 5 6 7] -> [4 5 6 7 0 1 2]
 class Solution:
     def findMin(self, nums):
@@ -203,6 +216,7 @@ class Solution:
                 start = mid
             else:
                 end = mid
+                
         return max( nums[start], nums[end] )
 
 

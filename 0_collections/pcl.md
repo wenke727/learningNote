@@ -22,3 +22,9 @@
   IP: 192.168.202.92
   user: wuyao
   key: pcl123456
+
+## Minio存储
+
+地址：http://192.168.202.108:9000/
+接入证书： BE5F0CE36638F6D08D85
+安全证书： tpKFwi31sm7IZPcX9BPtWjNQJJQAAAF6Zjj20Gsh

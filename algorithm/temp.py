@@ -1,14 +1,37 @@
-from heapq import heappop, heappush
-class Solution:
-    def topKFrequentWords(self, words, k):
-        word_dict = {}
+from algorithm.chapter_04_BFS import ListNode
+import collections
 
-        for w in words:
-            if w in word_dict:
-                word_dict[w] += 1
-            else:
-                word_dict[w] = 1
+
+class Solution:
+    def binaryTreeToLists(self, root):
+        if root is None:
+            return []
         
         res = []
-        [heappush(res, (-v, k)) for k, v in word_dict.items()]
-        return [heappop(res)[1] for _ in range(k)]
+        queue = collections.deque([root])
+
+        while queue:
+            res.append(self.create_linkedlist(queue))
+            nxtQueue = collections.deque([])
+
+            for node in queue:
+                if node.left:
+                    nxtQueue.append(node.left)
+        
+                if node.right:
+                    nxtQueue.append(node.right)
+            
+            queue = nxtQueue
+        
+        return res
+
+    def create_linkedlist(self, nodes):
+        dummy = ListNode(0)
+        cur = dummy
+
+        for node in nodes:
+            p = ListNode(node.val)
+            cur.next = p
+            cur = p
+        
+        return dummy.next

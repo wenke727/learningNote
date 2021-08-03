@@ -5,7 +5,7 @@
 - [Geopandas docs](https://geopandas.org/docs.html)
 - [DataScienceStudyNotes](https://github.com/CNFeffery/DataScienceStudyNotes)
 - [ ] [数据结构篇](https://www.cnblogs.com/feffery/p/11898190.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD74%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87)
-- [ ] [坐标参考系篇](https://www.cnblogs.com/feffery/p/12285828.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD75%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%9D%90%E6%A0%87%E5%8F%82%E8%80%83%E7%B3%BB%E7%AF%87)
+- [x] [坐标参考系篇](https://www.cnblogs.com/feffery/p/12285828.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD75%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%9D%90%E6%A0%87%E5%8F%82%E8%80%83%E7%B3%BB%E7%AF%87)
 - [ ] [文件IO](https://www.cnblogs.com/feffery/p/12301966.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD77%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6IO)
 - [ ] [空间计算篇（上）](https://www.cnblogs.com/feffery/p/12909284.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD84%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E7%A9%BA%E9%97%B4%E8%AE%A1%E7%AE%97%E7%AF%87%EF%BC%88%E4%B8%8A%EF%BC%89)
 - [ ] [空间计算篇（下）](https://www.cnblogs.com/feffery/p/13129271.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD88%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E7%A9%BA%E9%97%B4%E8%AE%A1%E7%AE%97%E7%AF%87%EF%BC%88%E4%B8%8B%EF%BC%89)
@@ -21,8 +21,32 @@
 
 ### 设置CRS
   
+
+常用CRS格式：
+
+- Proj4
+
+  ```python
+  +proj=utm +zone=11 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0
+  ```
+
+- [EPSG编码](http://spatialreference.org/ref/epsg/)
+  - 4326:  WGS84
+  - 3857: the Spherical Mercator projection (EPSG:3857)
+
+CRS设置与再投影
+
   ``` python
   df_edges.set_crs('EPSG:4326', inplace=True)
+
+  from shapely import geometry
+  import matplotlib.pyplot as plt
+  import geopandas as gpd
+
+  world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+  china = world.loc[world['name'].isin(['China', 'Taiwan'])]
+
+  cq = gpd.GeoSeries([geometry.Point([106.561203, 29.558078])], crs='EPSG:4326')
   ```
 
 ### [sindex](https://geopandas.org/docs/reference/api/geopandas.GeoDataFrame.sindex.html?highlight=sindex)
@@ -31,6 +55,21 @@
   georadius = georadius*dis_factor
   boxes = traj.geometry.apply(lambda i: box(i.x-georadius, i.y-georadius,i.x+georadius, i.y+georadius))
   df_candidates = boxes.apply(lambda x: edges.sindex.query(x, predicate='intersects')).explode()
+
+  # TUTORIAL
+  from shapely.geometry import box
+  s = geopandas.GeoSeries(geopandas.points_from_xy(range(5), range(5)))
+  s.sindex.query(box(1, 1, 3, 3))
+  """
+  s:
+  0    POINT (0.00000 0.00000)
+  1    POINT (1.00000 1.00000)
+  2    POINT (2.00000 2.00000)
+  3    POINT (3.00000 3.00000)
+  4    POINT (4.00000 4.00000)
+
+  # output: array([1, 2, 3])
+  """
   ```
 
 ### [和PostGIS交互](https://www.cnblogs.com/feffery/p/13468203.html)
@@ -107,7 +146,13 @@ gpd.read_postgis( f"SELECT * FROM {matching[feature]} ", geom_col='geometry', co
 
 ### [叠加在线地图](https://www.cnblogs.com/feffery/p/13763601.html)
 
-其他样式可参考: [网页](https://www.cnblogs.com/feffery/p/13763601.html)
+[contextily: context geo tiles in Python](https://contextily.readthedocs.io/en/latest/index.html)
+
+其他样式可参考:
+
+- [网页](https://www.cnblogs.com/feffery/p/13763601.html);
+- [高德谷歌腾讯天地图地图瓦片url](https://blog.csdn.net/sinat_41310868/article/details/105959659?utm_source=app&app_version=4.11.0&code=app_1562916241&uLinkId=usr1mkqgl919blen)
+
 绘图步骤
 
 - 正常读入矢量数据后，一定要先变换投影为web墨卡托即`EPSG:3857`，
@@ -131,8 +176,6 @@ ctx.add_basemap(ax,
 
 fig.savefig('图2 叠加在线地图示例.png', pad_inches=0, bbox_inches='tight', dpi=300)
 ```
-
-
 
 ## 空间计算
 
@@ -249,4 +292,87 @@ def coords_pair_dist(o, d, xy=True):
     
     return np.inf
 
+```
+
+## DEBUG
+
+### 'LineString' object is not iterable
+
+通过二分法定位问题
+
+``` python
+def find_error_geom(df_edge):
+    """Used to locate the problem: 'LineString' object is not iterable
+
+    Args:
+        df_edge ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
+    start, end = 0, df_edge.shape[0]
+
+    while start + 1 < end:
+        mid = (start + end) // 2
+        print(start ,": ", mid, ", ",end)
+        flag = False
+        try:
+            df_edge.loc[start: mid].plot()
+            plt.close()
+            print( f"\t({start}, {mid}) pass" )
+            start = mid
+        except:
+            end = mid
+
+    try:
+        df_edge.loc[[start]].plot()
+        ans = end
+    except:
+        try:
+            df_edge.loc[[end]].plot()
+            ans = None
+        except:
+            ans = start
+
+    return ans
+
+
+error_id = find_error_geom(df_edge)
+```
+
+### Cannot interpret '<geopandas.array.GeometryDtype object at 0x7fa0244e4390>' as a data type
+
+原因：想备份geometry，但存储文件的时候不允许两个字段存储geometry
+解决方案：to_wkt()
+
+``` python
+df_edge.loc[:, 'geom_origin'] = df_edge.geometry.apply(lambda x: x.to_wkt())
+```
+
+### ValueError: Must have equal len keys and value when setting with an iterable
+
+df.loc [1,'B']可以返回:
+
+- 单个元素(在这种情况下,当1/'B'具有唯一的索引/列时).
+- 系列(如果1/'B'之一在索引/列中多次出现).
+- 一个数据框(如果同时在索引/列中同时出现'1/B').
+
+loc和iloc中有很多边缘情况,解决方案是尽可能明确地避免它们(在此处使用).
+如您所知,更普遍地,`避免在DataFrame中使用列表！`
+
+``` python
+# http://www.cocoachina.com/articles/81838
+# Correct
+graph_t.loc[graph_t.rindex_0 == graph_t.rindex_1, ['v', 'shortest_path']] = [1, None]
+# Error
+graph_t.loc[graph_t.rindex_0 == graph_t.rindex_1, ['v', 'shortest_path']] = [1, {'path':None}]
+
+```
+
+### NOt use `predefined variables`
+
+``` python
+# 避免使用保留字段
+# lines.loc[:, 'length'] = lines.geometry.apply(lambda x: coords_pair_dist(x.coords[0], x.coords[-1], xy=True))
+lines.loc[:, '_len'] = lines.geometry.apply(lambda x: coords_pair_dist(x.coords[0], x.coords[-1], xy=True))
 ```

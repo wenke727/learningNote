@@ -8,11 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.01] - 2021-07-24
+## [2021-08-03]
 
 ### Added
 
-- python_lib
+- Add `python_lib`
 
 ## [1.0.00] - 2021-06-24
 

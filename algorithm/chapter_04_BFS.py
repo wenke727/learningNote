@@ -19,7 +19,7 @@ class TreeNode:
 
 """二叉树上的宽度优先搜索"""
 # 69. 二叉树的层次遍历
-# [2020年10月28日]
+# [2020年10月28日 2021年8月2日]
 # https://www.lintcode.com/problem/binary-tree-level-order-traversal/description
 # https://www.jiuzhang.com/solutions/binary-tree-level-order-traversal/#tag-lang-python
 class Solution:
@@ -51,7 +51,7 @@ class Solution:
 
 
 # 70. 二叉树的层次遍历 II
-# [2020年10月28日]
+# [2020年10月28日 2021年8月2日]
 # https://www.lintcode.com/problem/binary-tree-level-order-traversal-ii/description
 # https://www.jiuzhang.com/solutions/binary-tree-level-order-traversal-ii/#tag-lang-python
 class Solution:
@@ -79,7 +79,7 @@ class Solution:
 
 
 # 71. 二叉树的锯齿形层次遍历
-# [2020年10月28日]
+# [2020年10月28日 2021年8月2日]
 # https://www.lintcode.com/problem/binary-tree-zigzag-level-order-traversal/description
 # https://www.jiuzhang.com/solutions/binary-tree-zigzag-level-order-traversal/#tag-lang-python
 class Solution:
@@ -105,16 +105,19 @@ class Solution:
 
             flag = not flag
             res.append(level if flag else level[::-1])
+
         return res
 
 
 # 242. 将二叉树按照层级转化为链表
-# [2020年11月2日]
+# [2020年11月2日 2021年8月2日]
 # https://www.lintcode.com/problem/convert-binary-tree-to-linked-lists-by-depth/description
 # https://www.jiuzhang.com/solutions/convert-binary-tree-to-linked-lists-by-depth/#tag-lang-python
+# version bfs
 class Solution:
     def binaryTreeToLists(self, root):
-        if root is None: return []
+        if root is None: 
+            return []
 
         result, queue = [], collections.deque([root])
         while queue:
@@ -131,17 +134,39 @@ class Solution:
     def create_linkedlist(self, nodes):
         dummy = ListNode(0)
         cur_list_node = dummy
+
         for node in nodes:
             list_node = ListNode(node.val)
             cur_list_node.next = list_node
             cur_list_node = list_node
+        
         return dummy.next
+# version dfs
+class Solution:
+    def binaryTreeToLists(self, root):
+        result = []
+        self.dfs(root, 1, result)
+        return result
+
+    def dfs(self, root, depth, result):
+        if root is None:
+            return
+
+        node = ListNode(root.val)
+        if len(result) < depth:
+            result.append(node)
+        else:
+            node.next = result[depth-1]
+            result[depth-1] = node
+        
+        self.dfs(root.right, depth + 1, result)
+        self.dfs(root.left, depth + 1, result)
 
 
 """图上的宽度优先搜索"""
-# 137/133. 克隆图 # TODO 整体熟练度不行
-# [2020年10月28日]
-# https://www.lintcode.com/problem/clone-graph/description
+# 137/133. 克隆图 
+# [2020年10月28日 2021年7月29日]
+# https://www.lintcodinfe.com/problem/clone-graph/description
 # https://www.jiuzhang.com/solutions/clone-graph/#tag-lang-python
 class Solution:
     def cloneGraph(self, node):
@@ -174,7 +199,7 @@ class Solution:
 
 
 # 120/127. 单词接龙
-# [2020年10月28日]
+# [2020年10月28日 2021年7月30日]
 # https://www.lintcode.com/problem/word-ladder/description
 # https://www.jiuzhang.com/solution/word-ladder/#tag-lang-python
 # DESC 找出从start到end的最短转换序列，输出最短序列的长度
@@ -229,7 +254,7 @@ class Solution:
         return 0
     
     def extend_queue(self, graph, queue, visited, opposite_visited):
-        for _ in range(queue):
+        for _ in range(len(queue)):
             word = queue.popleft()
             for nxt_word in graph[word]:
                 if nxt_word in visited:
@@ -237,24 +262,27 @@ class Solution:
                 if nxt_word in opposite_visited:
                     return True
                 queue.append( nxt_word )
-                visited.append( nxt_word )
+                visited.add( nxt_word )
         return False
 
     def build_graph(self, dict):
-        graph = set()
+        graph = {}
         for word in dict:
-            graph[word] = self.get_next_words(word)
+            graph[word] = self.get_next_words(word, dict)
         return graph
 
-    def get_next_words(self, word):
+
+    def get_next_words(self, word, dict):
         words = []
         for i in range(len(word)):
             for char in 'abcdefghijklmnopqrstuvwxyz':
-                if char == word[i]:
+                new_word = word[:i] + char + word[i+1:]
+                if char == word[i] or new_word not in dict:
                     continue
-                words.append(word[:i] + char + word[i+1:])
+                words.append(new_word)
+        
         return words
-# version：% method # TODO
+# version：% method
 class Solution:
     def ladderLength(self, start, end, dict):
         from collections import deque
@@ -298,7 +326,8 @@ class Solution:
         return gragp
 
 
-# 121. 单词接龙 II # TODO
+# 121. 单词接龙 II
+# [2021年7月31日]
 # https://www.lintcode.com/problem/word-ladder-ii/description
 # https://www.jiuzhang.com/solution/word-ladder-ii/#tag-lang-python
 # DESC 给出两个单词（start和end）和一个字典，找出`所有`从start到end的最短转换序列
@@ -310,102 +339,150 @@ class Solution:
     @param: dict: a set of string
     @return: a list of lists of string
     """
-    def findLadders(self, start, end, dict):
-        dict.add(start)
-        dict.add(end)
-        indexes = self.build_indexes(dict)
-        
-        distance = self.bfs(end, indexes)
-        
-        results = []
-        self.dfs(start, end, distance, indexes, [start], results)
+    def findLadders(self, start, end, words):
+        words.add(start)
+        words.add(end)
+
+        graph = self.build_graph(words)
+        distance = self.bfs(end, graph)
+
+        results=[]
+        self.dfs(start, end, distance, graph, [start], results)
         
         return results
-        
-    def build_indexes(self, dict):
-        indexes = {}
-        for word in dict:
-            for i in range(len(word)):
-                key = word[:i] + '%' + word[i + 1:]
-                if key in indexes:
-                    indexes[key].add(word)
-                else:
-                    indexes[key] = set([word])
-        return indexes
+    
+    def build_graph(self, words):
+        graph = {}
 
-    def bfs(self, end, indexes):
-        distance = {end: 0}
+        for w in words:
+            for i in range(len(w)):
+                key = w[:i] + '*' + w[i+1:]
+                graph[key] = graph.get(key, set())
+                graph[key].add(w)
+
+        return graph
+    
+    def get_nxt_word(self, word, graph):
+        lst = []
+        for i in range(len(word)):
+            key = word[:i] + '*' + word[i+1:]
+            for w in graph.get(key, []):
+                lst.append(w)
+        
+        return lst
+    
+    def bfs(self, end, graph):
+        distance = {end:0}
         queue = deque([end])
+
         while queue:
-            word = queue.popleft()
-            for next_word in self.get_next_words(word, indexes):
-                if next_word not in distance:
-                    distance[next_word] = distance[word] + 1
-                    queue.append(next_word)
+            cur = queue.popleft()
+            for nxt in self.get_nxt_word(cur, graph):
+                if nxt in distance:
+                    continue
+                distance[nxt] = distance[cur] + 1
+                queue.append(nxt)
+        
         return distance
     
-    def get_next_words(self, word, indexes):
-        words = []
-        for i in range(len(word)):
-            key = word[:i] + '%' + word[i + 1:]
-            for w in indexes.get(key, []):
-                words.append(w)
-        return words
-                        
-    def dfs(self, curt, target, distance, indexes, path, results):
-        if curt == target:
-            results.append(list(path))
+    def dfs(self, src, dst, distance, graph, path, result):
+        if src == dst:
+            result.append(path[:])
             return
         
-        for word in self.get_next_words(curt, indexes):
-            if distance[word] != distance[curt] - 1:
+        for nxt in self.get_nxt_word(src, graph):
+            if distance[src] -1 != distance[nxt]:
                 continue
-            path.append(word)
-            self.dfs(word, target, distance, indexes, path, results)
+            path.append(nxt)
+            self.dfs(nxt, dst, distance, graph, path, result)
             path.pop()
 
 
-
-
 # 433/200. 岛屿的个数
-# [2020年11月2日]
+# [2020年11月2日 2021年7月31日]
 # https://www.lintcode.com/problem/number-of-islands/description
 # https://www.jiuzhang.com/solutions/number-of-islands/#tag-lang-python
+import collections
 DIRECTIONS = [(1, 0), (0, -1), (-1, 0), (0, 1)]
 class Solution:
     def numIslands(self, grid):
-        if not grid or not grid[0]: return 0
-
+        if not grid or not grid[0]:
+            return 0
+        
         isLands, visited = 0, set()
         for i in range(len(grid)):
             for j in range(len(grid[0])):
-                if grid[i][j] and (i,j) not in visited:
-                    self.bfs(grid, i, j, visited)
-                    isLands += 1
+                if (i, j) in visited or grid[i][j] == 0:
+                    continue
+                self.bfs(grid, i, j, visited)
+                isLands += 1
+        
         return isLands
-    
+
     def bfs(self, grid, x, y, visited):
-        queue = collections.deque( [(x, y)] )
-        visited.add( (x, y) )
+        queue = collections.deque([(x, y)])
+        visited.add((x,y))
 
         while queue:
             x, y = queue.popleft()
             for dx, dy in DIRECTIONS:
-                nxt_x, nxt_y = x + dx, y + dy
-                if not self.isNotValid(grid, nxt_x, nxt_y, visited):
+                nxt_x, nxt_y = x+dx, y+dy
+                if not self.isValid(grid, nxt_x, nxt_y, visited):
                     continue
-                queue.append( (nxt_x, nxt_y) )
-                visited.add( (nxt_x, nxt_y) )
-                
-    def isNotValid(self, grid, x, y, visited):
+                queue.append((nxt_x, nxt_y))
+                visited.add((nxt_x, nxt_y))
+
+    def isValid(self, grid, x, y, visited):
         n, m = len(grid), len(grid[0])
-        if not ( 0 <= x < n and 0<= y < m ) or (x,y) in visited:
+        if not (0<=x<n and 0<=y<m) or (x,y) in visited:
             return False
-        return grid[x][y] # ! Leetcode & Lintcode Diff `== '1'`
+        
+        return grid[x][y]
+
+
+# 804 · 不同岛屿的数量II
+# [2021年8月2日]
+# https://www.lintcode.com/problem/804/description?_from=collection&fromId=208
+# https://www.jiuzhang.com/solution/number-of-distinct-islands-ii/
+class Solution:
+    def numDistinctIslands2(self, grid):
+        grid += [0] * len(grid[0])
+        for row in grid:
+            row += 0 
+
+        isLands = set()
+        for i, row in enumerate(grid):
+            for j, num in enumerate(row):
+                if num == 1:
+                    isLands.add(self.canonical(self.dfs(grid, i, j)))
+
+        return len(isLands)
+
+    def dfs(self, grid, x, y):
+        if not grid[x][y]:
+            return []
+        
+        grid[x][y] = 0
+        shape = [(x,y)]
+        for dx, dy in ((0,-1), (0,1), (1,0), (-1,0)):
+            shape += self.dfs(grid, x+dx, y+dy)
+
+        return shape
+
+    def canonical(self, shape):
+        
+        def encode(shape):
+            x, y = shape[0]
+            return "".join(f"{i-x}:{j-y}" for i,j in shape)
+        
+        shapes = [[(a*i, b*j) for i, j in shape] for a, b in ((1, 1), (1, -1), (-1, 1), (-1,-1)) ]
+        shapes += [[(j, i) for i, j in shape] for shape in shapes]
+
+        return min( encode(sorted(shape)) for shape in shapes )
 
 
 # 611. 骑士的最短路线
-# [2020年11月2日]
+# [2020年11月2日 2021年7月31日]
 # https://www.lintcode.com/problem/knight-shortest-path/description
 # https://www.jiuzhang.com/solutions/knight-shortest-path/#tag-lang-python
 # version bfs
@@ -413,22 +490,25 @@ DIRECTIONS = [(-2, -1), (-2, 1), (-1, 2), (1, 2), (2, 1), (2, -1), (1, -2), (-1,
 class Solution:
     def shortestPath(self, grid, source, destination):
         queue = deque([(source.x, source.y)])
-        distance = { (source.x, source.y): 0 }
+        distance = {(source.x, source.y):0}
 
         while queue:
             x, y = queue.popleft()
             if (x, y) == (destination.x, destination.y):
-                return distance[(x, y)]
+                return distance[(x,y)]
             
             for dx, dy in DIRECTIONS:
-                nxt_x, nxt_y = x + dx, y + dy
-                if (nxt_x, nxt_y) in distance:
+                nxt = (x+dx, y+dy)
+                if nxt in distance:
                     continue
-                if not self.is_valid(nxt_x, nxt_y, grid):
+                if not self.is_valid(*nxt, grid):
                     continue
-                distance[(nxt_x, nxt_y)] = distance[(x,y)] + 1
-                queue.append((nxt_x, nxt_y))
+
+                distance[nxt] = distance[(x,y)] + 1
+                queue.append(nxt)
+        
         return -1
+
     
     def is_valid(self, x, y ,grid):
         n, m = len(grid), len(grid[0])
@@ -493,14 +573,22 @@ class Solution:
         
         distance = 0
         while forward_queue and backward_queue:
-            distance += 1
-            if self.extend_queue(forward_queue, forward_set, backward_set, grid):
-                return distance
-                
-            distance += 1
-            if self.extend_queue(backward_queue, backward_set, forward_set, grid):
-                return distance
-
+            if len(forward_queue) < len(backward_queue):
+                distance += 1
+                if self.extend_queue(forward_queue, forward_set, backward_set, grid):
+                    return distance
+                    
+                distance += 1
+                if self.extend_queue(backward_queue, backward_set, forward_set, grid):
+                    return distance
+            else:
+                distance += 1
+                if self.extend_queue(backward_queue, backward_set, forward_set, grid):
+                    return distance       
+                             
+                distance += 1
+                if self.extend_queue(forward_queue, forward_set, backward_set, grid):
+                    return distance
         return -1
                 
     def extend_queue(self, queue, visited, opposite_visited, grid):
@@ -517,21 +605,142 @@ class Solution:
                 
         return False
         
-    def is_valid(self, x, y, grid, visited):
-        if x < 0 or x >= len(grid):
-            return False
-        if y < 0 or y >= len(grid[0]):
-            return False
-        if grid[x][y]:
-            return False
-        if (x, y) in visited:
-            return False
-        return True
+    def is_valid(self, x, y ,grid, visited):
+        n, m = len(grid), len(grid[0])
+
+        if 0 <= x < n and 0<= y < m and not grid[x][y] and not (x,y) in visited:
+            return True
+        return False
+
+# version: two-A*
+import heapq
+from collections import deque
+DIRECTIONS = [(-2, -1), (-2, 1), (-1, 2), (1, 2), (2, 1), (2, -1), (1, -2), (-1, -2),]
+class Solution:
+    def shortestPath(self, grid, src, dst):
+        if not grid or not grid[0]:
+            return -1
+            
+        n, m = len(grid), len(grid[0])
+        if grid[dst.x][dst.y]:
+            return -1
+        if n * m == 1:
+            return 0
+        if src.x == dst.x and src.y == dst.y:
+            return 0
+        
+        self.init(grid, src, dst)
+
+        res =  self.searching()
+        # print(self.extract_path())
+
+        return res
+
+    def init(self, grid, src, dst):
+        self.grid = grid
+        self.src = src
+        self.dst = dst
+
+        l0 = self.h_val(src.x, src.y, dst.x, dst.y)
+
+        self.queue_forward = []
+        self.parent_forward = {(src.x, src.y): (src.x, src.y)}
+        self.visited_forward = {(src.x, src.y): 0}
+
+        self.queue_backward = []
+        self.parent_backward = {(dst.x, dst.y): (dst.x, dst.y)}
+        self.visited_backward = {(dst.x, dst.y): 0}
+
+        heapq.heappush(self.queue_forward, (l0, 0, src.x, src.y))
+        heapq.heappush(self.queue_backward, (l0, 0, dst.x, dst.y))
+
+        self.meet = None
+
+
+    def searching(self):
+        while self.queue_forward and self.queue_backward:
+            if len(self.queue_forward) < len(self.queue_backward):
+                self.extend_queue(self.queue_forward, self.visited_forward, self.visited_backward, self.parent_forward, self.grid)
+                if self.meet is not None:
+                    break
+                    
+                self.extend_queue(self.queue_backward, self.visited_backward, self.visited_forward, self.parent_backward, self.grid)
+                if self.meet is not None:
+                    break
+            else:
+                self.extend_queue(self.queue_backward, self.visited_backward, self.visited_forward, self.parent_backward, self.grid)
+                if self.meet is not None:
+                    break 
+                             
+                self.extend_queue(self.queue_forward, self.visited_forward, self.visited_backward, self.parent_forward, self.grid)
+                if self.meet is not None:
+                    break
+        
+        return -1 if self.meet is None else self.visited_backward[self.meet] + self.visited_forward[self.meet]
+
+
+    def extend_queue(self, queue, visited, opposite_visited, parent, grid):
+        _, dis, x, y = heapq.heappop(queue)
+        for dx, dy in DIRECTIONS:
+            nxt_x, nxt_y = (x + dx, y + dy)
+            dis = visited[(x,y)] + 1
+
+            if not self.is_valid(nxt_x, nxt_y, grid, visited):
+                continue
+
+            parent[(nxt_x, nxt_y)] = (x,y)
+            visited[(nxt_x, nxt_y)] = dis
+
+            if (nxt_x, nxt_y) in opposite_visited:
+                self.meet = (nxt_x, nxt_y)
+                return (nxt_x, nxt_y)
+
+            h = self.h_val(x, y, nxt_x, nxt_y)                
+            heapq.heappush(queue, (dis+h, dis , nxt_x, nxt_y))
+                
+        return None
+
+
+    def is_valid(self, x, y ,grid, visited):
+        n, m = len(grid), len(grid[0])
+
+        if 0 <= x < n and 0<= y < m and not grid[x][y] and not (x,y) in visited:
+            return True
+        return False
+
+
+    def h_val(self, x0, y0, x1, y1):
+        return (abs(x1-x0) + abs(y1-y0))/3
+
+
+    def extract_path(self,):
+        # extract path for foreward part
+        path_fore = [self.meet]
+        s = self.meet
+
+        while True:
+            s = self.parent_forward[s]
+            path_fore.append(s)
+            if s == self.src:
+                break
+
+        # extract path for backward part
+        path_back = []
+        s = self.meet
+
+        while True:
+            s = self.parent_backward[s]
+            path_back.append(s)
+            if s == self.dst:
+                break
+
+        return list(reversed(path_fore)) + list(path_back)
+
 
 
 """拓扑排序"""
 # 127. 拓扑排序
-# [2020年11月2日]
+# [2020年11月2日 2021年8月2日]
 # https://www.lintcode.com/problem/topological-sorting/description
 # https://www.jiuzhang.com/solutions/topological-sorting/#tag-lang-python
 class Solution:
@@ -562,7 +771,7 @@ class Solution:
 
 
 # 616/210. 安排课程
-# [2020年11月2日]
+# [2020年11月2日 2021年8月2日]
 # https://www.lintcode.com/problem/course-schedule-ii/description
 # https://www.jiuzhang.com/solution/course-schedule-ii/#tag-lang-python
 class Solution:
@@ -588,7 +797,7 @@ class Solution:
 
 
 # 615. 课程表
-# [2020年11月2日]
+# [2020年11月2日 2021年8月2日]
 # https://www.lintcode.com/problem/course-schedule/description
 # https://www.jiuzhang.com/solution/course-schedule/#tag-lang-python
 class Solution:
@@ -614,55 +823,61 @@ class Solution:
 
 
 # 892. 外星人词典
-# [2020年11月2日]
+# [2020年11月2日 2021年8月2日]
 # https://www.lintcode.com/problem/alien-dictionary/description
 # https://www.jiuzhang.com/solution/alien-dictionary/#tag-lang-python
 from heapq import heapify, heappop, heappush
 class Solution:
     def alienOrder(self, words):
         graph = self.build_graph(words)
-        if not graph: return ""
-        return self.topological_sort(graph)
+        if graph is None:
+            return ""
 
+        return self.topological_sort(graph)
+    
     def build_graph(self, words):
-        graph = {}
-        for word in words:
-            for i in word:
-                if i not in graph:
-                    graph[i] = set()
-        
-        for i in range( len(words)-1 ):
-            j_max = min( len(words[i]), len(words[i+1]) )
-            for j in range( j_max ):
+        graph = collections.defaultdict(set)
+
+        for w in words:
+            for c in w:
+                graph[c] = set()
+
+        n = len(words)
+        for i in range(n-1):
+            j_min = min( len(words[i]), len(words[i+1]) )
+            for j in range(j_min):
                 if words[i][j] != words[i+1][j]:
-                    graph[ words[i][j] ].add( words[i+1][j] )
+                    graph[words[i][j]] = words[i+1][j]
                     break
 
                 # ! case: ["abc","ab"]
-                if j == j_max - 1:
-                    if len(words[i]) > len(words[i+1]): 
+                if j == j_min-1:
+                    if len(words[i]) > len(words[i+1]):
                         return None
         return graph
 
-    def topological_sort(self, graph):
-        indegree, order = {node: 0 for node in graph}, ''
-        for node in graph:
-            for neighbor in graph[node]:
-                indegree[neighbor] += 1
 
-        queue = [node for node in graph if indegree[node]==0]
+    def topological_sort(self, graph):
+        indegree = { node: 0 for node in graph }
+
+        for node in graph:
+            for nxt in graph[node]:
+                indegree[nxt] += 1
+
+        queue = [ node for node in indegree if indegree[node] == 0 ]
         heapify(queue)
 
+        topo_order = ""
         while queue:
             node = heappop(queue)
-            order += node
+            topo_order += node
 
-            for neighbor in graph[node]:
-                indegree[neighbor] -= 1
-                if indegree[neighbor] == 0:
-                    heappush(queue, neighbor)
+            for nxt in graph[node]:
+                indegree[nxt] -= 1
+                if indegree[nxt] == 0:
+                    heappush(queue, nxt)
 
-        return order if len(order) == len(graph) else ""
+        return topo_order if len(topo_order) == len(graph) else ""
 
 
 # 605. 序列重构
@@ -1258,8 +1473,6 @@ class Solution:
                     queueT.append(neighbor)
                 
         return -1
-
-
 
 
 # 1029 · 寻找最便宜的航行旅途（最多经过k个中转站）
