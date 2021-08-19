@@ -2,16 +2,17 @@ import sys
 
 """ 随课教程预习题 """
 # 604. 滑动窗口内数的和
-# [2020年10月27日]
+# [2020年10月27日 2021年8月3日]
 # https://www.lintcode.com/problem/window-sum/description
 # version: prefix sum 
 class Solution:
     def winSum(self, nums, k):
-        if k == 0: return []
+        if k == 0: 
+            return []
         
         n = len(nums)
         prefix, res = [0] * (n+1), []
-        # 从物理的角度出发思考
+
         for i in range(n):
             prefix[i+1] = prefix[i] + nums[i]
         
@@ -22,7 +23,8 @@ class Solution:
 # version 2
 class Solution:
     def winSum(self, nums, k):
-        if k == 0: return []
+        if k == 0: 
+            return []
         
         n = len(nums)
         left, right, val_sum, res = 0, k-1, 0, []
@@ -40,13 +42,14 @@ class Solution:
 
 
 # 521. 去除重复元素
-# [2020年10月27日]
+# [2020年10月27日 2021年8月3日]
 # https://www.lintcode.com/problem/remove-duplicate-numbers-in-array/description
 # https://www.jiuzhang.com/solution/remove-duplicate-numbers-in-array/#tag-lang-python
 # version 1
 class Solution:
     def deduplication(self, nums):
-        if not nums: return 0
+        if not nums: 
+            return 0
 
         dict_nums, res = {}, 0
         for num in nums:
@@ -60,26 +63,29 @@ class Solution:
 # version 2
 class Solution:
     def deduplication(self, nums):
-        if not nums: return 0
+        if not nums: 
+            return 0
         
         nums.sort()
-        left = 1 # ! initial, not 0
+        left = 1
         for right in range(1, len(nums)):
-            if nums[right-1] != nums[right]:
-                nums[left] = nums[right]
-                left += 1
+            if nums[right-1] == nums[right]:
+                continue
+            nums[left] = nums[right]
+            left += 1
+
         return left
 
 
 # 102. 带环链表
-# [2020.11.13]
+# [2020.11.13 2021年8月3日]
 # https://www.lintcode.com/problem/linked-list-cycle/description
 class Solution:
     def hasCycle(self, head):
-        if head is None: return False
+        if head is None: 
+            return False
 
         slow, fast = head, head
-        # ! while slow.next and fast.next.next:
         while fast.next and fast.next.next:
             slow = slow.next
             fast = fast.next.next
@@ -88,54 +94,71 @@ class Solution:
         return False
 
 
-# 103. 带环链表 II # ! 数学原理, find interesction first
-# [2020年10月27日]
+# 103. 带环链表 II
+# [2020年10月27日 2021年8月3日]
 # https://www.lintcode.com/problem/linked-list-cycle-ii/description
 class Solution:
     def detectCycle(self, head):
-        if head is None: return None
+        if head is None: 
+            return None
+
         intersect = self.getIntersect(head)
-        
-        if intersect is None: return None
+        if intersect is None: 
+            return None
 
         ptr1, ptr2 = head, intersect
         while ptr1 != ptr2:
             ptr1 = ptr1.next
             ptr2 = ptr2.next
+        
         return ptr1
 
     def getIntersect(self, head):
         slow = fast = head
+        # ! Pay attention to the boundary conditions
         while fast.next and fast.next.next:
             slow = slow.next
             fast = fast.next.next
             if slow is fast:
                 return slow
+
         return None
 
 
-# 380. 两个链表的交叉 # TODO 不懂背后含义
+# 380. 两个链表的交叉 
+# [2021年8月4日]
 # https://www.lintcode.com/problem/intersection-of-two-linked-lists/description
 # https://www.jiuzhang.com/solution/intersection-of-two-linked-lists/#tag-lang-python
+# version 1
 class Solution:
     def getIntersectionNode(self, headA, headB):
-        if not headA or not headB: return None
-        first, second = headA, headB
-        markA, markB = True, True
-
-        while (markA or first) and (markB or second):
-            if markA and not first.next:
-                first = headB
-                markA = False
-            if markB and not second.next:
-                second = headA
-                markB = False
-            if first == second:
-                return first
-            first = first.next
-            second = second.next
+        if not headA or not headA.next or not headB:
+            return None 
+            
+        tailA = headA
+        while tailA.next:
+            tailA = tailA.next
+            
+        tailA.next = headB
+        
+        slow, fast = headA, headA
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next 
+            if slow is fast:
+                break
+            
+        if slow is fast:
+            slow = headA 
+            while slow is not fast:
+                slow = slow.next
+                fast = fast.next 
+            tailA.next = None
+            return slow
+        
+        tailA.next = None
         return None
-
+# version 2
 class Solution:
     def getIntersectionNode(self, headA, headB):
         if headA is None or headB is None:
@@ -160,6 +183,7 @@ class Solution:
 
         if curr_A is not None and curr_B is not None:
             return curr_A
+        
         return None
 
 
@@ -175,7 +199,7 @@ class Solution:
 
 """双指针"""
 # 539/283. 移动零
-# [2020年10月27日]
+# [2020年10月27日 2021年8月4日]
 # https://www.lintcode.com/problem/move-zeroes/description 
 # https://leetcode-cn.com/problems/move-zeroes/
 class Solution:
@@ -197,7 +221,7 @@ class Solution:
 
 
 # 415/125. 有效回文串
-# [2020年10月27日]
+# [2020年10月27日 2021年8月4日]
 # https://www.lintcode.com/problem/valid-palindrome/description
 class Solution:
     """
@@ -222,16 +246,16 @@ class Solution:
 
 
 # 891/680. 有效回文 II
-# DESC 给一个非空字符串 s，你最多可以删除一个字符。判断是否可以把它变成回文串
-# [2020年10月27日] media
+# [2020年10月27日 2021年8月4日]
 # https://www.lintcode.com/problem/valid-palindrome-ii/description
+# DESC 给一个非空字符串 s，你最多可以删除一个字符。判断是否可以把它变成回文串
 class Solution:
     def validPalindrome(self, s: str):
         left, right = self.twoPointer(s, 0, len(s) - 1)
         if left >= right:
             return True
-        return self.isPalindrome(s, left + 1, right) or self.isPalindrome(s, left, right - 1) # ! `right + 1` -> `right - 1`
-    
+        return self.isPalindrome(s, left + 1, right) or self.isPalindrome(s, left, right - 1) 
+
     def isPalindrome(self, s, left, right):
         left, right = self.twoPointer(s, left, right)
         return left >= right
@@ -260,7 +284,9 @@ class TwoSum:
         pass
 
     def find(self, value):
-        if len(self.nums) < 2: return False
+        if len(self.nums) < 2: 
+            return False
+        
         if not self.is_sorted:
             self.nums.sort()
             self.is_sorted = True
@@ -274,11 +300,12 @@ class TwoSum:
                 start += 1
             else:
                 end -= 1
+
         return False
 
 
 # 608. 两数和 II-输入已排序的数组
-# [2020年10月27日]
+# [2020年10月27日 2021年8月4日]
 # https://www.lintcode.com/problem/two-sum-ii-input-array-is-sorted/description
 # https://www.jiuzhang.com/solution/two-sum-ii-input-array-is-sorted/#tag-lang-python
 class Solution:
@@ -297,11 +324,12 @@ class Solution:
                 start += 1
             else:
                 end -= 1
+
         return []
 
 
 # 587. 两数之和 - 不同组成
-# [2020年10月27日]
+# [2020年10月27日 2021年8月4日]
 # https://www.lintcode.com/problem/two-sum-unique-pairs/description
 # https://www.jiuzhang.com/solutions/two-sum-unique-pairs/#tag-lang-python
 class Solution:
@@ -311,7 +339,8 @@ class Solution:
     @return: An integer
     """
     def twoSum6(self, nums, target):
-        if not nums or len(nums) < 2: return 0
+        if not nums or len(nums) < 2: 
+            return 0
         
         nums.sort()
         start, end = 0, len(nums) - 1
@@ -320,13 +349,11 @@ class Solution:
         while start < end:
             val_sum = nums[start] + nums[end]
             if val_sum == target:
-                # if (nums[start], nums[end]) != last_pair:
-                #     count += 1
-                # last_pair = (nums[start], nums[end])
-
                 count += 1
                 start += 1
                 end -= 1
+
+                # caution, start here was already plus 1
                 while start < end and nums[start] == nums[start-1]:
                     start += 1
                 while start < end and nums[end] == nums[end+1]:
@@ -340,21 +367,20 @@ class Solution:
 
 
 # 57/15. 三数之和
-# [2020年10月27日]
+# [2020年10月27日 2021年8月4日]
 # https://www.lintcode.com/problem/3sum/description
 # https://www.jiuzhang.com/solutions/3sum/#tag-lang-python
 class Solution:
-    """
-    @param numbers: Give an array numbers of n integer
-    @return: Find all unique triplets in the array which gives the sum of zero.
-    """
     def threeSum(self, nums):
         length = len(nums)
-        if nums is None or length < 3: return []
+        if nums is None or length < 3: 
+            return []
 
         nums.sort()
         res = []
+
         for i in range(length - 2):
+            # caution: border jedgement
             if i - 1 >= 0 and nums[i] == nums[i-1]:
                 continue
             self.findTwoSum(nums, i+1, length-1, -nums[i], res)
@@ -381,13 +407,14 @@ class Solution:
 
 
 # 382. 三角形计数
-# [2020年10月27日]
+# [2020年10月27日 2021年8月4日]
 # https://www.lintcode.com/problem/triangle-count/description
 # https://www.jiuzhang.com/solutions/triangle-count/#tag-lang-python
 class Solution:
     def triangleCount(self, nums):
         n = len(nums)
-        if n < 3: return -1
+        if n < 3: 
+            return -1
         
         nums.sort()
         count = 0
@@ -400,18 +427,20 @@ class Solution:
                     right -= 1
                 else:
                     left += 1
+        
         return count
 
 
 # 609. 两数和-小于或等于目标值
-# [2020年10月29日]
+# [2020年10月29日 2021年8月4日]
 # https://www.lintcode.com/problem/two-sum-less-than-or-equal-to-target/description
 # https://www.jiuzhang.com/solutions/two-sum-less-than-or-equal-to-target/#tag-lang-python
 class Solution:
     def twoSum5(self, nums, target):
-        if not nums: return 0
+        if not nums: 
+            return 0
 
-        nums.sort() #! the first setp always is sorting the array
+        nums.sort() 
         left, right = 0, len(nums) - 1
         res = 0
         while  left < right:
@@ -420,16 +449,18 @@ class Solution:
             else:
                 res += right - left
                 left += 1
+        
         return res
 
 
 # 443. 两数之和 II
-# [2020年10月29日]
+# [2020年10月29日 2021年8月4日]
 # https://www.lintcode.com/problem/two-sum-greater-than-target/description
 # https://www.jiuzhang.com/solutions/two-sum-greater-than-target/#tag-lang-python
 class Solution:
     def twoSum2(self, nums, target):
-        if not nums: return 0
+        if not nums: 
+            return 0
 
         nums.sort()
         left, right = 0, len(nums) - 1
@@ -445,7 +476,7 @@ class Solution:
 
 
 # 533. 两数和的最接近值
-# [2020年10月30日]
+# [2020年10月30日 2021年8月4日]
 # https://www.lintcode.com/problem/two-sum-closest-to-target/description
 # https://www.jiuzhang.com/solutions/two-sum-closest-to-target/#tag-lang-python
 class Solution:
@@ -455,7 +486,8 @@ class Solution:
     @return: the difference between the sum and the target
     """
     def twoSumClosest(self, nums, target):
-        if not nums: return None
+        if not nums: 
+            return None
 
         left, right = 0, len(nums) - 1
         diff = sys.maxsize
@@ -476,7 +508,7 @@ class Solution:
 
 
 # 59. 最接近的三数之和
-# [2020年11月1日]
+# [2020年11月1日 2021年8月4日]
 # https://www.lintcode.com/problem/3sum-closest/description
 # https://www.jiuzhang.com/solutions/3sum-closest/#tag-lang-python
 class Solution:
@@ -485,29 +517,26 @@ class Solution:
     @param target: An integer
     @return: return the sum of the three integers, the sum closest target.
     """
-    def threeSumClosest(self, nums, target):
-        if not nums or len(nums) < 3: return - 1
-        
-        res =  sys.maxsize
-        for i in range( len(nums)-2 ):
-            left, right = i+1, len(nums)-1
+    def threeSumClosest(self, numbers, target):
+        numbers.sort()
+        ans = None
 
+        for i in range(len(numbers)):
+            left, right = i + 1, len(numbers) - 1
             while left < right:
-                val_sum = nums[i] + nums[left] + nums[right]
-                
-                if abs(val_sum - target) < abs(res-target):
-                    res = val_sum
-
-                if val_sum < target:
+                sum = numbers[left] + numbers[right] + numbers[i]
+                if ans is None or abs(sum - target) < abs(ans - target):
+                    ans = sum
+                    
+                if sum < target:
                     left += 1
                 else:
-                    right -=1
-
-        return res
+                    right -= 1
+        return ans
 
 
 # 610. 两数和 - 差等于目标值
-# [2020年11月13日]
+# [2020年11月13日 2021年8月4日]
 # https://www.lintcode.com/problem/two-sum-difference-equals-to-target/description
 # https://www.jiuzhang.com/solutions/two-sum-difference-equals-to-target/
 class Solution:
@@ -517,7 +546,8 @@ class Solution:
     @return: [num1, num2] (num1 < num2)
     """
     def twoSum7(self, nums, target):
-        if not nums: return [-1, -1]
+        if not nums: 
+            return [-1, -1]
         
         nums.sort()
         target = abs(target)
@@ -554,12 +584,15 @@ class Solution:
         for i in range(n-4):
             if i > 0 and nums[i] == nums[i-1]:
                 continue
+
             for j in range(i+1, n-3):
                 if j > i+1 and nums[j] == nums[j-1]:
                     continue
+                
                 pairs = self.findTwoSum( nums, j+1, n-1, target - nums[i] -nums[j] )
                 for c, d in pairs:
                     res.append( [nums[i], nums[j], c, d] )
+                    
         return res
     
     def findTwoSum(self, nums, left, right, target):
@@ -579,14 +612,33 @@ class Solution:
 
 
 """Partition Array"""
-# 31. 数组划分
-# [2020年10月29日]
+"""
+```python
+# ! `left <= right`, not `left < right`
+def partitionArray(self, nums, k):
+    left, right =  0, len(nums) - 1
+    while left <= right:
+        while left <= right and con:
+            left += 1
+        
+        while left <= right and con:
+            right -= 1
+        
+        if left <= right:
+            nums[left], nums[right] = nums[right], nums[left]
+            left += 1
+            right -= 1
+
+    return left
+```
+"""# 31. 数组划分
+# [2020年10月29日 2021年8月4日]
 # https://www.lintcode.com/problem/partition-array/description
 # https://www.jiuzhang.com/solutions/partition-array/#tag-lang-python
 class Solution:
     def partitionArray(self, nums, k):
         left, right =  0, len(nums) - 1
-        # ! `left < right` -> `left <= right` # TODO 
+        # ! `left < right` -> `left <= right`
         while left <= right:
             while left <= right and nums[left] < k:
                 left += 1
@@ -598,16 +650,19 @@ class Solution:
                 nums[left], nums[right] = nums[right], nums[left]
                 left += 1
                 right -= 1
+
         return left
 
 
-# 461. 无序数组K小元素 # TODO rewrite
+# 461. 无序数组K小元素 ⭐⭐
 # [2020年10月29日, 2020年11月13日]
 # https://www.lintcode.com/problem/kth-smallest-numbers-in-unsorted-array/description
 # https://www.lintcode.com/problem/kth-smallest-numbers-in-unsorted-array/description#tag-lang-python
+# DESC 对一个数组进行partition的时间复杂度为O(n)。分治，选择一边继续进行partition。所以总的复杂度为T(n) = T(n / 2) + O(n)，总时间复杂度依然为O(n)
 class Solution:
     def kthSmallest(self, k, nums):
-        if not nums or len(nums) < k: return None
+        if not nums or len(nums) < k: 
+            return None
 
         self.quickSort(nums, 0, len(nums)-1, k-1)        
         return nums[k-1]
@@ -624,6 +679,7 @@ class Solution:
                 left += 1
             while left <= right and nums[right] > pivot:
                 right -= 1
+
             if left <= right:
                 nums[left], nums[right] = nums[right], nums[left]
                 left += 1
@@ -631,43 +687,8 @@ class Solution:
         
         # ! intervls, `>` -> `>=`
         if k >= left:
-            self.quickSort(  nums, left, end, k )
-        if k <= right:
-            self.quickSort(  nums, start, right, k )
-        return
-
-
-# 215. 数组中的第K个最大元素
-# [2020年10月29日]
-# https://leetcode-cn.com/problems/kth-largest-element-in-an-array/
-class Solution:
-    def findKthLargest(self, nums, k: int):
-        if not nums or k < 0 or k > len(nums):
-            return None
-
-        self.quickSort( nums, 0, len(nums)-1, len(nums)-k )
-        return nums[len(nums)-k]
-
-    def quickSort(self, nums, start, end, k):
-        if start == end:
-            return
-        
-        left, right = start, end
-        pivot = nums[(start+end)//2]
-
-        while left <= right:
-            while left <= right and nums[left] < pivot:
-                left += 1
-            while left <= right and nums[right] > pivot:
-                right -= 1
-
-            if left <= right:
-                nums[left], nums[right] = nums[right], nums[left]
-                left += 1
-                right -= 1
-        
-        if k >= left:
             self.quickSort(nums, left, end, k)
+        
         if k <= right:
             self.quickSort(nums, start, right, k)
 
@@ -675,7 +696,7 @@ class Solution:
 
 
 # 373. 奇偶分割数组
-# [2020年10月29日]
+# [2020年10月29日 2021年8月6日]
 # https://www.lintcode.com/problem/partition-array-by-odd-and-even/description
 # https://www.jiuzhang.com/solutions/partition-array-by-odd-and-even/#tag-lang-python
 class Solution:
@@ -690,15 +711,15 @@ class Solution:
                 right -= 1
         
             if left <= right:
-                print( nums[left], nums[right] )
                 nums[left], nums[right] = nums[right], nums[left]
                 left += 1
                 right -= 1
+
         return nums
 
 
 # 144. 交错正负数
-# [2020年11月1日]
+# [2020年11月1日 2021年8月6日]
 # https://www.lintcode.com/problem/interleaving-positive-and-negative-numbers/description
 # https://www.jiuzhang.com/solutions/interleaving-positive-and-negative-integers/#tag-lang-python
 class Solution:
@@ -762,13 +783,12 @@ class Solution:
 
 
 # 148. 颜色分类
-# [2020年10月30日]
-# DESC 不熟练
+# [2020年10月30日 2021年8月6日]
 # https://www.lintcode.com/problem/sort-colors/description
 # https://www.jiuzhang.com/solutions/sort-colors/#tag-lang-python
 class Solution:
     def sortColors(self, nums):
-        left, cur, right = 0, 0,len(nums)-1
+        left, cur, right = 0, 0, len(nums)-1
 
         # ! `<=` not  `<`
         while cur <= right:
@@ -783,13 +803,14 @@ class Solution:
                 cur += 1
 
 
-# 143. 排颜色 II
-# [2020年10月30日]
+# 143. 排颜色 II ⭐⭐
+# [2020年10月30日 2021年8月6日]
 # https://www.lintcode.com/problem/sort-colors-ii/
 # https://www.jiuzhang.com/solutions/sort-colors-ii/#tag-lang-python
 class Solution:
     def sortColors2(self, colors, k):
         self.sort(colors, 1, k, 0, len(colors)-1)
+
         return colors
 
     def sort(self, nums, color_from, color_to, index0, index1):
@@ -800,10 +821,10 @@ class Solution:
         pivot = (color_from + color_to) // 2
         
         while left <= right:
-            while left <= right and nums[left] <= pivot: # ! nums[left] < pivot
+            # nums[left] < pivot
+            while left <= right and nums[left] <= pivot: 
                 left += 1
 
-            # while left <= right and nums[right] > right:
             while left <= right and nums[right] > pivot:
                 right -= 1
             
@@ -813,8 +834,9 @@ class Solution:
                 right -= 1
         
         self.sort( nums, color_from, pivot, index0, right )
-        self.sort( nums, pivot+1, color_to, left,  index1 )
-        pass
+        # pivot+1, not pivot
+        self.sort( nums, pivot+1, color_to, left,  index1 ) 
+
 
 """ladder 161 习题"""
 # 1343. 两字符串和
@@ -840,42 +862,6 @@ class Solution:
             result = B[0 : j + 1] + result
 
         return result
-
-
-# 64. 合并排序数组
-# https://www.lintcode.com/problem/merge-sorted-array/description
-# https://www.jiuzhang.com/solution/merge-sorted-array/#tag-lang-python
-class Solution:
-    """
-    @param: A: sorted integer array A which has m elements, but size of A is m+n
-    @param: m: An integer
-    @param: B: sorted integer array B which has n elements
-    @param: n: An integer
-    @return: nothing
-    """
-    def mergeSortedArray(self, A, m, B, n):
-        # write your code here
-        pos = m + n - 1 
-        i = m - 1  
-        j = n - 1
-        while  i >= 0 and j >= 0 :
-            if A[i]>B[j] :
-                A[pos]=A[i]
-                pos-=1
-                i-=1
-            else :
-                A[pos]=B[j]
-                pos-=1
-                j-=1
-                
-        while i >= 0 :
-            A[pos] = A[i]
-            pos-=1
-            i-=1
-        while j >= 0:
-            A[pos] = B[j]
-            pos-=1
-            j-=1
 
 
 # 56. 两数之和

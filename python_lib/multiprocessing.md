@@ -44,6 +44,28 @@ pools.close()
 pools.join()
 ```
 
+- [多进程进度条](https://blog.csdn.net/qq_34914551/article/details/119451639)
+
+```python
+def get_staticimage_batch(lst, n_jobs=30, with_bar=True, bar_describe="Crawl panos"):
+    if lst is None:
+        return None
+    
+    from tqdm import tqdm
+    pbar = tqdm(len(lst))
+    if bar_describe is not None:
+        pbar.set_description(bar_describe)
+    update = lambda *args: pbar.update() if with_bar else None
+    
+    pool = multiprocessing.Pool(n_jobs)
+    result = pool.map_async(_multi_helper, lst, callback=update).get()
+    pool.close()
+    pool.join() 
+
+    return result
+
+```
+
 ## LintCode
 
 - [2503 · 实现一个线程安全的计数器 counter](https://www.lintcode.com/problem/2503/)

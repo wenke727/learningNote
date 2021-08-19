@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2021-08-18]
+
+### Changed
+
+- 算法复习
+- 阿里云天池大赛笔记
+- python常用库更新
+
 ## [2021-08-03]
 
 ### Added

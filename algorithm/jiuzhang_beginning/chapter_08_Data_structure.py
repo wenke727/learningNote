@@ -2,11 +2,10 @@
 * Queue
 """
 # 642. 数据流滑动窗口平均值
-# [2020年11月7日]
+# [2020年11月7日 2021年8月8日]
 # https://www.lintcode.com/problem/moving-average-from-data-stream/description
 # https://www.jiuzhang.com/solutions/moving-average-from-data-stream/#tag-lang-python
 from collections import deque
-import collections
 class MovingAverage:
     def __init__(self, size):
         self.queue = deque([])
@@ -22,71 +21,76 @@ class MovingAverage:
 
         return self.sum / len( self.queue )
 
+
 """
 hash
 """
-# 134. LRU缓存策略 # TODO
-# [2020年11月7日]
+# 134. LRU缓存策略 ⭐
+# [2020年11月7日 2021年8月8日]
 # https://www.lintcode.com/problem/lru-cache/description
 # https://www.jiuzhang.com/solutions/lru-cache/#tag-lang-python
-class LinkedNode:
+class LinkedNode():
     def __init__(self, key=None, value=None, pre=None, next=None):
-        self.key   = key
+        self.key = key
         self.value = value
-        self.pre   = pre
-        self.next  = next
+        self.pre = pre
+        self.next = next
 
 class LRUCache:
     def __init__(self, capacity):
+        # 我们实现的双链表API是从尾部插入，也就是说靠尾部的数据是最近使用的
         self.key_to_node = {}
-        self.dummy       = LinkedNode()
-        self.tail        = self.dummy
-        self.capacity    = capacity
+        self.dummy = LinkedNode()
+        self.tail = self.dummy
+        self.capacity = capacity
 
     def get(self, key):
-        if key not in self.key_to_node: return -1
+        if key not in self.key_to_node:
+            return -1
         
-        current = self.key_to_node[key]
-        self._kick(current)
-        return current.value
+        cur = self.key_to_node[key]
+        self._kick(cur)
+
+        return cur.value
 
     def set(self, key, value):
-        if key in self.key_to_node:	   
+        if key in self.key_to_node:
             self._kick(self.key_to_node[key])
             self.key_to_node[key].value = value
-            return
 
-        #如果key不存在，则存入新节点
-        self._push_back(LinkedNode(key, value))  
-        #如果缓存超出上限
-        if len(self.key_to_node) > self.capacity:		
+            return
+        
+        self._push_back(LinkedNode(key, value))
+        if len(self.key_to_node) > self.capacity:
             self._pop_front()
+
+    def _kick(self, cur):
+        if cur == self.tail:
+            return
+        
+        cur.pre.next = cur.next
+        cur.next.pre = cur.pre
+        self._push_back(cur)
 
     def _push_back(self, node):
         node.pre = self.tail
         self.tail.next = node
         self.tail = node
-        node.next=None
-        
-        if node.key not in self.key_to_node:  
-            self.key_to_node[node.key]=node
-    
-    def _pop_front(self):
+        node.next = None
+
+        if node.key not in self.key_to_node:
+            self.key_to_node[node.key] = node
+
+    def _pop_front(self, ):
         head = self.dummy.next
         del self.key_to_node[head.key]
-        self.dummy.next = head.next
-        head.next.pre   = self.dummy
 
-    def _kick(self, current):  
-        if current == self.tail:
-            return
-        current.pre.next = current.next
-        current.pre.next.pre=current.pre
-        self._push_back(current)
+        self.dummy.next = head.next
+        head.next.pre = self.dummy
 
 
 # 657. O(1)实现数组插入/删除/随机访问
-# [2020年11月7日]
+# [2020年11月7日 2021年8月8日]
 # https://www.lintcode.com/problem/insert-delete-getrandom-o1/description
 # https://www.jiuzhang.com/solutions/insert-delete-getrandom-o1/#tag-lang-python
 import random
@@ -96,14 +100,17 @@ class RandomizedSet:
         self.val2index = {}
 
     def insert(self, val):
-        if val in self.val2index: return False
+        if val in self.val2index: 
+            return False
         
         self.nums.append( val )
         self.val2index[val] = len(self.nums) - 1
+        
         return True
 
     def remove(self, val):
-        if val not in self.val2index: return False
+        if val not in self.val2index: 
+            return False
         
         index = self.val2index[val]
         last = self.nums[-1]
@@ -122,8 +129,8 @@ class RandomizedSet:
         return self.nums[ random.randint( 0, len(self.nums) - 1 ) ]
 
 
-# 954. Insert Delete GetRandom O(1) - 允许重复 # TODO
-# [2020年11月7日]
+# 954. Insert Delete GetRandom O(1) - 允许重复
+# [2020年11月7日 2021年8月8日]
 # https://www.lintcode.com/problem/insert-delete-getrandom-o1-duplicates-allowed/description
 # https://www.jiuzhang.com/solutions/insert-delete-getrandom-o1-duplicates-allowed/#tag-lang-python
 class RandomizedCollection(object):
@@ -183,6 +190,7 @@ class Solution:
                 return num
             if num == number:
                 break
+            
         return -1
 
 
@@ -250,6 +258,7 @@ class Solution:
             if prefix_sum in prefix_hash:
                 return prefix_hash[prefix_sum] + 1, index
             prefix_hash[prefix_sum] = index
+
         return -1, -1
 
 
@@ -301,6 +310,7 @@ class Solution:
 
                 # ! not need to + 1
                 max_len = max(max_len, high - low)
+
         return max_len
 
 
@@ -415,7 +425,9 @@ import heapq
 ListNode.__lt__ = lambda x, y : (x.val < y.val)
 class Solution:
     def mergeKLists(self, lists):
-        if not lists: return None
+        if not lists: 
+            return None
+        
         dummy = ListNode( 0 )
         tail = dummy
         heap = []
@@ -570,7 +582,7 @@ class Solution:
         
         heap.sort(reverse = True)
         return heap
-# version: quick select # TODO
+# version: quick select
 class Solution:
     def topk(self, nums, k):
         self.quick_select(nums, 0, len(nums) - 1, k)

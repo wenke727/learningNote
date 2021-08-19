@@ -32,8 +32,10 @@ class Solution:
             else:
                 end = mid
         
-        if nums[start] == target: return start
-        if nums[end] == target: return end
+        if nums[start] == target: 
+            return start
+        if nums[end] == target: 
+            return end
         
         return -1
 
@@ -50,7 +52,7 @@ class Solution:
     def searchRange(self, A, target):
         n = len(A) 
         if not n: 
-            return [-1, -1] # error: the case []
+            return [-1, -1]
         
         return [self.findFirstTargetNum(A, target, n), self.findLastTargetNum(A, target, n)]   
 
@@ -201,7 +203,7 @@ class Solution:
 
 
 # 585/852. 山脉序列中的最大值
-# [2020年10月22日]
+# [2020年10月22日 2021年8月3日]
 # https://www.lintcode.com/problem/maximum-number-in-mountain-sequence/description
 class Solution:
     """
@@ -221,7 +223,7 @@ class Solution:
 
 
 # 28. 搜索二维矩阵
-# [2020年10月22日]
+# [2020年10月22日 2021年8月3日]
 # https://www.lintcode.com/problem/search-a-2d-matrix/description
 class Solution:
     """
@@ -230,7 +232,8 @@ class Solution:
     @return: a boolean, indicate whether matrix contains target
     """
     def searchMatrix(self, matrix, target):
-        if matrix is None or matrix[0] is None: return False
+        if matrix is None or matrix[0] is None: 
+            return False
         
         self.n, self.m = len(matrix), len(matrix[0])
         start, end = 0, self.m * self.n -1
@@ -250,7 +253,7 @@ class Solution:
 
         
 # 38. 搜索二维矩阵 II
-# [2020年10月22日]
+# [2020年10月22日 2021年8月3日]
 # https://www.lintcode.com/problem/search-a-2d-matrix-ii/description
 class Solution:
     """
@@ -259,7 +262,8 @@ class Solution:
     @return: An integer indicate the total occurrence of target in the given matrix
     """
     def searchMatrix(self, matrix, target):
-        if not matrix or not matrix[0]: return 0
+        if not matrix or not matrix[0]: 
+            return 0
 
         m, n = len(matrix), len(matrix[0])
         i, j = m - 1, 0
@@ -273,17 +277,18 @@ class Solution:
             else:
                 count += 1
                 i -= 1
+        
         return count
 
 
-
 # 462. 目标出现总和
-# [2020年10月22日]
+# [2020年10月22日 2021年8月3日]
 # https://www.lintcode.com/problem/total-occurrence-of-target/description
 class Solution:
     def totalOccurrence(self, A, target):
         n = len(A) 
-        if not n: return 0
+        if not n: 
+            return 0
         last = self.findLastTargetNum(A, target, n)
         first = self.findFirstTargetNum(A, target, n)
         
@@ -320,7 +325,7 @@ class Solution:
 
 
 # 600/302. 包裹黑色像素点的最小矩形 # TODO
-# [2020年10月22日]
+# [2020年10月22日 2021年8月3日]
 # https://www.lintcode.com/problem/smallest-rectangle-enclosing-black-pixels/description
 class Solution:
     def minArea(self, image, x, y):
@@ -347,10 +352,9 @@ class Solution:
                 return True
         return False
 
-    def bin_search(self,image, lo, hi, row_col, left_right):
-        # FIXME: change to your own style
-        while lo < hi:
-            mid = (lo + hi) // 2
+    def bin_search(self,image, start, end, row_col, left_right):
+        while start < end:
+            mid = (start + end) // 2
             if row_col:
                 flag = self.check_row(image, mid)
             else:
@@ -358,19 +362,19 @@ class Solution:
         
             if flag:
                 if left_right:
-                    hi = mid
+                    end = mid
                 else:
-                    lo = mid + 1
+                    start = mid + 1
             else:
                 if left_right:
-                    lo = mid + 1
+                    start = mid + 1
                 else:
-                    hi = mid
-        return lo
+                    end = mid
+        return start
 
 
 # 75/162. 寻找峰值
-# [2020年10月26日]
+# [2020年10月26日 2021年8月3日]
 # https://www.lintcode.com/problem/find-peak-element/description
 class Solution:
     """
@@ -385,16 +389,17 @@ class Solution:
                 start = mid
             else:
                 end = mid
+
         return start if nums[start] > nums[end] else end
 
 
-# 62/33. 搜索旋转排序数组 ️️⭐ # TODO, draw map to solve it 
-# [2020年10月26日]
+# 62/33. 搜索旋转排序数组 ️️⭐⭐
+# [2020年10月26日 2021年8月3日]
 # https://www.lintcode.com/problem/search-in-rotated-sorted-array/description
-# https://leetcode-cn.com/problems/search-in-rotated-sorted-array/
 class Solution:
     def search(self, nums, target):
-        if not nums: return -1 # ! `or not nums[0]` 
+        if not nums: 
+            return -1 
 
         start, end = 0, len(nums)-1
         while start+1 < end:
@@ -409,23 +414,26 @@ class Solution:
                     start = mid
                 else:
                     end = mid
-        if nums[start] == target: return start
-        if nums[end] == target: return end
+
+        if nums[start] == target: 
+            return start
+        if nums[end] == target: 
+            return end
     
         return -1
 
 
-# 63. 搜索旋转排序数组 II
-# DESC What if duplicates are allowed?
-# [2020年10月26日]
+# 63. 搜索旋转排序数组 II ⭐⭐⭐
+# [2020年10月26日 2021年8月3日]
 # https://www.lintcode.com/problem/search-in-rotated-sorted-array-ii/description
+# DESC What if duplicates are allowed?
 class Solution:
     def search(self, nums, target):
         if not nums: return False
 
         start, end = 0, len(nums)-1
         while start+1 < end:
-            # DESC Similiar as previous problem, just keep going if duplicate
+            # ! DESC Similiar as previous problem, just keep going if duplicate
             while start + 1 < end and nums[start] == nums[start+1]:
                 start += 1
             while start + 1 < end and nums[end] == nums[end-1]:

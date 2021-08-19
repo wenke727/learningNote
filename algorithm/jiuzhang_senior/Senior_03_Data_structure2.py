@@ -103,7 +103,7 @@ import os, sys
 
 """Heap"""
 # 363. 接雨水 ⭐⭐⭐
-# [2021年3月9日]
+# [2021年3月9日 2021年8月12日]
 # https://www.lintcode.com/problem/trapping-rain-water/description
 # https://www.jiuzhang.com/solution/trapping-rain-water/#tag-lang-python
 # version： _index_stack, 单调栈
@@ -114,7 +114,8 @@ class Solution:
         for hi, h in enumerate(heights):
             while stack and h >= heights[stack[-1]]:
                 ground_height = heights[stack.pop()]
-                if not stack: continue
+                if not stack: 
+                    continue
             
                 lo = stack[-1]
                 water_line = min( heights[lo], h )
@@ -192,155 +193,172 @@ class Solution:
 
 
 # 364/407. 接雨水 II
-# [2020年11月10日 2021年2月24日]
+# [2020年11月10日 2021年2月24日 2021年8月11日]
 # https://www.lintcode.com/problem/trapping-rain-water-ii/description
 # https://www.jiuzhang.com/solution/trapping-rain-water-ii/#tag-lang-python
-import heapq
+from heapq import heappop, heappush
 DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+
 class Solution:
     def trapRainWater(self, heights):
-        if not heights or not heights[0]: return 0
-
+        if not heights or not heights[0]:
+            return 0
+        
         ans, max_height = 0, 0
         queue, visited = self.initialize(heights)
 
         while queue:
-            cur_height, (x ,y) = heapq.heappop(queue)
+            cur_height, (x, y) = heappop(queue)
+            
             if cur_height > max_height:
                 max_height = cur_height
             else:
                 ans += max_height - cur_height
             
             self.bfs(heights, x, y, visited, queue)
-        
+
         return ans
+    
 
     def bfs(self, heights, x, y, visited, queue):
         for dx, dy in DIRECTIONS:
-            nxt_x, nxt_y = x + dx, y + dy
-            if not ( 0<=nxt_x<self.n and 0<=nxt_y<self.m ) or (nxt_x, nxt_y) in visited:
+            nxt_x, nxt_y = x+dx, y+dy
+
+            if not ( 0<=nxt_x<self.n and 0<=nxt_y<self.m ):
+                continue
+            if (nxt_x, nxt_y) in visited:
                 continue
 
-            heapq.heappush( queue, (heights[nxt_x][nxt_y], (nxt_x, nxt_y)) )
+            heappush(queue, (heights[nxt_x][nxt_y], (nxt_x, nxt_y)))
             visited.add((nxt_x, nxt_y))
-
-        pass
-
+        
+        return
+    
+    
     def initialize(self, heights):
-        visited, queue = set(), []
+        queue, visited = [], set()
         self.n, self.m = len(heights), len(heights[0])
 
         for i in [0, self.n-1]:
             for j in range(self.m):
-                heapq.heappush( queue, (heights[i][j], (i, j)) )
-                visited.add((i, j))
-
+                heappush(queue, (heights[i][j], (i, j)))
+                visited.add((i,j))
+        
         for j in [0, self.m-1]:
             for i in range(1, self.n-1):
-                heapq.heappush(queue, (heights[i][j], (i, j)))
-                visited.add((i, j))
-
+                heappush(queue, (heights[i][j], (i, j)))
+                visited.add((i,j))
+        
         return queue, visited
 
 
 # 81. 数据流中位数
-# [2020年11月11日 2021年2月24日]
+# [2020年11月11日 2021年2月24日 2021年8月11日]
 # https://www.lintcode.com/problem/find-median-from-data-stream/description, https://leetcode-cn.com/problems/find-median-from-data-stream/
-import heapq
+from heapq import heappop, heappush
 class Solution:
     """
     @param nums: A list of integers
     @return: the median of numbers
     """
-    def medianII(self, nums):
-        if not nums: return []
-            
-        self.median = nums[0]
-        self.min_heap, self.max_heap = [], []
-        
-        res = [nums[0]]
-        for num in nums[1:]:
-            self.add(num)
-            res.append(self.median)
-            
-        return res
+    def __init__(self):
+        # 小顶堆放大于中位数的数
+        # 大顶堆放小于中位数的数
+        # 最开始中位数是数据流中的第一个数
+        self.max_heap = []
+        self.min_heap = []
+        self.is_first_add = True
 
     def add(self, num):
+        if self.is_first_add:
+            # 第一个进入数据流的数字是第一个中位数
+            self.median = num
+            self.is_first_add = False
+            return
+    
         if num < self.median:
-            heapq.heappush(self.min_heap, -num)
+            heappush(self.min_heap, -num)
         else:
-            heapq.heappush(self.max_heap, num)
-            
-        # balanace, `-` in right
-        if len(self.min_heap) > len(self.max_heap):
-            heapq.heappush(self.max_heap, self.median)
-            self.median = -heapq.heappop(self.min_heap)
-        elif len(self.min_heap) + 1 < len(self.max_heap):
-            heapq.heappush(self.min_heap, -self.median)
-            self.median = heapq.heappop(self.max_heap)
+            heappush(self.max_heap, num)
+
+        if len(self.min_heap) + 1 < len(self.max_heap):
+            heappush( self.min_heap, -self.median )
+            self.median = heappop(self.max_heap)
+        elif len(self.min_heap) > len(self.max_heap):
+            heappush(self.max_heap, self.median)
+            self.median = -heappop(self.min_heap)
+
+    def getMedian(self):
+        return self.median
 
 
-# 360. 滑动窗口的中位数 # TODO ⭐
-# [2021年3月19日]
+# 360. 滑动窗口的中位数 ⭐⭐⭐
+# [2021年3月19日 2021年8月12日]
 # https://www.lintcode.com/problem/sliding-window-median/description 
 # https://www.jiuzhang.com/solutions/sliding-window-median/#tag-lang-python
 # Version HashHeap
 class HashHeap:
     def __init__(self, desc=False):
-        self.hash = dict()
+        self.hash = {}
         self.heap = []
         self.desc = desc
-        
+
+
     @property
     def size(self):
         return len(self.heap)
-        
+
+
     def push(self, item):
         self.heap.append(item)
         self.hash[item] = self.size - 1
-        self._sift_up(self.size - 1)
-        
+        self._shift_up(self.size - 1)
+
+
     def pop(self):
         item = self.heap[0]
         self.remove(item)
+
         return item
-    
+
+
     def top(self):
         return self.heap[0]
-        
+
+
     def remove(self, item):
-        if item not in self.hash: return
-            
-        index = self.hash[item]
-        self._swap(index, self.size - 1)
+        if item not in self.hash:
+            return
         
+        index = self.hash[item]
+        self._swap(index, self.size-1)
+
         del self.hash[item]
         self.heap.pop()
-        
-        # in case of the removed item is the last item
+
         if index < self.size:
-            self._sift_up(index)
-            self._sift_down(index)
+            self._shift_up(index)
+            self._shift_down(index)
 
-    def _smaller(self, left, right):
-        return right < left if self.desc else left < right
 
-    def _sift_up(self, index):
+    def _shift_up(self, index):
         while index != 0:
             parent = index // 2
             if self._smaller(self.heap[parent], self.heap[index]):
                 break
             self._swap(parent, index)
             index = parent
-    
-    def _sift_down(self, index):
+
+
+    def _shift_down(self, index):
         if index is None:
             return
+
         while index * 2 < self.size:
             smallest = index
-            left, right = index * 2, index * 2 + 1
-            
-            if self._smaller(self.heap[left], self.heap[smallest]):
+            left, right = 2*index, 2*index + 1
+
+            if self._smaller(self.heap[left], self.heap[index]):
                 smallest = left
             if right < self.size and self._smaller(self.heap[right], self.heap[smallest]):
                 smallest = right
@@ -349,59 +367,62 @@ class HashHeap:
             
             self._swap(index, smallest)
             index = smallest
-        
+
+
     def _swap(self, i, j):
-        elem1 = self.heap[i]
-        elem2 = self.heap[j]
-        self.heap[i] = elem2
-        self.heap[j] = elem1
-        self.hash[elem1] = j
-        self.hash[elem2] = i
+        elem1, elem2 = self.heap[i], self.heap[j]
+        self.heap[i], self.heap[j] = elem2, elem1
+        self.hash[elem1], self.hash[elem2] = j, i 
+
+
+    def _smaller(self, left, right):
+        return  right < left if self.desc else left < right
     
 class Solution:
     def medianSlidingWindow(self, nums, k):
-        if not nums or len(nums) < k: return []
+        if not nums or len(nums) < k:
+            return []
 
-        self.left = HashHeap(desc=True)
-        self.right = HashHeap()
-        
-        for i in range(0, k - 1):
+        self.left, self.right = HashHeap(desc=True), HashHeap()
+
+        for i in range(k-1):
             self.add((nums[i], i))
-            
-        medians = []
-        for i in range(k - 1, len(nums)):
+
+        res = []
+        for i in range(k-1, len(nums)):
             self.add((nums[i], i))
-            # print(self.left.heap, self.median, self.right.heap)
-            medians.append(self.median)
-            self.remove((nums[i - k + 1], i - k + 1))
-            # print(self.left.heap, self.median, self.right.heap)
-            
-        return medians
-            
+            res.append(self.median)
+            self.remove((nums[i-k+1], i-k+1))
+
+        return res
+
+
     def add(self, item):
         if self.left.size > self.right.size:
             self.right.push(item)
         else:
             self.left.push(item)
-            
+        
         if self.left.size == 0 or self.right.size == 0:
             return
-            
+        
         if self.left.top() > self.right.top():
             self.left.push(self.right.pop())
             self.right.push(self.left.pop())
-        
+
+
     def remove(self, item):
         self.left.remove(item)
         self.right.remove(item)
         if self.left.size < self.right.size:
             self.left.push(self.right.pop())
-        
+
+
     @property
     def median(self):
         return self.left.top()[0]
 
-
+#version Heap
 from heapq import *
 class Heap:
     # q1存储了当前所有元素（包括未删除元素）
@@ -486,7 +507,7 @@ class Solution:
 
 """"Stack"""
 # 12/155. 带最小值操作的栈
-# [2020年11月11日 2021年3月3日]
+# [2020年11月11日 2021年3月3日 2021年8月12日]
 # https://www.lintcode.com/problem/min-stack/description
 # DESC 使用一个 minStack 作为辅助的栈，用来更新目前的最小值序列。 如果发现了一个更小的值就往 minStack 里也 push 
 # DESC 注意如果和最小值相等的情况，也需要往 minStack 里 push, 如果 push 的数比当前的最小值要大，就不需要往 MinStack 里push 了。
@@ -538,7 +559,7 @@ class MinStack:
 
 
 # 40/232. 用栈实现队列 
-# [2020年11月11日 2021年3月5日]
+# [2020年11月11日 2021年3月5日 2021年8月12日]
 # https://www.lintcode.com/problem/implement-queue-by-two-stacks/description
 # https://www.jiuzhang.com/solution/implement-queue-by-two-stacks/#tag-lang-python
 class MyQueue:
@@ -556,17 +577,18 @@ class MyQueue:
         if not self.out_:
             while self.in_:
                 self.out_.append(self.in_.pop())
+                
         return self.out_[-1]
 
     def empty(self):
         return not (self.in_ or self.out_)
 
+
 # 494. 双队列实现栈
-# [2021年3月5日]
+# [2021年3月5日 2021年8月12日]
 # https://www.lintcode.com/problem/494/
 from collections import deque
 class Stack:
-   
     def __init__(self):
         self.queue1 = deque()
         self.queue2 = deque()
@@ -593,7 +615,7 @@ class Stack:
 
 
 # 575/394. 字符串解码 
-# [2020年11月11日 2021年3月5日]
+# [2020年11月11日 2021年3月5日 2021年8月12日]
 # https://www.lintcode.com/problem/decode-string/description
 # https://www.jiuzhang.com/solutions/expression-expand/#tag-lang-python
 # version: stack
@@ -618,13 +640,13 @@ class Solution:
             stack.append(''.join(reversed(strs)) * repeats)
         
         return ''.join(stack)
-# version: dfs # TODO
+# version: dfs
 class Solution:
     def expressionExpand(self, s):
-        # write your code here
         if not s:
             return ''
         self.end = 0
+
         return self.dfs(s, 0, '')
         
     # Expand from idx to rest. Result expanded before idx is saved in result
@@ -654,7 +676,7 @@ class Solution:
     用单调栈来维护
 """
 # 122/84. 直方图最大矩形覆盖 
-# [2021年3月5日 2021年3月9日]
+# [2021年3月5日 2021年3月9日 2021年8月13日]
 # https://www.lintcode.com/problem/largest-rectangle-in-histogram/description
 # https://www.jiuzhang.com/solutions/largest-rectangle-in-histogram#tag-lang-python
 # DESC 用九章算法强化班中讲过的单调栈(stack)。维护一个单调递增栈，逐个将元素 push 到栈里。
@@ -672,10 +694,12 @@ class Solution:
             while stack and val < heights[stack[-1]]:
                 h = heights[stack.pop()]
 
-                if not stack: continue
+                if not stack:
+                    continue
+
                 lo = stack[-1] + 1
-                area = (hi-lo) * h
-                ans = max(ans, area)
+                ans = max(ans, (hi-lo) * h)
+
             stack.append(hi)
 
         return ans
@@ -720,12 +744,13 @@ class Solution:
 
 
 # 510/85. 最大矩形
-# [2020年11月12日 2021年3月9日]
+# [2020年11月12日 2021年3月9日 2021年8月13日]
 # https://www.lintcode.com/problem/maximal-rectangle/description
 # https://www.jiuzhang.com/solution/maximal-rectangle/#tag-lang-python
 class Solution:
     def maximalRectangle(self, matrix):
-        if not matrix: return 0
+        if not matrix: 
+            return 0
             
         max_rectangle = 0
         heights = [0] * len(matrix[0])
@@ -742,29 +767,32 @@ class Solution:
 
     def find_max_rectangle(self, heights):
         heights = [0, *heights, 0]
-        stack, max_area = [], 0
+        stack, ans = [], 0
 
-        for right, val in enumerate(heights):
+        for hi, val in enumerate(heights):
             while stack and val < heights[stack[-1]]:
-                index = stack.pop()
-                left = stack[-1] + 1
+                h = heights[stack.pop()]
 
-                area = (right - left) * heights[index]
-                max_area = max( max_area, area )
-            
-            stack.append(right)
-        
-        return max_area
+                if not stack:
+                    continue
+
+                lo = stack[-1] + 1
+                ans = max(ans, (hi-lo) * h)
+
+            stack.append(hi)
+
+        return ans
 
 
 # 126/654. 最大树 # TODO ⭐⭐⭐ # TODO
-# []
+# [2021年8月14日]
 # https://www.lintcode.com/problem/max-tree/description
 # https://www.jiuzhang.com/solution/max-tree/#tag-lang-python
 # DESC 保存一个单调递减栈。每个数从栈中被 pop 出的时候，就知道它往左和往右的第一个比他大的数的位置了。
 class Solution:
     def maxTree(self, A):
-        if not A: return None
+        if not A: 
+            return None
 
         stack, nodes =[], [TreeNode(num) for num in (A + [sys.maxsize])]
 
@@ -839,3 +867,48 @@ class Solution:
         return son
     
 
+# 下一个更大的数 II
+# [2021年8月14日]
+# https://www.lintcode.com/problem/1201/
+class Solution:
+    def nextGreaterElements(self, nums):
+        if not nums: 
+           return nums
+        
+        n = len(nums)
+        res = [-1] * n
+        stack = []
+        
+        for right in range(2*n):
+            right %= n
+            while stack and nums[right] > nums[stack[-1]]:
+                cur = stack.pop()
+                res[cur] = nums[right]
+
+            stack.append(right)
+        
+        return res
+
+
+# 229 · 栈排序
+# [2021年8月14日]
+# https://www.lintcode.com/problem/229/
+class Solution:
+    """
+    @param: stk: an integer stack
+    @return: void
+    """
+    def stackSorting(self, stk):
+        tmp = []
+
+        while stk:
+            top = stk.pop()
+            while tmp and top > tmp[-1]:
+                stk.append(tmp.pop())
+
+            tmp.append(top)
+        
+        while tmp:
+            stk.append(tmp.pop())
+        
+        return stk

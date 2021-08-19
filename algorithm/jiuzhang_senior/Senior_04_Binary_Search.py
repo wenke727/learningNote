@@ -1,24 +1,5 @@
 import sys
 
-# 75. 寻找峰值
-# [2020年10月24日, 2020年11月13日]
-# https://www.lintcode.com/problem/find-peak-element/description
-class Solution:
-    """
-    @param A: An integers array.
-    @return: return any of peek positions.
-    """
-    def findPeak(self, nums):
-        start, end = 0, len(nums)-1
-        while start + 1 < end:
-            mid = (start + end) // 2
-            if nums[mid] < nums[mid+1]:
-                start = mid
-            else:
-                end = mid
-        return start if nums[start] > nums[end] else end
-
-
 # 390. 找峰值 II # TODO 手打一遍
 # [2021年3月11日]
 # https://www.lintcode.com/problem/find-peak-element-ii/description
@@ -170,7 +151,7 @@ class Solution:
 
 
 # 141. 对x开根
-# [2020年10月24日 2021年03月17日]
+# [2020年10月24日 2021年03月17日 2021年8月13日]
 # https://www.lintcode.com/problem/sqrtx/description
 class Solution:
     def sqrt(self, x):
@@ -183,7 +164,9 @@ class Solution:
             else:
                 start = mid
 
-        if self.pow(end) <= x: return end
+        if self.pow(end) <= x: 
+            return end
+        
         return start
 
     def pow(self, x):
@@ -191,7 +174,7 @@ class Solution:
 
 
 # 586. 对x开根II
-# [2020年10月24日 2021年03月17日]
+# [2020年10月24日 2021年03月17日 2021年8月13日]
 # https://www.lintcode.com/problem/sqrtx-ii/description
 class Solution:
     def sqrt(self, x):
@@ -210,32 +193,19 @@ class Solution:
         return start
 
 
-# 74. 第一个错误的代码版本
-# [2020年10月21日 2021年03月17日]
-# https://www.lintcode.com/problem/first-bad-version/description
-class Solution:
-    def findFirstBadVersion(self, n):
-        left, right = 0, n
-        while left+1 < right:
-            mid = (left + right) // 2
-            if isBadVersion(mid):
-                right = mid
-            else:
-                left = mid
-        
-        return left if isBadVersion(left) else right
-
-
 # 183. 木材加工
-# [2020年10月24日 2021年03月17日]
+# [2020年10月24日 2021年03月17日 2021年8月13日]
 # https://www.lintcode.com/problem/wood-cut/description
 # https://www.jiuzhang.com/solution/wood-cut/#tag-lang-python
 class Solution:
     def woodCut(self, L, k):
-        if not L: return 0
+        if not L: 
+            return 0
 
+        # caution: start with 1 not 0
         start, end = 1, min(max(L), sum(L) // k)
-        if start > end: return 0
+        if start > end: 
+            return 0
         
         while start + 1 < end:
             mid = (start + end) // 2
@@ -244,8 +214,11 @@ class Solution:
             else:
                 end = mid
                 
-        if self.get_pieces(L, end) >= k: return end
-        if self.get_pieces(L, start) >= k: return start
+        if self.get_pieces(L, end) >= k: 
+            return end
+        if self.get_pieces(L, start) >= k: 
+            return start
+        
         return 0
         
     def get_pieces(self, L, length):
@@ -253,7 +226,7 @@ class Solution:
 
 
 # 633. 寻找重复的数
-# [2020年10月24日 2021年03月17日]
+# [2020年10月24日 2021年03月17日 2021年8月14日]
 # https://www.lintcode.com/problem/find-the-duplicate-number/description
 # https://www.jiuzhang.com/solution/find-the-duplicate-number/#tag-lang-python
 class Solution:
@@ -281,6 +254,7 @@ class Solution:
 
 
 # 437. 书籍复印
+# [2021年8月14日]
 # https://www.lintcode.com/problem/copy-books/description
 # https://www.jiuzhang.com/solution/copy-books/#tag-lang-python
 class Solution:
@@ -290,7 +264,8 @@ class Solution:
     @return: an integer
     """
     def copyBooks(self, pages, k):
-        if not pages: return 0
+        if not pages: 
+            return 0
             
         start, end = max(pages), sum(pages)
         while start + 1 < end:
@@ -316,6 +291,7 @@ class Solution:
             
         return count + 1
 
+
 # 868. 子数组的最大平均值
 # https://www.lintcode.com/problem/maximum-average-subarray/description
 # https://www.jiuzhang.com/solution/maximum-average-subarray/#tag-lang-python
@@ -332,7 +308,7 @@ class Solution:
 
 """ Sweep-Line """
 # 391. 数飞机
-# [2021年03月18日 2021年4月13日]
+# [2021年03月18日 2021年4月13日 2021年8月14日]
 # https://www.lintcode.com/problem/number-of-airplanes-in-the-sky/description
 class Solution:
     def countOfAirplanes(self, airplanes):
@@ -350,7 +326,7 @@ class Solution:
 
 
 # 821. 时间交集
-# [2021年03月18日 2021年4月13日]
+# [2021年03月18日 2021年4月13日 2021年8月14日]
 # https://www.lintcode.com/problem/time-intersection/description?_from=ladder&&fromId=4
 # https://www.jiuzhang.com/solution/time-intersection/#tag-lang-python
 # version 扫描线
@@ -395,6 +371,7 @@ class Solution:
 
 
 # 131. 大楼轮廓 # TODO
+# [2021年8月14日]
 # https://www.lintcode.com/problem/the-skyline-problem/description
 # https://www.jiuzhang.com/solution/the-skyline-problem/#tag-lang-python
 class HashHeap:
@@ -572,26 +549,43 @@ class MyCalendar:
         return True
 
 
-
 """ Deque """
 # 362. 滑动窗口的最大值
-# [2021年3月19日]
+# [2021年3月19日 2021年8月14日]
 # https://www.lintcode.com/problem/sliding-window-maximum/description
+# DESC 单调队列
+from collections import deque
 class Solution:
-    def maxSlidingWindow(self, nums, window_size):
-        queue, output = collections.deque([]), []
-
-        for i in range(len(nums)):
-            while queue and nums[i] >= nums[queue[-1]]:
-                queue.pop()
-
-            queue.append(i)
-            if i + 1 >= window_size:
-                output.append(nums[queue[0]])
+    """
+    @param: nums: A list of integers
+    @param: k: An integer
+    @return: The maximum number inside the window at each moving
+    """
+    def maxSlidingWindow(self, nums, k):
+        if not nums or not k:
+            return []
+            
+        dq = deque([])
+        
+        for i in range(k - 1):
+            self.push(dq, nums, i)
+        
+        result = []
+        for i in range(k - 1, len(nums)):
+            self.push(dq, nums, i)
+            result.append(nums[dq[0]])
+            self.pop(dq, i-k+1)
                 
-            if i + 1 - window_size == queue[0]:
-                queue.popleft()
-        return output
+        return result
+            
+    def push(self, dq, nums, i):
+        while dq and nums[dq[-1]] < nums[i]:
+            dq.pop()
+        dq.append(i)
+
+    def pop(self, dq, i):
+        if dq[0] == i:
+            dq.popleft()
 
 
 """exercise""" # TODO
@@ -760,9 +754,6 @@ class Solution:
         return False
 
 
-
-
-
 # 156 · 合并区间
 # [2021年4月12日]
 # https://www.lintcode.com/problem/156/
@@ -829,7 +820,6 @@ class Solution:
         return res
 
 
-
 # 903 · 范围加法
 # [2021年4月13日]
 # https://www.lintcode.com/problem/903/
@@ -854,7 +844,4 @@ class Solution:
             res[idx] = res[idx-1] + operation[idx]
 
         return res 
-
-
-
 

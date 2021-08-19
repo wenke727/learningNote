@@ -15,7 +15,9 @@ class TreeNode:
         self.val = val
         self.left, self.right = None, None
 
+""" 预习 """
 # 597/1120. 具有最大平均数的子树
+# [2021年8月4日]
 # https://www.lintcode.com/problem/subtree-with-maximum-average/description
 # https://www.jiuzhang.com/solution/subtree-with-maximum-average/#tag-lang-python
 # Version Divide Conquer
@@ -32,7 +34,7 @@ class Solution:
         maxAvg_r, maxTree_r, size_r, sum_r = self.dfs(root.right)
 
         size_cur = size_l + size_r + 1
-        sum_cur  = sum_r + sum_l + root.val # ! `root.val`
+        sum_cur  = sum_r + sum_l + root.val
         avg_cur  = sum_cur / size_cur
 
         if maxAvg_l == max( maxAvg_l, maxAvg_r, avg_cur ):
@@ -69,9 +71,9 @@ class Solution:
 
 
 # 175. 翻转二叉树
-# [2020年11月2日]
+# [2020年11月2日 2021年8月4日]]
 # https://www.lintcode.com/problem/invert-binary-tree/description
-# version divide
+# version divide, 先序，根左右
 class Solution:
     """
     @param root: a TreeNode, the root of the binary tree
@@ -92,7 +94,7 @@ class Solution:
 
 
 # 95. 验证二叉查找树
-# [2020年11月2日]
+# [2020年11月2日 2021年8月6日]
 # https://www.lintcode.com/problem/validate-binary-search-tree/description
 # https://www.jiuzhang.com/solution/validate-binary-search-tree/#tag-lang-python
 # Version Divide Conquer
@@ -145,11 +147,12 @@ class Solution:
 
         return True
 
+
 """
-# TODO 二叉树的增删改查
-# 参考labuladong 二叉搜索树操作集锦
+# 二叉树的增删改查， 参考labuladong 二叉搜索树操作集锦
 """
 # 1524. 在二叉搜索树中查找
+# [2021年8月6日]
 # https://www.lintcode.com/problem/search-in-a-binary-search-tree/description
 class Solution:
     """
@@ -162,12 +165,13 @@ class Solution:
             return root
 
         if val < root.val:
-            return self.searchBST(root.left,val)
+            return self.searchBST(root.left, val)
         else:
-            return self.searchBST(root.right,val)
+            return self.searchBST(root.right, val)
 
 
 # 85. 在二叉查找树中插入节点
+# [2021年8月6日]
 # https://www.lintcode.com/problem/insert-node-in-a-binary-search-tree/description
 # https://www.jiuzhang.com/solution/insert-node-in-a-binary-search-tree/#tag-lang-python
 # version: DFS
@@ -189,6 +193,7 @@ class Solution:
             root.left = self.__helper(root.left, node)
         else:
             root.right = self.__helper(root.right, node)
+        
         return root
 # version
 class Solution:
@@ -215,6 +220,7 @@ class Solution:
 
 
 # 87. 删除二叉查找树的节点
+# [2021年8月6日]
 # https://www.lintcode.com/problem/remove-node-in-binary-search-tree/description
 # https://www.jiuzhang.com/solution/remove-node-in-binary-search-tree/#tag-lang-python
 # version: inorder -> build
@@ -259,19 +265,19 @@ class Solution:
     @return: The root of the binary search tree after removal.
     """
     def removeNode(self, root, value):
-        # null case
         if root is None:
             return None
 
         # check if node to delete is in left/right subtree
         if value < root.val:
+            # not `self.removeNode(root.left, value)`
             root.left = self.removeNode(root.left, value)
         elif value > root.val:
             root.right = self.removeNode(root.right, value)
         else:
             # if root is has 2 childs/only one child/leaf node
             if root.left and root.right:
-                max = self.findMax(root)
+                max = self.find_left_Max(root)
                 root.val = max.val
                 root.left = self.removeNode(root.left, max.val)
             elif root.left:
@@ -284,27 +290,30 @@ class Solution:
         return root
 
     # find max node in left subtree of root
-    def findMax(self, root):
+    def find_left_Max(self, root):
         node = root.left
         while node.right:
             node = node.right
         return node
 
 
-
-
-"""Tree-based Depth First Search
-Tree-based Depth First Search, 考点都是基于树的深度优先搜索
-碰到二叉树的问题，就想想整棵树在该问题上的结果 和左右儿子在该问题上的结果之间的联系是什么
 """
-"""考察形态"""
+Tree-based Depth First Search
+
+考点都是基于树的深度优先搜索
+碰到二叉树的问题，就想想整棵树在该问题上的结果 和左右儿子在该问题上的结果之间的联系是什么
+
+"""
+
+""" 第一类 考察形态"""
 # 596. 最小子树
-# [2020年11月2日]
+# [2020年11月2日 2021年8月6日 2021年8月6日]
 # https://www.lintcode.com/problem/minimum-subtree/description
 # https://www.jiuzhang.com/solutions/minimum-subtree/#tag-lang-python
 class Solution:
     def findSubtree(self, root):
         _, node, _ = self.dfs(root)
+
         return node
     
     def dfs(self, root):
@@ -318,8 +327,10 @@ class Solution:
 
         if min_left == min(min_left, min_right, sum_root):
             return min_left, subtree_left, sum_root
+
         if min_right == min(min_left, min_right, sum_root):
             return min_right, subtree_right, sum_root
+
         return sum_root, root, sum_root
 
 
@@ -348,10 +359,12 @@ class Solution:
 # version Traversal
 class Solution:
     def binaryTreePaths(self, root):
-        if root is None: return []
+        if root is None: 
+            return []
 
         result = []
         self.dfs( root, [str(root.val)], result )
+
         return result
     
     def dfs(self, node, path, result):
@@ -370,8 +383,8 @@ class Solution:
             path.pop()
 
 
-# 88. 最近公共祖先
-# [2020年11月3日, 2020.12.03, 2020年1月5号]
+# 88. 最近公共祖先 ⭐
+# [2020年11月3日, 2020年1月5号 2021年8月6日]
 # https://www.lintcode.com/problem/lowest-common-ancestor-of-a-binary-tree/description
 # https://www.jiuzhang.com/solutions/lowest-common-ancestor/#tag-lang-python
 class Solution:
@@ -382,7 +395,6 @@ class Solution:
         if root is A or root is B:
             return root
 
-        # ! 无脑丢给左右
         left  = self.lowestCommonAncestor(root.left,  A, B)
         right = self.lowestCommonAncestor(root.right, A, B)
 
@@ -396,9 +408,11 @@ class Solution:
         return None
 
 
-# 474. 最近公共祖先 II # TODO 和1的区别
+# 474. 最近公共祖先 II 
+# [2021年8月6日]
 # https://www.lintcode.com/problem/lowest-common-ancestor-ii/description
 # https://www.jiuzhang.com/solution/lowest-common-ancestor-ii/#tag-lang-python
+# DESC: 每个节点除了左右儿子指针以外，还包含一个父亲指针parent
 class Solution:
     """
     @param: root: The root of the tree
@@ -419,10 +433,12 @@ class Solution:
             if curr in parent_set:
                 return curr
             curr = curr.parent
+
         return None
 
 
-# 578. 最近公共祖先 III # TODO
+# 578. 最近公共祖先 III
+# [2021年8月6日]
 # https://www.lintcode.com/problem/lowest-common-ancestor-iii/description
 # https://www.jiuzhang.com/solution/lowest-common-ancestor-iii/#tag-lang-python
 class Solution:
@@ -442,8 +458,8 @@ class Solution:
         if root is None:
             return False, False, None
             
-        left_a, left_b, left_node = self.helper(root.left, A, B)
-        right_a, right_b, right_node = self.helper(root.right, A, B)
+        left_a, left_b, left = self.helper(root.left, A, B)
+        right_a, right_b, right = self.helper(root.right, A, B)
         
         a = left_a or right_a or root == A
         b = left_b or right_b or root == B
@@ -451,18 +467,18 @@ class Solution:
         if root == A or root == B:
             return a, b, root
 
-        if left_node is not None and right_node is not None:
+        if left is not None and right is not None:
             return a, b, root
-        if left_node is not None:
-            return a, b, left_node
-        if right_node is not None:
-            return a, b, right_node
+        if left is not None:
+            return a, b, left
+        if right is not None:
+            return a, b, right
 
         return a, b, None
 
 
 # 376. Binary Tree Path Sum
-# [2020.11.30]
+# [2020.11.30 2021年8月6日]
 # https://www.lintcode.com/problem/binary-tree-path-sum/description
 class Solution:
     """
@@ -472,8 +488,10 @@ class Solution:
     """
     def binaryTreePathSum(self, root, target):
         result = []
-        path = []
-        self.dfs(root, path, result, target)
+        if root is None: 
+            return result
+            
+        self.dfs(root, [], result, target)
         
         return result
 
@@ -493,8 +511,8 @@ class Solution:
         path.pop()
 
 
-# 246. 二叉树的路径和 II
-# [2020.11.30, 2020.12.03]
+# 246. 二叉树的路径和 II ⭐⭐
+# [2020.11.30, 2020.12.03 2021年8月6日]
 # https://www.lintcode.com/problem/binary-tree-path-sum-ii/description
 # https://www.jiuzhang.com/solution/binary-tree-path-sum-ii/#tag-lang-python
 class Solution:
@@ -511,26 +529,26 @@ class Solution:
         self.dfs(root, [], result, 0, target)
         return result
     
-    def dfs(self, root, path, result, l, target):
+    def dfs(self, root, path, result, level, target):
         if root is None:
             return
         
         path.append(root.val)
 
         tmp = target
-        for i in range(l, -1, -1):
+        for i in range(level, -1, -1):
             tmp -= path[i]
             if tmp == 0:
                 result.append(path[i:])
         
-        self.dfs(root.left, path, result, l+1, target)
-        self.dfs(root.right, path, result, l+1, target)
+        self.dfs(root.left, path, result, level+1, target)
+        self.dfs(root.right, path, result, level+1, target)
 
         path.pop()
 
 
 # 97. Maximum Depth of Binary Tree
-# [2020.11.30, 2020.12.03]
+# [2020.11.30, 2020.12.03 2021年8月6日]
 # https://www.lintcode.com/problem/maximum-depth-of-binary-tree/description
 class Solution:
     """
@@ -547,16 +565,15 @@ class Solution:
         return max(left, right) + 1
 
 
-# 242. 将二叉树按照层级转化为链表 # TODO
-# [2020年11月2日, 2020.12.03]
+# 242. 将二叉树按照层级转化为链表
+# [2020年11月2日, 2021年8月6日]
 # https://www.lintcode.com/problem/convert-binary-tree-to-linked-lists-by-depth/description
 # https://www.jiuzhang.com/solutions/convert-binary-tree-to-linked-lists-by-depth/#tag-lang-python
 class Solution:
-    # @param {TreeNode} root the root of binary tree
-    # @return {ListNode[]} a lists of linked list
     def binaryTreeToLists(self, root):
         result = []
         self.dfs(root, 1, result)
+
         return result
     
     def dfs(self, root, depth, result):
@@ -577,6 +594,7 @@ class Solution:
 
 
 # 93. 平衡二叉树
+# [2021年8月6日]
 # https://www.lintcode.com/problem/balanced-binary-tree/description
 class Solution:
     """
@@ -602,9 +620,9 @@ class Solution:
         return abs( left_height - right_height ) <= 1, max(left_height, right_height) + 1       
 
 
-"""二叉树结构变化"""
-# 453/114. 将二叉树拆成链表 # FIXME
-# [2020年11月3日]
+"""第二类 二叉树结构变化"""
+# 453/114. 将二叉树拆成链表 ⭐
+# [2020年11月3日 2021年8月7日]
 # https://www.lintcode.com/problem/flatten-binary-tree-to-linked-list/description
 # https://www.jiuzhang.com/solutions/flatten-binary-tree-to-linked-list/#tag-lang-python
 # version divide conquer
@@ -624,11 +642,13 @@ class Solution:
             root.right = root.left
             root.left  = None
         
-        # ! return 有先后顺序 先right后left，因left在上一步已处理
+        # ! return 有先后顺序 先right后left，因left在上一步已处理, 
+        # 更多的是由先后顺序决定的
         if right is not None:
             return right
         if left is not None:
             return left
+
         return root
 # version Traversal
 class Solution:
@@ -648,9 +668,9 @@ class Solution:
         self.flatten(right)
 
 
-"""考察形态"""
+"""第三类 考察形态"""
 # 902. BST中第K小的元素 ✨
-# [2020年11月3日 2020年01月20日]
+# [2020年11月3日 2020年01月20日 2021年8月7日]
 # https://www.lintcode.com/problem/kth-smallest-element-in-a-bst/description
 # https://www.jiuzhang.com/solution/kth-smallest-element-in-a-bst/#tag-lang-python
 class Solution:
@@ -670,15 +690,15 @@ class Solution:
             
             if not stack:
                 return None
+        
         return stack[-1].val
 
 
 # 86. 二叉查找树迭代器
-# [2020年11月3日 2020年01月20日]
+# [2020年11月3日 2020年01月20日 2021年8月7日]
 # https://www.lintcode.com/problem/binary-search-tree-iterator/description
 # https://www.jiuzhang.com/solution/binary-search-tree-iterator/#tag-lang-python
 class BSTIterator:
-    # non-recursion 的 inorder traversal
     def __init__(self, root):
         dummy = TreeNode(0)
         dummy.right = root
@@ -686,15 +706,9 @@ class BSTIterator:
         self.next()
 
     def hasNext(self, ):
-        """
-        @return: True if there has next node, or false
-        """
         return len(self.stack) > 0
 
     def next(self, ):
-        """
-        @return: return next node
-        """
         node = self.stack.pop()
         nxt_node = node
 
@@ -708,7 +722,7 @@ class BSTIterator:
 
 
 # 448. 二叉查找树的中序后继 ✨
-# [ 2020年01月20日]
+# [ 2020年01月20日 2021年8月7日]
 # https://www.lintcode.com/problem/inorder-successor-in-bst/description
 # https://www.jiuzhang.com/solution/inorder-successor-in-bst/#tag-lang-python
 class Solution:
@@ -722,7 +736,6 @@ class Solution:
             return None
 
         if root.val <= p.val:
-            # self.inorderSuccessor(root.right, p)
             return self.inorderSuccessor(root.right, p)
         
         left = self.inorderSuccessor( root.left, p )
@@ -734,12 +747,13 @@ class Solution:
 
 
 # 95. 验证二叉查找树
-# [ 2020年01月20日]
+# [ 2020年01月20日 2021年8月7日]
 # https://www.lintcode.com/problem/validate-binary-search-tree/description
 # https://www.jiuzhang.com/solution/validate-binary-search-tree/#tag-lang-python
 class Solution:
     def isValidBST(self, root):
-        if root is None: return True
+        if root is None: 
+            return True
 
         dummy = TreeNode(0)
         dummy.right = root
@@ -753,15 +767,17 @@ class Solution:
                 while node:
                     stack.append(node)
                     node = node.left
+
             if stack:
                 if last_node is not None and stack[-1].val <= last_node.val:
                     return False
                 last_node = stack[-1]
+
         return True
 
 
 # 67. 二叉树的中序遍历
-# [2020年01月20日]
+# [2020年01月20日 2021年8月7日]
 # https://www.lintcode.com/problem/binary-tree-inorder-traversal/description
 class Solution:
     """
@@ -783,10 +799,12 @@ class Solution:
                     node = node.left
             if stack:
                 inorder.append(stack[-1].val)
+
         return inorder
 
 
 # 900. 二叉搜索树中最接近的值
+# [2021年8月7日]
 # https://www.lintcode.com/problem/closest-binary-search-tree-value/description
 # https://www.jiuzhang.com/solution/closest-binary-search-tree-value/#tag-lang-python
 class Solution:
@@ -796,21 +814,25 @@ class Solution:
     @return: the value in the BST that is closest to the target
     """
     def closestValue(self, root, target):
-        if root is None: return None
+        if root is None: 
+            return None
 
         lower = self.get_lower_bound(root, target)
         upper = self.get_upper_bound(root, target)
 
-        if lower is None: return upper.val
-        if upper is None: return lower.val
+        if lower is None: 
+            return upper.val
+        if upper is None: 
+            return lower.val
         
-        print(target - lower.val, upper.val - target)
         if  target - lower.val > upper.val - target:
             return upper.val
+
         return lower.val
     
     def get_lower_bound(self, root, target):
-        if root is None: return None
+        if root is None: 
+            return None
 
         if target < root.val:
             return self.get_lower_bound(root.left, target)
@@ -820,7 +842,8 @@ class Solution:
         return lower if lower is not None else root
 
     def get_upper_bound(self, root, target):
-        if root is None: return None
+        if root is None: 
+            return None
 
         if target > root.val:
             return self.get_upper_bound(root.right, target)
@@ -830,7 +853,8 @@ class Solution:
         return upper if upper is not None else root
 
 
-# 901/272. 二叉搜索树中最接近的值 II
+# 901/272. 二叉搜索树中最接近的值 II ⭐
+# [2021年8月7日]
 # https://www.lintcode.com/problem/closest-binary-search-tree-value-ii/description
 # https://www.jiuzhang.com/solution/closest-binary-search-tree-value-ii/#tag-lang-python
 class Solution:
@@ -841,29 +865,29 @@ class Solution:
     @return: k values in the BST that are closest to the target
     """
     def closestKValues(self, root, target, k):
-        if root is None or k == 0: 
+        if root is None or k == 0:
             return []
-
-        nums = self.get_inorder( root )
-        left = self.find_lower_index( nums )
+            
+        nums = self.get_inorder(root)
+        left = self.find_lower_index(nums, target)
         right = left + 1
         results = []
-
+        
         for _ in range(k):
             if self.is_left_closer(nums, left, right, target):
-                results.append( nums.left )
+                results.append(nums[left])
                 left -= 1
             else:
-                results.append( nums.right )
+                results.append(nums[right])
                 right += 1
         return results
-
+        
     def get_inorder(self, root):
         dummy = TreeNode(0)
         dummy.right = root
         stack = [dummy]
         inorder = []
-
+        
         while stack:
             node = stack.pop()
             if node.right:
@@ -872,33 +896,40 @@ class Solution:
                     stack.append(node)
                     node = node.left
             if stack:
-                inorder.append( stack[-1].val )
+                inorder.append(stack[-1].val)
+
         return inorder
-    
-    def find_lower_index( self, nums, target ):
-        start, end = 0, len(nums) - 1
         
+    def find_lower_index(self, nums, target):
+        """
+        find the largest number < target, return the index
+        """
+        start, end = 0, len(nums) - 1
         while start + 1 < end:
             mid = (start + end) // 2
-            if nums[mid] < target: # ! 搞错了方向
-                end = mid
-            else:
+            if nums[mid] < target:
                 start = mid
+            else:
+                end = mid
+                
+        if nums[end] < target:
+            return end
         
-        if nums[start] <= target:
+        if nums[start] < target:
             return start
-        return end
-    
-    def is_left_closer(nums, left, right, target):
+            
+        return -1
+        
+    def is_left_closer(self, nums, left, right, target):
         if left < 0:
             return False
         if right >= len(nums):
-            return False
-        
+            return True
         return target - nums[left] < nums[right] - target
 
 
 # 11. 二叉查找树中搜索区间
+# [2021年8月7日]
 # https://www.lintcode.com/problem/search-range-in-binary-search-tree/description
 # https://www.jiuzhang.com/solution/search-range-in-binary-search-tree/#tag-lang-python
 class Solution:
@@ -930,65 +961,34 @@ class Solution:
         return results
 
 
-# 85. 在二叉查找树中插入节点
-# https://www.lintcode.com/problem/insert-node-in-a-binary-search-tree/description
-# https://www.jiuzhang.com/solution/insert-node-in-a-binary-search-tree/#tag-lang-python
-# DESC 如果它大于当前根节点，则应该在右子树中， 如果它小于当前根节点，则应该在左子树中。 （二叉查找树中保证不插入已经存在的值）
-class Solution:
-    """
-    @param: root: The root of the binary search tree.
-    @param: node: insert this node into the binary search tree
-    @return: The root of the new binary search tree.
-    """
-    def insertNode(self, root, node):
-        # write your code here
-        return self.__helper(root, node)
-    
-     # helper函数定义成私有属性 
-    def __helper(self, root, node):     
-        if root is None:
-            return node
-
-        if node.val < root.val:
-            root.left = self.__helper(root.left, node)
-        else:
-            root.right = self.__helper(root.right, node)
-        
-        return root
-
-# 87. 删除二叉查找树的节点
-# https://www.lintcode.com/problem/remove-node-in-binary-search-tree/description
-# https://www.jiuzhang.com/solution/remove-node-in-binary-search-tree/#tag-lang-python
-class Solution:
-    """
-    @param: root: The root of the binary search tree.
-    @param: value: Remove the node with given value.
-    @return: The root of the binary search tree after removal.
-    """
-    def removeNode(self, root, value):
-        pass
-
-
-# 路径总和 II · Path Sum II
+# 路径总和 II
+# [2021年8月7日]
 # https://www.lintcode.com/problem/1357/
 class Solution:
     def pathSum(self, root, sum):
-        def mysum(nums):
+        if not root:
+            return []
+        
+        res = []
+        self.findPath(root, [], sum, res)
+
+        return res
+    
+    def findPath(self, root, path, sum, res):
+        def __mysum(nums):
             count = 0
             for n in nums:
                 count += n
             
             return count
         
-        def findPath( root, path ):
-            if root.left is None and root.right is None:
-                if mysum(path + [root.val]) == sum:
-                    res.append( [t for t in path+[root.val]] )
-                
-            if root.left: findPath(root.left, path + [root.val])
-            if root.right: findPath(root.right, path + [root.val])
+        if root.left is None and root.right is None:
+            if __mysum(path +[root.val]) == sum:
+                res.append(path[:]+[root.val])
+            return
+            
+        if root.left:
+            self.findPath(root.left, path + [root.val], sum, res)
+        if root.right:
+            self.findPath(root.right, path + [root.val], sum, res)
         
-        res = []
-        if root:findPath(root, [])
-
-        return res

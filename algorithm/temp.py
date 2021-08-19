@@ -1,37 +1,18 @@
-from algorithm.chapter_04_BFS import ListNode
-import collections
-
-
 class Solution:
-    def binaryTreeToLists(self, root):
-        if root is None:
-            return []
+    def backPackIV(self, nums, target):
+        if not nums: 
+            return 0
         
-        res = []
-        queue = collections.deque([root])
+        n = len(nums)
+        dp = [[0]*(target+1) for _ in (n+1)]
+        dp[0][0] = 1
 
-        while queue:
-            res.append(self.create_linkedlist(queue))
-            nxtQueue = collections.deque([])
-
-            for node in queue:
-                if node.left:
-                    nxtQueue.append(node.left)
+        for i in range(1, n+1):
+            dp[i][0] = 1
+            for j in range(1, target+1):
+                dp[i][j] = dp[i-1][j]
+                if j >= nums[i-1]:
+                    dp[i][j] += dp[i][j-nums[i-1]]
         
-                if node.right:
-                    nxtQueue.append(node.right)
-            
-            queue = nxtQueue
+        return dp[n][target]
         
-        return res
-
-    def create_linkedlist(self, nodes):
-        dummy = ListNode(0)
-        cur = dummy
-
-        for node in nodes:
-            p = ListNode(node.val)
-            cur.next = p
-            cur = p
-        
-        return dummy.next

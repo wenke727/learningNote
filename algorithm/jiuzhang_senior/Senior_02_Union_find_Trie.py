@@ -62,7 +62,7 @@ class Trie:
 
 '''
 # 589. 连接图  
-# [2020年11月8日 2021年2月22日]
+# [2020年11月8日 2021年2月22日 2021年8月11日]
 # https://www.lintcode.com/problem/connecting-graph/description
 # https://www.jiuzhang.com/solutions/connecting-graph/#tag-lang-python
 class ConnectingGraph:
@@ -86,8 +86,9 @@ class ConnectingGraph:
         self.father[x] = self.find(self.father[x])
         return self.father[x]
 
+
 # 590. 连接图 II  
-# [2020年11月9日 2021年2月22日]
+# [2020年11月9日 2021年2月22日 2021年8月11日]
 # https://www.lintcode.com/problem/connecting-graph-ii/description
 # https://www.jiuzhang.com/solutions/connecting-graph-ii/#tag-lang-python
 class ConnectingGraph2:
@@ -105,8 +106,8 @@ class ConnectingGraph2:
         root_a, root_b = self.find(a), self.find(b)
         if root_a != root_b:
             self.father[root_a] = root_b
+            # Caution: The father is root_b not root_a. self.nodenum[root_a] += self.nodenum[root_b]
             self.nodenum[root_b] += self.nodenum[root_a]
-            # self.nodenum[root_b] += 1
 
     def query(self, a):
         """
@@ -136,7 +137,7 @@ class ConnectingGraph2:
 
 
 # 591. 连接图 III 
-# [2020年11月9日 2021年2月22日]
+# [2020年11月9日 2021年2月22日 2021年8月11日]
 # https://www.lintcode.com/problem/connecting-graph-iii/description
 # https://www.jiuzhang.com/solutions/connecting-graph-iii/#tag-lang-python
 class ConnectingGraph3:
@@ -150,7 +151,6 @@ class ConnectingGraph3:
         root_a, root_b = self.find(a), self.find(b)
         if root_a  != root_b:
             self.father[root_a] = root_b
-            # self.father[root_a] = self.father[root_b]
             self.count -= 1
    
     def query(self):
@@ -167,48 +167,55 @@ class ConnectingGraph3:
         return self.father[x]
 
 
-# 433/200. 岛屿的个数 # TODO: DFS
-# [2020年11月9日 2021年2月22日]
+# 433/200. 岛屿的个数
+# [2020年11月9日 2021年2月22日 2021年8月11日]
 # https://www.lintcode.com/problem/number-of-islands/; https://leetcode-cn.com/problems/number-of-islands/
 # https://www.jiuzhang.com/solutions/number-of-islands/#tag-lang-python
 # version: Union find
-class Solution:
-    def __init__(self):
-        self.ans = 0
+class UnionFind:
+    def __init__(self, n):
         self.father = {}
+        self.ans = 0
+        for i in range(n):
+            self.father[i] = i
 
+    def connect(self, a, b):
+        roota, rootb = self.find(a), self.find(b)
+        if roota != rootb:
+            self.father[roota] = rootb
+            self.ans -= 1
+
+    def query(self, a, b):
+        return self.find(a) == self.find(b)
+
+    def find(self,x):
+        if self.father[x] == x:
+            return x
+
+        self.father[x] = self.find(self.father[x])
+        return self.father[x]
+
+class Solution:
     def numIslands(self, grid):
-        if not grid or not grid[0]: return 0
+        if not grid or not grid[0]: 
+            return 0
 
         n, m = len(grid), len(grid[0])
 
-        for i in range(n):
-            for j in range(m):
-                self.father[i*m +j] = i*m +j
-                if grid[i][j]:
-                    self.ans += 1
+        uf = UnionFind(n*m)
 
         for i in range(n):
             for j in range(m):
-                if grid[i][j]:
-                    if i + 1 < n and grid[i+1][j]:
-                        self.connect( i*m + j, (i+1)*m + j )
-                    if j +1 < m and grid[i][j+1]:
-                        self.connect( i*m + j, i*m + (j+1) )
-        return self.ans
+                if not grid[i][j]:
+                    continue
+                uf.ans += 1
 
-    def connect(self, a, b):
-        root_a, root_b = self.find(a), self.find(b)
-        if root_a != root_b:
-            self.father[root_a] = root_b
-            self.ans -= 1
-    
-    def find(self, x):
-        if self.father[x] == x:
-            return x
+                if i + 1 < n and grid[i+1][j]:
+                    uf.connect( i*m + j, (i+1)*m + j )
+                if j +1 < m and grid[i][j+1]:
+                    uf.connect( i*m + j, i*m + (j+1) )
         
-        self.father[x] = self.find( self.father[x] )
-        return self.father[x]
+        return uf.ans                
 # version: BFS
 from collections import deque
 DIRECTIONS = [(1, 0), (0, -1), (-1, 0), (0, 1)]
@@ -283,98 +290,158 @@ class Solution:
 
 
 # 434. 岛屿的个数II 
-# [2020年11月9日 2021年2月22日]
+# [2020年11月9日 2021年2月22日 2021年8月11日]
 # https://www.lintcode.com/problem/number-of-islands-ii/description
 # https://www.jiuzhang.com/solutions/number-of-islands-ii/#tag-lang-python
 DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-class Solution:
-    def numIslands2(self, n, m, operators):
-        """
-        @param n, m, operators: An integer, An integer,an array of point
-        @return: an integer array
-        """
-        results, island = [], set()
-        self.size, self.father  = 0, {}
+class UnionFind:
+    def __init__(self, n):
+        self.father = {}
+        self.ans = 0
+        for i in range(n):
+            self.father[i] = i
 
-        for operator in operators:
-            x, y = operator.x, operator.y
-            if (x, y) in island:
-                results.append(self.size)
-                continue
-            
-            island.add((x, y))
-            self.father[(x, y)] = (x, y)
-            self.size += 1
+    def connect(self, a, b):
+        roota, rootb = self.find(a), self.find(b)
+        if roota != rootb:
+            self.father[roota] = rootb
+            self.ans -= 1
 
-            for delta_x, delta_y in DIRECTIONS:
-                x_, y_ = x + delta_x, y + delta_y
-                if (x_, y_) in island:
-                    self.union((x_, y_), (x, y))
-            results.append(self.size)
-        return results
+    def query(self, a, b):
+        return self.find(a) == self.find(b)
 
-    def union(self, point_a, point_b):
-        root_a, root_b = self.find(point_a), self.find(point_b)
-        if root_a != root_b:
-            self.father[root_a] = root_b
-            self.size -= 1
-        
-    def find(self, point):
-        path = []
-        while point != self.father[point]:
-            path.append(point)
-            point = self.father[point]
-            
-        for p in path:
-            self.father[p] = point
-            
-        return point
-
-
-# 178/261. 图是否是树 
-# [2020年11月9日 2021年2月23日]
-# https://www.lintcode.com/problem/graph-valid-tree/description; https://leetcode-cn.com/problems/graph-valid-tree/
-# https://www.jiuzhang.com/solutions/graph-valid-tree/#tag-lang-python
-class Solution:
-    def validTree(self, n, edges):
-        """
-        @param n, edges: An integer, a list of undirected edges
-        @return: true if it's a valid tree, or false
-        """
-        if len(edges) != n-1: return False
-
-        self.father = {i: i for i in range(n)}
-        # self.father = {1: i for i in range(n)} # type error
-        self.size = n
-
-        for a, b in edges:
-            self.union( a, b )
-        
-        return self.size == 1
-    
-    def union(self, a, b):
-        root_a, root_b = self.find(a), self.find(b)
-        if root_a != root_b:
-            self.father[root_a] = root_b
-            self.size -= 1
-        
-    def find(self, x):
+    def find(self,x):
         if self.father[x] == x:
             return x
-        
+
         self.father[x] = self.find(self.father[x])
         return self.father[x]
 
+class Solution:
+    def numIslands2(self, n, m, operators):
+        res, island = [], set()
+        
+        uf = UnionFind(n*m)
+
+        for op in operators:
+            x, y = op.x, op.y
+            if (x, y) in island:
+                res.append(uf.ans)
+                continue
+            
+            island.add((x, y))
+            uf.ans += 1
+
+            for dx, dy in DIRECTIONS:
+                nxt_x, nxt_y = x+dx, y+dy
+                if (nxt_x, nxt_y) in island:
+                    uf.connect(x*m+y, nxt_x*m+nxt_y)
+            
+            res.append(uf.ans)
+
+        return res
+
+
+# 178/261. 图是否是树 
+# [2020年11月9日 2021年2月23日 2021年8月11日]
+# https://www.lintcode.com/problem/graph-valid-tree/description; https://leetcode-cn.com/problems/graph-valid-tree/
+# https://www.jiuzhang.com/solutions/graph-valid-tree/#tag-lang-python
+class UnionFind:
+    def __init__(self, n):
+        self.father = {}
+        self.ans = 0
+        for i in range(n):
+            self.father[i] = i
+
+    def connect(self, a, b):
+        roota, rootb = self.find(a), self.find(b)
+        if roota != rootb:
+            self.father[roota] = rootb
+            self.ans -= 1
+
+    def query(self, a, b):
+        return self.find(a) == self.find(b)
+
+    def find(self,x):
+        if self.father[x] == x:
+            return x
+
+        self.father[x] = self.find(self.father[x])
+        return self.father[x]
+
+class Solution:
+    def validTree(self, n, edges):
+        if len(edges) != n-1:
+            return False
+
+        uf = UnionFind(len(edges)+1)
+        uf.ans = len(edges)+1
+
+        for a, b in edges:
+            uf.connect(a, b)
+
+        return uf.ans == 1
+
 
 # 477. 被围绕的区域 ⭐
-# [2020年11月9日 2021年2月23日]
+# [2020年11月9日 2021年2月23日 2021年8月11日]
 # https://www.lintcode.com/problem/surrounded-regions/description https://leetcode-cn.com/problems/surrounded-regions/
 # https://www.jiuzhang.com/solutions/surrounded-regions/#tag-lang-python
 # DESC 给一个二维的矩阵，包含 'X' 和 'O', 找到所有被 'X' 围绕的区域，并用 'X' 替换其中所有的 'O'
-# version: 高频题班 # TODO
+# version: Union find
+DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+class UnionFind:
+    def __init__(self, n):
+        self.father = {i:i for i in range(n)}
+
+    def connect(self, a, b):
+        roota, rootb = self.find(a), self.find(b)
+        if roota != rootb:
+            self.father[min(roota, rootb)] = max(roota, rootb)
+
+    def query(self, a, b):
+        return self.find(a) == self.find(b)
+
+    def find(self,x):
+        if self.father[x] == x:
+            return x
+
+        self.father[x] = self.find(self.father[x])
+        return self.father[x]
+
 class Solution:
-    # @param {list[list[str]]} board a 2D board containing 'X' and 'O'
-    # @return nothing 
+    def surroundedRegions(self, board):
+        if not board or not board[0]:
+          return []
+          
+        m, n = len(board), len(board[0])
+        if m <= 2 or n <=2: 
+            return board
+
+        uf = UnionFind(m*n+1)
+        dummy = m*n
+
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'X':
+                    continue
+
+                if i in (0, m-1) or j in (0, n-1):
+                    uf.connect(i*n+j, dummy)
+                
+                for dx, dy in DIRECTIONS:
+                    nxt_x, nxt_y = i + dx, j + dy
+                    if not ( 0<nxt_x<m and 0<nxt_y<n ):
+                        continue
+                    if board[nxt_x][nxt_y] == 'O':
+                        uf.connect(i*n + j, nxt_x*n + nxt_y ) 
+
+        for x in range(m):
+            for y in range(n):
+                if board[x][y] == "O" and uf.find(x * n + y) != dummy:
+                    board[x][y] = "X"
+# version: 高频题班
+class Solution:
     def surroundedRegions(self, board):
         if not any(board): return
 
@@ -390,58 +457,10 @@ class Solution:
                 queue += (i, j-1), (i, j+1), (i-1, j), (i+1, j)
 
         board[:] = [['XO'[c == 'W'] for c in row] for row in board]
-# version: Union find
-DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-class UnionFind:
-    def __init__(self, n):
-        self.father = {i:i for i in range(n)}
-    
-    def find(self, x):
-        if x == self.father[x]:
-            return x
-        
-        self.father[x] = self.find(self.father[x])
-        return self.father[x]
-    
-    def connect( self, a, b ):
-        root_a, root_b = self.find(a), self.find(b)
-        if root_a != root_b:
-            self.father[min(root_a, root_b)] = max(root_a, root_b)
-
-class Solution:
-    def solve(self, board):
-        """
-        Do not return anything, modify board in-place instead.
-        """
-        # if not board or not board[0]: return board
-
-        m, n = len(board), len(board[0])
-        if m <= 2 or n <=2: return board
-
-        uf = UnionFind(m*n+1)
-        dummy = m*n
-
-        for i in range(m):
-            for j in range(n):
-                if board[i][j] == "X": 
-                    continue
-                
-                if i in [0, m-1] or j in [0, n-1]:
-                    uf.connect( i*n + j, dummy )
-                
-                for dx, dy in DIRECTIONS:
-                    nxt_x, nxt_y = i+dx, j+dy
-                    if 0<nxt_x<m and 0<nxt_y<n and board[nxt_x][nxt_y] == 'O':
-                        uf.connect( i*n + j, nxt_x*n + nxt_y )
-
-        for x in range(m):
-            for y in range(n):
-                if board[x][y] == "O" and uf.find(x * n + y) != dummy:
-                    board[x][y] = "X"
 
 
-# 1070/721. 账户合并 ⭐
-# [2020年10月21日 2020年11月9日 2021年2月23日]
+# 1070/721. 账户合并 ⭐⭐
+# [2020年10月21日 2020年11月9日 2021年2月23日 2021年8月11日]
 # https://www.lintcode.com/problem/accounts-merge/description https://leetcode-cn.com/problems/accounts-merge/
 # https://www.jiuzhang.com/solution/accounts-merge/#tag-lang-python
 # DESC: 1) emails_to_ids; 2) ids union; 3) get_id_to_mail(key: find root user id)
@@ -508,8 +527,8 @@ class Solution:
         return email_to_ids       
 
 
-# 629. 最小生成树 
-# [2021年2月23日]
+# 629. 最小生成树 ⭐⭐⭐
+# [2021年2月23日 2021年8月11日]
 # https://www.lintcode.com/problem/minimum-spanning-tree/description
 class Connection:
     def __init__(self, city1, city2, cost):
@@ -550,9 +569,6 @@ class UnionFind:
         return self.father[x]
 
 class Solution:
-    # @param {Connection[]} connections given a list of connections
-    # include two cities and cost
-    # @return {Connection[]} a list of connections from results
     def lowestCost(self, connections):
         import functools
         connections.sort(key = functools.cmp_to_key(cmp))
@@ -563,12 +579,14 @@ class Solution:
 
         res = []
         for i in connections:
+            # 若已经连接了，此处返回False
             if uf.union( city_map[i.city1], city_map[i.city2] ):
                 res.append(i)
         
         root = uf.find(0)
         for i in range(city_size):
-            if uf.find(i) == root: continue
+            if uf.find(i) == root: 
+                continue
             return []
         
         return res
@@ -594,7 +612,7 @@ class Solution:
 
 """Trie"""
 # 442/208. 实现 Trie（前缀树）
-# [2020年11月9日 2021年2月23日 2021年2月24日]
+# [2020年11月9日 2021年2月23日 2021年2月24日 2021年8月11日]
 # https://www.lintcode.com/problem/implement-trie-prefix-tree/description https://leetcode-cn.com/problems/implement-trie-prefix-tree/
 from collections import OrderedDict
 class TrieNode:
@@ -631,7 +649,7 @@ class Trie:
 
 
 # 473/211. 单词的添加与查找 
-# [2020年11月10日 2021年2月23日]
+# [2020年11月10日 2021年2月23日 2021年8月11日]
 # https://www.lintcode.com/problem/add-and-search-word-data-structure-design/description https://leetcode-cn.com/problems/implement-trie-prefix-tree/
 from collections import OrderedDict
 class TrieNode:
@@ -652,17 +670,20 @@ class WordDictionary:
         node.isWord = True
 
     def search(self, word):
-        if word is None: return False
+        if word is None: 
+            return False
         
         return self.dfs_helper(self.root, word, 0)
 
     def dfs_helper(self, node, word, index):
-        if node is None: return False
-        if index >= len(word): return node.isWord 
+        if node is None: 
+            return False
+        if index >= len(word): 
+            return node.isWord 
 
         letter = word[index]
         if letter != '.': 
-            return self.dfs_helper(node.children.get(letter), word, index+1) # `get` instead of `[]`
+            return self.dfs_helper(node.children.get(letter), word, index+1)
         
         for i in node.children:
             if self.dfs_helper(node.children.get(i), word, index+1):
@@ -672,7 +693,7 @@ class WordDictionary:
 
 
 # 132/212. 单词搜索 II 
-# [2021年2月23日]
+# [2021年2月23日 2021年8月11日]
 # https://www.lintcode.com/problem/word-search-ii/description https://leetcode-cn.com/problems/word-search-ii/
 # version hashmap
 DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
@@ -719,8 +740,8 @@ class TrieNode:
         self.is_word = False
         self.word = None
 
-class Trie:
-    def __init__(self):
+class Trie():
+    def __init__(self) -> None:
         self.root = TrieNode()
     
     def add(self, word):
@@ -729,6 +750,7 @@ class Trie:
             if letter not in node.children:
                 node.children[letter] = TrieNode()
             node = node.children[letter]
+        
         node.is_word = True
         node.word = word
     
@@ -737,43 +759,58 @@ class Trie:
         for letter in word:
             if node.children.get(letter) is None:
                 return None
+        
         return node
 
 class Solution:
-    def findWords(self, board, words):
-        if board is None or not board[0]: return []
-            
+    def wordSearchII(self, board, words):
+        if board is None or not board[0]: 
+            return []
+        
         trie = Trie()
         for word in words:
             trie.add(word)
-
-        result = set()
-        for i in range(len(board)):	
-            for j in range(len(board[0])):
-                self.search(board, i, j, trie.root.children.get(board[i][j]), set([(i, j)]), result,)
-                
-        return list(result)
         
-    def search(self, board, x, y, node, visited, result):
-        if node is None: return
+        res = set()
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                self.dfs(board, 
+                         i, 
+                         j, 
+                         trie.root.children.get(board[i][j]), 
+                         set([(i,j)]), 
+                         res
+                )
+        
+        return list(res)
+
+    def dfs(self, board, x, y, node, visited, result):
+        if node is None:
+            return
         
         if node.is_word:
             result.add(node.word)
         
-        for delta_x, delta_y in DIRECTIONS:	
-            x_, y_ = x + delta_x, y + delta_y
-            if not self.inside(board, x_, y_) or (x_, y_) in visited:
+        for dx, dy in DIRECTIONS:
+            nxt_x, nxt_y = x+dx, y+dy
+            if not self.inside(board, nxt_x, nxt_y) or (nxt_x, nxt_y) in visited:
                 continue
-            
-            visited.add((x_, y_))
-            self.search(board, x_, y_, node.children.get(board[x_][y_]), visited, result,)
-            visited.remove((x_, y_))
-            
+        
+            visited.add((nxt_x, nxt_y))
+            self.dfs(board, 
+                     nxt_x, 
+                     nxt_y, 
+                     node.children.get(board[nxt_x][nxt_y]), 
+                     visited, 
+                     result
+            )
+            visited.remove((nxt_x, nxt_y))
+
     def inside(self, board, x, y):
         return 0 <= x < len(board) and 0 <= y < len(board[0])
 
 
-# 634/425. 单词矩阵 / 单词方块 ⭐⭐⭐ # TODO
+# 634/425. 单词矩阵 / 单词方块 ⭐⭐⭐
 # https://www.lintcode.com/problem/word-squares/description https://leetcode-cn.com/problems/word-squares/
 # https://www.jiuzhang.com/solution/word-squares/#tag-lang-python
 # Version 1

@@ -7,8 +7,8 @@
 - [ ] [数据结构篇](https://www.cnblogs.com/feffery/p/11898190.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD74%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AF%87)
 - [x] [坐标参考系篇](https://www.cnblogs.com/feffery/p/12285828.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD75%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%9D%90%E6%A0%87%E5%8F%82%E8%80%83%E7%B3%BB%E7%AF%87)
 - [ ] [文件IO](https://www.cnblogs.com/feffery/p/12301966.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD77%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6IO)
-- [ ] [空间计算篇（上）](https://www.cnblogs.com/feffery/p/12909284.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD84%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E7%A9%BA%E9%97%B4%E8%AE%A1%E7%AE%97%E7%AF%87%EF%BC%88%E4%B8%8A%EF%BC%89)
-- [ ] [空间计算篇（下）](https://www.cnblogs.com/feffery/p/13129271.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD88%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E7%A9%BA%E9%97%B4%E8%AE%A1%E7%AE%97%E7%AF%87%EF%BC%88%E4%B8%8B%EF%BC%89)
+- [x] [空间计算篇（上）](https://www.cnblogs.com/feffery/p/12909284.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD84%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E7%A9%BA%E9%97%B4%E8%AE%A1%E7%AE%97%E7%AF%87%EF%BC%88%E4%B8%8A%EF%BC%89)
+- [x] [空间计算篇（下）](https://www.cnblogs.com/feffery/p/13129271.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD88%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E7%A9%BA%E9%97%B4%E8%AE%A1%E7%AE%97%E7%AF%87%EF%BC%88%E4%B8%8B%EF%BC%89)
 - [ ] [基础可视化](https://www.cnblogs.com/feffery/p/12361421.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD78%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94%E5%9F%BA%E7%A1%80%E5%8F%AF%E8%A7%86%E5%8C%96)
 - [ ] [geoplot篇(上)](https://www.cnblogs.com/feffery/p/12779150.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD82%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94geoplot%E7%AF%87(%E4%B8%8A))
 - [ ] [geoplot篇(下)](https://www.cnblogs.com/feffery/p/12901334.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD83%EF%BC%89%E5%9F%BA%E4%BA%8Egeopandas%E7%9A%84%E7%A9%BA%E9%97%B4%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E2%80%94%E2%80%94geoplot%E7%AF%87(%E4%B8%8B))
@@ -17,11 +17,12 @@
 - [x] [利用geopandas与PostGIS进行交互](https://www.cnblogs.com/feffery/p/13468203.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD93%EF%BC%89%E5%88%A9%E7%94%A8geopandas%E4%B8%8EPostGIS%E8%BF%9B%E8%A1%8C%E4%BA%A4%E4%BA%92)
 - [x] [在geopandas中叠加在线地图](https://www.cnblogs.com/feffery/p/13763601.html)　:airplane:[仓库路径](https://github.com/CNFeffery/DataScienceStudyNotes/tree/master/%EF%BC%88%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6%E5%AD%A6%E4%B9%A0%E6%89%8B%E6%9C%AD96%EF%BC%89%E5%9C%A8geopandas%E4%B8%AD%E5%8F%A0%E5%8A%A0%E5%9C%A8%E7%BA%BF%E5%9C%B0%E5%9B%BE)
 
+----
+
 ## 基础操作
 
 ### 设置CRS
   
-
 常用CRS格式：
 
 - Proj4
@@ -177,41 +178,20 @@ ctx.add_basemap(ax,
 fig.savefig('图2 叠加在线地图示例.png', pad_inches=0, bbox_inches='tight', dpi=300)
 ```
 
-## 空间计算
+----
 
-- [空间连接](https://www.cnblogs.com/feffery/p/13129271.html)
-  而空间连接不同于常规表连接，其合并同一行的依据不是检查指定的列数值是否相等，而是基于不同矢量表其矢量列之间的空间拓扑关系，譬如相交、包含等
-  - 参数
-    >left_df: GeoDataFrame，传入空间连接对应的左表
-    right_df: GeoDataFrame，传入空间连接对应的右表
-    how: 字符型，用于决定连接方式，'inner'表示内连接，且连接结果表中的矢量列来自左表；'left'表示左连接，且结果表中的矢量列来自左表；'right'表示右连接，最终结果表中的矢量列来自右表
-    op: 字符型，用于设定拓扑判断的规则，`intersects`代表相交，即几何对象之间存在共有的边或内部点；`contains`代表包含，即一个几何对象至少有一个点位于另一个几何对象内部，且其本身没有任何点落在另一个结几何对象的外部；`within`表示在内部，是'contains'的相反情况，即左表被右表矢量'contains'
-    lsuffix: 字符型，代表当左右表连接之后存在重名列时，为左表重名的列添加的后缀，默认为'left'
-    rsuffix: 字符型，意义类似lsuffix，默认为'right'
-  - 案例
-  
-    ``` python
-    path_set = PathSet(cache_folder='/home/pcl/traffic/GBA_tranportation/cache', file_name='wkt_step')
-    df_path  = path_set.convert_to_gdf()
-    shenzhen_boundary = gpd.read_file('../input/ShenzhenBoundary_wgs_citylevel.geojson')
+## [空间计算](https://www.cnblogs.com/feffery/p/12909284.html)
 
-    df_path = gpd.sjoin(df_path, shenzhen_boundary, op='within')
+### 构造性方法
 
-    ```
+- buffer
+  geopandas中的buffer()方法源于shapely，用于缓冲区的创建
 
-- [空间裁切](https://www.cnblogs.com/feffery/p/13129271.html)
-  在空间数据分析中，裁切也是非常常用的操作，譬如我们想要获取某个公交站周围500米半径内部的路网矢量，就可以使用到裁切
-  - 参数
-    >gdf: GeoDataFrame或GeoSeries，代表将要被裁切的矢量数据集
-    mask: GeoDataFrame、GeoSeries或shapely中的Polygon、Multi-Polygon对象，代表蒙版矢量
-    keep_geom_type: 同叠加分析overlay中的同名参数
+- total_bounds
+  返回依次记录了整列矢量数据所在最小矩形区域左下角x、左下角y、右上角x以及右上角y的numpy数组
 
-  - 案例
-  
-    ``` python
-    # 裁切所有出租车站点500米缓冲区内部的路网线数据
-    taxi_station_500buffer_roads = gpd.clip(gdf=Berlin_footway, mask=taxi_station_500_buffer)
-    ```
+- unary_union
+  通过unary_union属性，我们可以将一整列矢量合并为单独的一个shapely矢量对象，从而方便我们进行一些其他的操作
 
 - [simplify](https://www.cnblogs.com/feffery/p/12909284.html)
   geopandas中沿用shapely中的simplify()方法，帮助我们对过于复杂的线和面进行简化，和QGIS中简化矢量的方法一样，simplify()使用了科学的Douglas-Peucker算法，基于预先设定的阈值𝜖，在递归判断的过程中删掉所有小于𝜖的点
@@ -243,6 +223,116 @@ fig.savefig('图2 叠加在线地图示例.png', pad_inches=0, bbox_inches='tigh
     ax.axis('off')
     plt.savefig('图7.png', dpi=300, bbox_inches='tight', pad_inches=0)
     ```
+
+### 仿射变换
+
+- rotate()
+  对矢量列中的每个要素分别进行旋转操作
+- scale()
+  用于对矢量对象进行各个维度上的放缩操作
+- translate()
+  用于实现矢量对象的平移操作，其主要参数有xoff和yoff，分别控制在x维度和y维度上的平移距离（与对应的投影单位保持一致）
+
+### 叠加分析
+
+对两个GeoDataFrame中全部的矢量对象两两之间进行基于集合关系的叠加分析
+参数：
+> df1：GeoDataFrame，作为输入的第一个矢量数据集
+df2：GeoDataFrame，作为输入的第二个矢量数据集
+how：字符型，用于声明空间叠加的类型，有'intersection'，'union'、'symmetric_difference'、'difference'，以及额外的'identity'，他们之间的区别下文会进行详细介绍
+keep_geom_type：bool型，当df1与df2矢量类型不同时（譬如面与线数据之间进行叠加分析），用于决定在叠加分析产生结果中，是否只保留与df1矢量类型相同的记录，默认为True
+
+![叠加分析效果](https://img2020.cnblogs.com/blog/1344061/202005/1344061-20200521180921642-1658583538.png)
+
+示例：
+
+```python
+polygon1 = gpd.GeoDataFrame({
+    'value1': [1, 2],
+    'geometry': [shapely.geometry.Polygon([(1, 0), (3, 0), (3, 10), (1, 10)]),
+                 shapely.geometry.Polygon([(6, 0), (8, 0), (8, 10), (6, 10)])]
+})
+
+polygon2 = gpd.GeoDataFrame({
+    'value2': [3, 4],
+    'geometry': [shapely.geometry.Polygon([(-1, 3), (-1, 5), (10, 5), (10, 3)]),
+                 shapely.geometry.Polygon([(-1, 6), (-1, 8), (10, 8), (10, 6)])]
+})
+
+ax = polygon1.plot(color='red', alpha=0.4)
+ax = polygon2.plot(color='grey', alpha=0.4, ax=ax)
+ax.axis('off')
+plt.savefig('图14.png', dpi=300, bbox_inches='tight', pad_inches=0)
+
+overlay_result = gpd.overlay(df1=polygon1, df2=polygon2, how='union')
+overlay_result
+
+```
+
+### 空间融合和拆分
+
+- dissolve()
+  用于对矢量数据进行融合，可以理解为对矢量数据进行groupby+agg操作，即指定的单个或多个字段值相等的分到一组，对非矢量字段进行指定规则的聚合计算，对矢量列进行融合
+- explode()
+  功能与dissolve()相反，用于将Multi-xxx或Geometry-Collection类型的数据从一行拆分到多行，如下面的例子，非矢量字段会自动填充到每一行
+
+### [空间连接](https://www.cnblogs.com/feffery/p/13129271.html)
+
+类比常规表格数据的连接操作，在空间数据分析中也存在类似表连接的操作，譬如我们手头有一张包含设施点数据的矢量表，以及另一张包含行政区划面数据的矢量表，当我们想要通过某些操作来统计出每个行政区划面内部的设施点信息时，空间连接就可以非常方便快捷地实现这类需求。
+而空间连接不同于常规表连接，其合并同一行的依据不是检查指定的列数值是否相等，而是基于不同矢量表其矢量列之间的空间拓扑关系，譬如相交、包含等
+
+- 参数
+  >left_df: GeoDataFrame，传入空间连接对应的左表
+  right_df: GeoDataFrame，传入空间连接对应的右表
+  how: 字符型，用于决定连接方式，`inner`表示内连接，且连接结果表中的矢量列来自左表；`left`表示左连接，且结果表中的矢量列来自左表；`right`表示右连接，最终结果表中的矢量列来自右表
+  op: 字符型，用于设定拓扑判断的规则，`intersects`代表相交，即几何对象之间存在共有的边或内部点；`contains`代表包含，即一个几何对象至少有一个点位于另一个几何对象内部，且其本身没有任何点落在另一个结几何对象的外部；`within`表示在内部，是'contains'的相反情况，即左表被右表矢量'contains'
+  lsuffix: 字符型，代表当左右表连接之后存在重名列时，为左表重名的列添加的后缀，默认为'left'
+  rsuffix: 字符型，意义类似lsuffix，默认为'right'
+- 案例
+
+``` python
+path_set = PathSet(cache_folder='/home/pcl/traffic/GBA_tranportation/cache', file_name='wkt_step')
+df_path  = path_set.convert_to_gdf()
+shenzhen_boundary = gpd.read_file('../input/ShenzhenBoundary_wgs_citylevel.geojson')
+
+df_path = gpd.sjoin(df_path, shenzhen_boundary, op='within')
+
+# another
+gpd.sjoin(left_df=Berlin,
+        right_df=Berlin_transport.query("fclass=='bus_stop'"),
+        op='intersects') \
+  .groupby('Gemeinde_n') \
+  .size()
+```
+
+### [空间裁切](https://www.cnblogs.com/feffery/p/13129271.html)
+
+在空间数据分析中，裁切也是非常常用的操作，譬如我们想要获取某个公交站周围500米半径内部的路网矢量，就可以使用到裁切
+
+- 参数
+  >gdf: GeoDataFrame或GeoSeries，代表将要被裁切的矢量数据集
+  mask: GeoDataFrame、GeoSeries或shapely中的Polygon、Multi-Polygon对象，代表蒙版矢量
+  keep_geom_type: 同叠加分析overlay中的同名参数
+
+- 案例
+
+  ``` python
+  # 裁切所有出租车站点500米缓冲区内部的路网线数据
+  taxi_station_500buffer_roads = gpd.clip(gdf=Berlin_footway, mask=taxi_station_500_buffer)
+  ```
+
+### 拓扑关系检查
+
+- intersects()：检查相交关系
+- contains()：检查包含关系，即主体矢量完全包裹住待比较的矢量且它们的边界互不接触，譬如面对点的包含
+- within()：检查主体矢量是否在待检查矢量的内部
+- touches()：检查触碰关系，即两个矢量之间至少有一个1个公共点，但它们的内部无任何相交区域
+- crosses()：检查交叉关系，常见如线与线之间的交叉
+- disjoint()：检查不相交关系，即两个矢量之间没有任何接触
+- geom_equals()：检查是否完全相同
+- overlaps()：检查重叠关系
+
+----
 
 ## 常用函数
 
@@ -293,6 +383,8 @@ def coords_pair_dist(o, d, xy=True):
     return np.inf
 
 ```
+
+----
 
 ## DEBUG
 

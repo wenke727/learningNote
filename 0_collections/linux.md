@@ -1,15 +1,17 @@
 # Amax server
 
+- [【保姆级教程】个人深度学习工作站配置指南](https://zhuanlan.zhihu.com/p/336429888)
+
 ## 机器重启服务
 
-* 开启docker
+- 开启docker
 
-  * sudo docker exec -it eta bash
+  - sudo docker exec -it eta bash
 
-* connect to the Internet
+- connect to the Internet
   Ref:
-  * [Ubuntu 18.04网络不通，netplan命令不存在](https://www.cnblogs.com/zh-dream/p/13405799.html)
-  * [Ubuntu配置和修改IP地址](https://www.cnblogs.com/linjiqin/p/3148346.html)
+  - [Ubuntu 18.04网络不通，netplan命令不存在](https://www.cnblogs.com/zh-dream/p/13405799.html)
+  - [Ubuntu配置和修改IP地址](https://www.cnblogs.com/linjiqin/p/3148346.html)
 
   Command:  
 
@@ -34,7 +36,7 @@
 
 ## 软件安装
 
-* [GDAL](https://www.cnblogs.com/Assist/p/14034447.html)
+- [GDAL](https://www.cnblogs.com/Assist/p/14034447.html)
 
   ``` bash
   sudo add-apt-repository ppa:ubuntugis/ppa 
@@ -47,7 +49,7 @@
   pip install GDAL==version
   ```
 
-* Redis
+- Redis
   
   命令
 
@@ -59,6 +61,15 @@
   netstat -nlt|grep 6379
   ```
 
+- Samba
+  [samba使用指定端口windows访问linux](https://www.huaweicloud.com/articles/13710590.html)
+
+  ```bash
+  netsh interface portproxy add v4tov4 listenport=445 listenaddress=127.0.0.1 connectport=139 connectaddress=192.168.135.15
+  ```
+
+  [Windows系统开启telnet命令](https://help.aliyun.com/document_detail/40796.html)
+
 ## 服务
 
 ### ssh自启动
@@ -69,9 +80,12 @@
   /etc/init.d/ssh start
   ```
 
+- [修改linux远程端口22连不上,Linux系统修改远程连接22端口](https://blog.csdn.net/weixin_42322512/article/details/116633836?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control)
+- [服务器22端口连接超时 ssh: connect to host *** port 22: Operation timed out](https://www.cnblogs.com/oldboyooxx/p/10387150.html)
+
 ### Postgresql
 
-* 启动服务
+- 启动服务
   
   ``` bash
   /etc/init.d/postgresql start
@@ -79,39 +93,39 @@
   # passwd: the amax passwd
   ```
 
-* enter the postgresql
+- enter the postgresql
 
   ``` bash
   sudo su postgres
   psql
   ```
 
-* Error:
+- Error:
   > could not access file "$libdir/postgis-2.4": No such file or directory
 
   Solution:
   这个问题是由于postgresql和postgis版本不同出现的问题
   Ref: [ERROR: could not access file "$libdir/postgis-2.3": No such file or director解决方法](https://blog.csdn.net/weixin_43966390/article/details/102955201)
 
-  * To find out what $libdir is referring to, run the following command:
+  - To find out what $libdir is referring to, run the following command:
 
     ``` bash
     pg_config --pkglibdir # for Amax: /usr/lib/postgresql/10/lib
     ```
 
-  * 到这个目录查看有没有相关的postgis的文件，如果postgis文件版本名为2.4就是对的，如果是其他版本名，只需要把文件名改为自己需要的文件名
+  - 到这个目录查看有没有相关的postgis的文件，如果postgis文件版本名为2.4就是对的，如果是其他版本名，只需要把文件名改为自己需要的文件名
 
 ## Jupyter
 
-* AI learing: <http://192.168.135.34:8888/tree>?
+- AI learing: <http://192.168.135.34:8888/tree>?
 
   folder: `/home/pcl/Data/0_Learning/jupyer_folder`
 
-* Pytorch: <http://192.168.135.34:8888/tree>?
+- Pytorch: <http://192.168.135.34:8888/tree>?
 
 ## 操作命令
 
-* tar
+- tar
 
   ``` bash
   # zip
@@ -120,7 +134,7 @@
   tar -xvf ****.tar.gz -C ./
   ```
 
-* zip & unzip
+- zip & unzip
 
   ``` bash
   # 把/home目录下面的mydata目录压缩为mydata.zip
@@ -171,7 +185,7 @@
   -X：解压缩时同时回存文件原来的UID/GID
   ```
 
-* 查看磁盘
+- 查看磁盘
 
   ``` bash
   df -hl # 查看磁盘剩余空间
@@ -181,13 +195,13 @@
   du -h [目录名] # 查看指定文件夹下的所有文件大小（包含子文件夹）
   ```
 
-* 查找代码的函数
+- 查找代码的函数
 
   ``` bash
   find RoadNetworkCreator_by_View/ -name "*.py"|xargs wc -l
   ```
 
-* scp
+- scp
 
   ``` bash
   scp local_file remote_username@remote_ip:remote_file 
@@ -198,13 +212,13 @@
 
 ## Github
 
-* check the lines
+- check the lines
 
   ``` bash
   git log --format='%aN' | sort -u | while read name; do echo -en "$name\t"; git log --author="$name" --pretty=tformat: --numstat | awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }' -; done
   ```
 
-* 切换分支
+- 切换分支
 
   ``` bash
   # 列出所有的分支
@@ -213,9 +227,9 @@
   git checkout dev
   ```
 
-* .gitignore
+- .gitignore
     The GitHub’s collection of .gitignore file templates: <https://github.com/github/gitignore>
-* ...
+- ...
 
 ## Docker
 
@@ -224,7 +238,7 @@
   常用命令：
   <https://www.hangge.com/blog/cache/detail_2402.html>
 
-* 安装并启动步骤
+- 安装并启动步骤
 
   ``` bash
   安装docker: 
@@ -264,26 +278,35 @@
   /etc/init.d/ssh start 
   ```
 
-* 进入容器
+- 进入容器
   
   ``` bash
   docker exec -it XXX bash
   exit
   ```
 
-* save images
+- 重启容器
+
+  ``` bash
+  sudo docker ps -a
+  sudo docker start XXX
+  sudo docker exec -it XXX bash
+  exit
+  ```
+
+- save images
 
     ``` bash
     sudo docker save imgs_name -o prp.tar
     ```
 
-* load images
+- load images
 
     ``` bash
     sudo docker load --input imgs_name
     ```
 
-* 服务自启动
+- 服务自启动
 
     ``` bash
     systemctl enable docker.service
@@ -294,7 +317,7 @@
     systemctl restart docker
     ```
 
-* [端口映射](https://www.jb51.net/article/142462.htm)
+- [端口映射](https://www.jb51.net/article/142462.htm)
 
     ``` bash
     iptables -t nat --list-rules PREROUTING

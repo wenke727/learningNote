@@ -1,5 +1,5 @@
 # 6. 合并排序数组 II
-# []
+# [2021年8月9日]
 # https://www.lintcode.com/problem/merge-two-sorted-arrays/description
 # https://www.jiuzhang.com/solutions/merge-two-sorted-arrays#tag-lang-python
 class Solution:
@@ -30,7 +30,7 @@ class Solution:
 
 
 # 64. 合并排序数组
-# []
+# [2021年8月9日]
 # https://www.lintcode.com/problem/merge-sorted-array/description
 # https://www.jiuzhang.com/solutions/merge-sorted-array/#tag-lang-python
 class Solution:
@@ -42,10 +42,9 @@ class Solution:
     @return: nothing
     """
     def mergeSortedArray(self, A, m, B, n):
-        # write your code here
         pos = m + n - 1 
-        i = m - 1  
-        j = n - 1
+        i, j = m - 1, n - 1   
+
         while  i >= 0 and j >= 0 :
             if A[i]>B[j] :
                 A[pos]=A[i]
@@ -58,9 +57,9 @@ class Solution:
                 
         while i >= 0 :
             A[pos] = A[i]
-            
             pos-=1
             i-=1
+
         while j >= 0:
             A[pos] = B[j]
             pos-=1
@@ -68,7 +67,7 @@ class Solution:
 
 
 # 839. 合并两个排序的间隔列表
-# []
+# [2021年8月9日]
 # https://www.lintcode.com/problem/merge-two-sorted-interval-lists/description
 # https://www.jiuzhang.com/solutions/merge-two-sorted-interval-lists/#tag-lang-python
 class Solution:
@@ -80,6 +79,7 @@ class Solution:
     def mergeTwoInterval(self, list1, list2):
         i, j = 0, 0
         intervals = []
+
         while i < len(list1) and j < len(list2):
             if list1[i].start < list2[j].start:
                 self.push_back(intervals, list1[i])
@@ -87,30 +87,33 @@ class Solution:
             else:
                 self.push_back(intervals, list2[j])
                 j += 1
-        while i < len(list1):
+        
+        while i < len(list1) :
             self.push_back(intervals, list1[i])
             i += 1
+    
         while j < len(list2):
             self.push_back(intervals, list2[j])
             j += 1
         
         return intervals
         
-    def push_back(self, intervals, interval):
-        if not intervals:
-            intervals.append(interval)
+
+    def push_back(self, res, interval):
+        if not res:
+            res.append(interval)
             return
         
-        last_interval = intervals[-1]
-        if last_interval.end < interval.start:
-            intervals.append(interval)
+        last = res[-1]
+        if last.end < interval.start:
+            res.append(interval)
             return
         
-        intervals[-1].end = max(intervals[-1].end, interval.end)
+        res[-1].end = max(res[-1].end, interval.end)
 
 
 # 486. 合并k个排序数组
-# []
+# [2021年8月9日]
 # https://www.lintcode.com/problem/merge-k-sorted-arrays/description
 # https://www.jiuzhang.com/solutions/merge-k-sorted-arrays/#tag-lang-python
 import heapq
@@ -137,30 +140,32 @@ class Solution:
 
 
 # 577. 合并K个排序间隔列表
-# []
+# [2021年8月9日]
 # https://www.lintcode.com/problem/merge-k-sorted-interval-lists/description
 # https://www.jiuzhang.com/solutions/merge-k-sorted-interval-lists/#tag-lang-python
-import heapq
+from heapq import heappop, heappush
 class Solution:
     """
     @param intervals: the given k sorted interval lists
     @return:  the new sorted interval list
     """
     def mergeKSortedIntervalLists(self, intervals):
-        result = []
-        lst = []
+        res, lst = [], []
+
         for index, item in enumerate(intervals):
             if len(item) == 0:
                 continue
-            heapq.heappush(lst, (item[0].start, item[0].end, index, 0))
-
+            heappush(lst, (item[0].start, item[0].end, index, 0))
+        
         while lst:
-            start, end, i, j = lst[0]
-            self.append_and_merge(Interval(start, end), result)
-            heapq.heappop(lst)
+            start, end, i, j = heappop(lst)
+            self.append_and_merge(Interval(start, end), res)
+            
             if j + 1 < len(intervals[i]):
-                heapq.heappush( lst, (intervals[i][j+1].start, intervals[i][j+1].end, i, j+1) )
-        return result
+                heappush(lst, (intervals[i][j+1].start, intervals[i][j+1].end, i, j+1))
+
+        return res
+
 
     def append_and_merge(self, interval, res):
         if not res :
@@ -175,9 +180,8 @@ class Solution:
 
 
 # 47. 两数组的交集
-# []
+# [2021年8月9日]
 # https://www.lintcode.com/problem/intersection-of-two-arrays/description
-# https://www.jiuzhang.com/solutions/intersection-of-two-arrays/#tag-lang-python
 class Solution:
     """
     @param nums1: an integer array
@@ -185,13 +189,12 @@ class Solution:
     @return: an integer array
     """
     def intersection(self, nums1, nums2):
-        # write your code here   
         s1, s2 = set(nums1), set(nums2)
         return [x for x in s1 if x in s2]
 
 
 # 548. 两数组的交集 II
-# []
+# [2021年8月9日]
 # https://www.lintcode.com/problem/intersection-of-two-arrays-ii/description
 # https://www.jiuzhang.com/solutions/intersection-of-two-arrays-ii/#tag-lang-python
 class Solution:
@@ -199,7 +202,6 @@ class Solution:
     # @param {int[]} nums2 an integer array
     # @return {int[]} an integer array
     def intersection(self, nums1, nums2):
-        # Write your code here
         counts = collections.Counter(nums1)
         result = []
 
@@ -210,8 +212,9 @@ class Solution:
 
         return result
 
+
 # 793. 多个数组的交集
-# []
+# [2021年8月9日]
 # https://www.lintcode.com/problem/intersection-of-arrays/description
 # https://www.jiuzhang.com/solutions/intersection-of-arrays/#tag-lang-python
 class Solution:
@@ -232,11 +235,12 @@ class Solution:
         for item in count.keys():
             if count[item] == len(arrs):
                 result += 1
+
         return result
 
 
 # 654. 稀疏矩阵乘法
-# []
+# [2021年8月9日]
 # https://www.lintcode.com/problem/sparse-matrix-multiplication/description
 # https://www.jiuzhang.com/solutions/sparse-matrix-multiplication/#tag-lang-python
 class Solution:
@@ -250,6 +254,7 @@ class Solution:
             for col_vector in col_vectors:
                 row.append(self.multi_vector(row_vector, col_vector))
             matrix.append(row)
+
         return matrix
         
     def convert_to_row_vectors(self, matrix):
@@ -286,10 +291,11 @@ class Solution:
                 result += v1[i][1] * v2[j][1]
                 i += 1
                 j += 1
+        
         return result
         
 
-""" Medias """
+""" Medians """
 # 65. 两个排序数组的中位数（4）
 # []
 # https://www.lintcode.com/problem/median-of-two-sorted-arrays/description

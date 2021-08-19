@@ -1,44 +1,39 @@
+import sys
+
 # 135/39. 数字组合
-# [2020年11月5日]
+# [2020年11月5日 2021年8月7日]
 # https://www.lintcode.com/problem/combination-sum/description
 # https://www.jiuzhang.com/solutions/combination-sum/#tag-lang-python
 class Solution:
-    """
-    @param candidates: A list of integers
-    @param target: An integer
-    @return: A list of lists of integers
-    """
     def combinationSum(self, candidates, target):
         if candidates is None:
             return []
-            
+        
         candidates.sort()
         result = []
-        self.dfs( candidates, target, 0, [], result )
+        self.dfs(candidates, target, 0, [], result)
+
         return result
 
-
-    def dfs(self, candidates, target, start, combination, result):
+    def dfs(self, nums, target, index, combination, res):
         if target == 0:
-            result.append( combination[:] )
+            res.append(combination[:])
             return
+        
+        for i in range(index, len(nums)):
+            if nums[i] > target:
+                continue
+            
+            if i > 0 and nums[i] == nums[i-1]:
+                continue
 
-        for i in range(start, len(candidates)):
-            if candidates[i] > target:
-                continue
-            
-            # 数据没有去重，可以通过这个方式来处理
-            if i > 0 and candidates[i] == candidates[i-1]:
-                continue
-            
-            combination.append( candidates[i] )
-            self.dfs( candidates, target - candidates[i], i, combination, result )
+            combination.append(nums[i])
+            self.dfs(nums, target-nums[i], i, combination, res)
             combination.pop()
-        pass
 
 
 # 153/40. 数字组合 II
-# [2020年11月5日]
+# [2020年11月5日 2021年8月7日]
 # https://www.lintcode.com/problem/combination-sum-ii/description
 # https://www.jiuzhang.com/solution/combination-sum-ii/#tag-lang-python
 class Solution:
@@ -51,27 +46,28 @@ class Solution:
         candidates.sort()
         results = [] 
         self.dfs( candidates, target, 0, [], [0] * len(candidates), results  )
+
         return results
 
-    def dfs(self, candidates, target, start, combination, use, results):
+    def dfs(self, nums, target, index, combination, use, results):
         if target == 0:
             results.append(combination[:])
             return 
         
-        for i in range(start, len(candidates)):
-            if target < candidates[i]:
+        for i in range(index, len(nums)):
+            if target < nums[i]:
                 continue
             
-            if i == 0 or candidates[i] != candidates[i-1] or use[i-1]==1:
-                combination.append(candidates[i])
+            if i == 0 or nums[i] != nums[i-1] or use[i-1]==1:
+                combination.append(nums[i])
                 use[i] = 1
-                self.dfs(candidates, target- candidates[i], i+1, combination, use, results)
-                # self.dfs(candidates, target- candidates[i], start+1, combination, use, results)
-                combination.pop()
+                self.dfs(nums, target- nums[i], i+1, combination, use, results)
                 use[i] = 0
+                combination.pop()
+
 
 # 90. k数和 II
-# [2020年11月5日]
+# [2020年11月5日 2021年8月7日]
 # https://www.lintcode.com/problem/k-sum-ii/description
 # https://www.jiuzhang.com/solution/k-sum-ii/#tag-lang-python
 class Solution:
@@ -85,9 +81,10 @@ class Solution:
         A.sort()
         results = []
         self.dfs( A, k, target, 0, [], results )
+        
         return results
-    
-    def dfs(self, nums, k, target, start, combination, reults):
+
+    def dfs(self, nums, k, target, index, combination, reults):
         if k == 0 and target == 0:
             reults.append( list(combination) )
             return
@@ -95,7 +92,7 @@ class Solution:
         if k == 0 or target <= 0:
             return
         
-        for i in range(start, len(nums)):
+        for i in range(index, len(nums)):
             combination.append( nums[i] )
             # 不允许重复，因此`i+1`
             self.dfs(nums, k-1, target- nums[i], i+1, combination, reults)
@@ -103,18 +100,14 @@ class Solution:
 
 
 # 680. 分割字符串
-# [2020年11月5日]
+# [2020年11月5日 2021年8月7日]
 # https://www.lintcode.com/problem/split-string/description
 # https://www.jiuzhang.com/solution/split-string/#tag-lang-python
-# version 1
 class Solution:
-    """
-    @param: : a string to be split
-    @return: all possible split string array
-    """
     def splitString(self, s):
         result = []
         self.dfs( s, 0, [], result )
+
         return result
 
     def dfs(self, s, start, combination, result):
@@ -123,37 +116,23 @@ class Solution:
             return
         
         for i in range(2):
-            if i + start < len(s):
-                combination.append( s[start: start+i+1] )
-                self.dfs( s, start+i+1, combination, result )
-                # self.dfs( s, start+1, combination, result )
-                combination.pop()
-# version 2
-class Solution:
-    def splitString(self, s):
-        result = []
-        self.dfs(result, [], s)
-        return result 
-    
-    def dfs(self, result, path, s):
-        if s == "":
-            result.append(path[:]) #important: use path[:] to clone it
-            return 
-        for i in range(2):
-            if i+1 <= len(s):
-                path.append(s[:i+1])
-                self.dfs(result, path, s[i+1:])
-                path.pop()
+            if i + start >= len(s):
+                continue
+
+            combination.append( s[start: start+i+1] )
+            self.dfs( s, start+i+1, combination, result )
+            combination.pop()
 
 
 # 136. 分割回文串
-# [2020年11月5日]
+# [2020年11月5日 2021年8月7日]
 # https://www.lintcode.com/problem/palindrome-partitioning/description
 # https://www.jiuzhang.com/solutions/palindrome-partitioning/#tag-lang-python
 class Solution:
     def partition(self, s):
         result = []
         self.dfs(s, [], result)
+
         return result
 
     def dfs( self, s, combination, result):
@@ -164,20 +143,61 @@ class Solution:
         for i in range(1, len(s)+1):
             prefix = s[:i]
 
-            if self.is_palindrome(prefix):
-                combination.append( prefix )
-                self.dfs( s[i:], combination, result )
-                combination.pop()
+            if not self.is_palindrome(prefix):
+                continue
+            
+            combination.append( prefix )
+            self.dfs( s[i:], combination, result )
+            combination.pop()
 
     def is_palindrome(self, s):
         return s == s[::-1]
 
 
 """Memoization Search 记忆化搜索"""
-# 192/44. 通配符匹配
-# [2020年11月5日, 2020年11月12日]
+# 192/44. 通配符匹配 ⭐
+# [2020年11月5日, 2020年11月12日 2021年8月7日]
 # https://www.lintcode.com/problem/wildcard-matching/description
 # https://www.jiuzhang.com/solution/wildcard-matching/#tag-lang-python
+#version dfs
+class Solution:
+    """
+    @param s: A string 
+    @param p: A string includes "?" and "*"
+    @return: is Match?
+    """
+    def isMatch(self, source, pattern):
+        return self.dfs(source, 0, pattern, 0, {})
+    
+    def dfs(self, s, i, p, j, memo):
+        if (i, j) in memo:
+            return memo[(i,j)]
+
+        if len(s) == i:
+            return self.is_empty(p, j)
+
+        if len(p) == j:
+            return False
+        
+        if p[j] != '*':
+            matched = self.is_match_char(s[i], p[j]) and self.dfs(s, i+1, p, j+1, memo)
+        else:
+            matched = self.dfs(s, i+1, p, j, memo) or self.dfs(s, i, p, j+1, memo)
+
+        memo[(i,j)] = matched
+
+        return matched
+
+    def is_match_char(self, s, p):
+        return s == p or p == '?'
+    
+    def is_empty(self, p, j):
+        for index in range(j, len(p)):
+            if p[index] != "*":
+                return False
+
+        return True
+#version dp
 class Solution:
     """
     @param s: A string 
@@ -206,8 +226,8 @@ class Solution:
         return dp[n][m]
 
 
-# 154/10. 正则表达式匹配
-# [2020年11月5日, 2020年11月12日]
+# 154/10. 正则表达式匹配 ⭐
+# [2020年11月5日, 2020年11月12日 2021年8月7日]
 # https://www.lintcode.com/problem/regular-expression-matching/description
 # https://www.jiuzhang.com/solution/regular-expression-matching/#tag-lang-python
 class Solution:
@@ -216,32 +236,30 @@ class Solution:
     @param p: A string includes "." and "*"
     @return: A boolean
     """
-    def isMatch(self, s, p):
-        return self.dp( s, 0, p, 0, {} )
+    def isMatch(self, source, pattern):
+        return self.dp(source, 0, pattern, 0, {})
     
-    def dp(self, source, i, pattern, j, memo):
-        if (i, j) in memo:
+    def dp(self, s, i, p, j, memo):
+        if (i,j) in memo:
             return memo[(i,j)]
-        
-        if len(source) == i:
-            return self.is_empty( pattern[j:] )
-        
-        if len(pattern) == j:
+
+        if len(s) == i:
+            return self.is_empty(p[j:])
+        if len(p) == j:
             return False
-        
-        # ! 方程，这个是后向的，访问的位置具有不确定性
-        if j + 1 < len(pattern) and pattern[j+1] == '*':
-            # DESC case0: match more than one char; case 1: mathced zero char
-            case0 = self.is_match_char( source[i], pattern[j] ) and self.dp( source, i+1, pattern, j, memo )
-            case1 = self.dp( source, i, pattern, j+2, memo )
+
+        if j+1 < len(p) and p[j+1] == '*':
+            # case0: match more than one char; case 1: mathced zero char
+            case0 = self.is_match_char(s[i], p[j]) and self.dp(s, i+1, p, j, memo)
+            case1 = self.dp(s, i, p, j+2, memo)
             matched = case0 or case1
         else:
-            # ! `+` -> `and`
-            matched = self.is_match_char( source[i], pattern[j] ) and self.dp( source, i+1, pattern, j+1, memo )
+            matched = self.is_match_char(s[i], p[j]) and self.dp(s, i+1, p, j+1, memo)
         
         memo[(i,j)] = matched
+
         return matched
-    
+
     def is_match_char( self, s, p ):
         return s == p or p == '.'
 
@@ -255,11 +273,11 @@ class Solution:
         
         return True  
 
-# 582/140. 单词拆分II # TODO
-# [2020年11月5日, 2020年11月12日]
+
+# 582/140. 单词拆分II
+# [2020年11月5日, 2020年11月12日 2021年8月7日]
 # https://www.lintcode.com/problem/word-break-ii/description
 # https://www.jiuzhang.com/solution/word-break-ii/#tag-lang-python
-# DESC unfamiliar
 class Solution:
     """
     @param: s: A string
@@ -277,7 +295,6 @@ class Solution:
             return []
         
         partitions= []
-
         for i in range( 1, len(s)+1 ):
             prefix = s[:i]
             if prefix not in wordDict:
@@ -287,7 +304,7 @@ class Solution:
             for item in sub_partitions:
                 partitions.append( prefix + ' ' + item )
         
-        # ! forget
+        # caution
         if s in wordDict:
             partitions.append(s)
             
@@ -296,8 +313,8 @@ class Solution:
         return partitions
 
 
-# 683. Word Break III
-# [2020年11月12日]
+# 683. Word Break III ⭐⭐
+# [2020年11月12日 2021年8月7日]
 # https://www.lintcode.com/problem/word-break-iii/description
 # https://www.jiuzhang.com/solution/word-break-iii/#tag-lang-python
 class Solution:
@@ -308,6 +325,7 @@ class Solution:
     """
     def wordBreak3(self, s, dict):
         max_length, lower_dict = self.initialize(dict)
+
         return self.memo_search(s.lower(), 0, max_length, lower_dict, {})
         
     def memo_search(self, s, index, max_length, lower_dict, memo):
@@ -317,14 +335,15 @@ class Solution:
         if index in memo:
             return memo[index]
         
-        # 这里的memo更为灵活
         memo[index] = 0
         for i in range(index, len(s)):
             if i + 1 - index > max_length:
                 break
+
             word = s[index: i + 1]
             if word not in lower_dict:
                 continue
+            
             memo[index] += self.memo_search(s, i + 1, max_length, lower_dict, memo)
             
         return memo[index]
@@ -335,6 +354,7 @@ class Solution:
         for word in dict:
             max_length = max(max_length, len(word))
             lower_dict.add(word.lower())
+        
         return max_length, lower_dict
 
 

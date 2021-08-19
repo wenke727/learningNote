@@ -17,7 +17,6 @@
 # https://www.lintcode.com/problem/house-robber/description
 # https://www.jiuzhang.com/solution/house-robber/#tag-lang-python
 class Solution:
-    # ! `%2`也是对的
     def houseRobber(self, A):
         if not A:
             return 0
@@ -108,7 +107,9 @@ class Solution:
 
 class Solution:
     def climbStairs(self, n):
-        if n == 0: return 0
+        if n == 0: 
+            return 0
+        
         res = self.steps(n, {1:1, 2:2})
 
         return res
@@ -127,7 +128,8 @@ class Solution:
 # version 1
 class Solution:
     def maxSquare(self, matrix):
-        if not matrix or len(matrix[0]) == 0: return 0
+        if not matrix or len(matrix[0]) == 0: 
+            return 0
 
         n, m = len(matrix), len(matrix[0])
         dp = [[0] * (m) for _ in range(n)]
@@ -193,7 +195,7 @@ class Solution:
 
         for i in range(1, n):
             dp[i % 2][0] = matrix[i][0]
-            up[i % 2][0] = 0 if matrix[i][0] else up[(i-1) % 2][0] +1
+            up[i % 2][0] = 0 if matrix[i][0] else up[(i-1) % 2][0] + 1
             left = 1 - matrix[i][0]
 
             for j in range(1, m):
@@ -255,32 +257,31 @@ class Solution:
         return f[m - 1][n - 1]
 
 
-# 119. 编辑距离 
+# 119. 编辑距离 ✨✨✨
 # [2021年1月4日 2021年3月30日]
-# DESC 给出两个单词word1和word2，计算出将word1 转换为word2的最少操作次数
 # https://www.lintcode.com/problem/edit-distance/description 
 # https://www.jiuzhang.com/solution/edit-distance/#tag-lang-python
+# DESC 给出两个单词word1和word2，计算出将word1 转换为word2的最少操作次数
 class Solution:
     def minDistance(self, word1, word2):
         n, m = len(word1), len(word2)
-        f = [[0] * (m + 1) for _ in range(n + 1)]
-        
-        for i in range(n + 1):
-            f[i][0] = i
-        for j in range(m + 1):
-            f[0][j] = j
+        dp = [[0] * (m+1) for _ in range(n+1)]
 
-        for i in range(1, n + 1):
-            for j in range(1, m + 1):
+        for i in range(n+1):
+            dp[i][0] = i
+        for j in range(m+1):
+            dp[0][j] = j
+
+        for i in range(1, n+1):
+            for j in range(1, m+1):
                 if word1[i-1] == word2[j-1]:
-                    # equal, delete, add
-                    f[i][j] = min( f[i-1][j-1], f[i-1][j]+1, f[i][j-1]+1 )
+                    dp[i][j] = dp[i-1][j-1]
                 else:
-                    f[i][j] = min( f[i-1][j-1], f[i-1][j], f[i][j-1]) + 1
-                        
-        return f[n][m]
+                    dp[i][j] = min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) + 1
+        
+        return dp[n][m]
 
-# TODO
+# version with debug
 class Node:
     def __init__(self, value, choice):
         self.value = value
@@ -293,12 +294,11 @@ class Node:
 class Solution:
     def minDistance(self, word1, word2):
         n, m = len(word1), len(word2)
-        dp = [ [Node(0, -1) for i in range(m+1) ] for _ in range(n+1) ]
+        dp = [[Node(0, -1)] * (m+1) for _ in range(n+1)]
 
         for j in range(m+1):
             dp[0][j].value = j
         for i in range(n+1):
-
             dp[i][0].value = i
         
         for i in range(n):
@@ -314,12 +314,12 @@ class Solution:
         
     def minNode( self, d: Node, u: Node, l: Node ):
         # 0 None, 1 replace, 2 delete, 3 insert
-        # ! val = min( d.value, u.value, l.value ) + 1
         val = min( d.value, u.value, l.value ) 
         if val == d.value:
             return Node(val+1, 1)
         if val == u.value:
             return Node(val+1, 2)
+        
         return Node(val+1, 3)
         
     def print_result( self, word1, word2, dp ):
@@ -362,8 +362,10 @@ class Solution:
 class Solution:
     def longestIncreasingContinuousSubsequence(self, A):
         size = len(A)
-        if size < 1: return 0 
-        if size < 2: return 1 
+        if size < 1: 
+            return 0 
+        if size < 2: 
+            return 1 
             
         dp1, dp2 = 1, 1 
         glomax = 0 
@@ -381,31 +383,39 @@ class Solution:
 # https://www.lintcode.com/problem/longest-continuous-increasing-subsequence-ii/description
 # https://www.jiuzhang.com/solutions/longest-continuous-increasing-subsequence-ii/#tag-lang-python
 # version classical: dfs
+DIRECTIONS = [(1, 0), (0, -1), (-1, 0), (0, 1)]
 class Solution:
-    def longestIncreasingPath(self, matrix):
-        if not matrix or not matrix[0]: return 0
-
+    def longestContinuousIncreasingSubsequence2(self, matrix):
+        if not matrix or not matrix[0]: 
+            return 0
+    
         n, m = len(matrix), len(matrix[0])
         memo, longest = {}, 0
+
         for i in range(n):
             for j in range(m):
-                longest = max(longest, self.dfs(matrix, i, j, memo))
+                 longest = max(longest, self.dfs(matrix, i, j, memo))
+        
         return longest
-
+    
     def dfs(self, matrix, x, y, memo):
-        if (x,y) in memo: return memo[(x,y)]
-
-        longest = 1 
-        for dx, dy in [(1, 0), (0, -1), (-1, 0), (0, 1)]:
-            x_nxt, y_nxt = x + dx, y + dy
-            if not self.inside(matrix, x_nxt, y_nxt) or matrix[x_nxt][y_nxt] >= matrix[x][y]:
+        if (x, y) in memo:
+            return memo[(x, y)]
+        
+        longest = 1
+        for dx, dy in DIRECTIONS:
+            nxt_x, nxt_y = x + dx, y + dy
+            if not self.is_valid(matrix, nxt_x, nxt_y):
                 continue
-            longest = max( longest, self.dfs( matrix, x_nxt, y_nxt, memo ) + 1 )
+            if matrix[nxt_x][nxt_y] <= matrix[x][y]:
+                continue
+            longest = max(longest, self.dfs(matrix, nxt_x, nxt_y, memo)+1)
 
         memo[(x,y)] = longest
+
         return longest
 
-    def inside(self, matrix, x, y):
+    def is_valid(self, matrix, x, y):
         return 0 <= x < len(matrix) and 0 <= y < len(matrix[0])
 
 # version 动态数组 BFS
@@ -450,10 +460,14 @@ class Solution:
         return self.dfs(n, {})
 
     def dfs( self, n, memo ):
-        if n in memo: return memo[n]
+        if n in memo:
+            return memo[n]
             
-        if n == 0:  return False
-        if n == 1 or n == 2: return True
+        if n == 0: 
+            return False
+
+        if n == 1 or n == 2:
+            return True
 
         case1 = self.dfs(n-2, memo) and self.dfs(n-3, memo)
         case2 = self.dfs(n-3, memo) and self.dfs(n-4, memo)
@@ -470,16 +484,18 @@ class Solution:
         return dp[n % 3]
 
 
-# 395. 硬币排成线 II 
+# 395. 硬币排成线 II
 # [2021年03月29号]
 # https://www.lintcode.com/problem/coins-in-a-line-ii/description
 # https://www.jiuzhang.com/solution/coins-in-a-line-ii/#tag-lang-python
 # version 记忆化搜索，自顶向下
 class Solution:
     def firstWillWin(self, values):
-        if not values: return False
+        if not values: 
+            return False
 
-        if len(values) <= 2: return True
+        if len(values) <= 2: 
+            return True
 
         first, sencond = self.dfs(values, 0, {})
         return first > sencond
@@ -502,7 +518,7 @@ class Solution:
         first = max( 
             (values[index] + second1), 
             (values[index] + values[index+1] + second2) 
-            )
+        )
 
         memo[index] = (first, total - first)
         return memo[index]
@@ -552,15 +568,16 @@ class Solution:
         return f[0] > prefix_sum[0] - f[0]
 
 
-# 396. 硬币排成线 III #TODO⭐️⭐️⭐️
+# 396. 硬币排成线 III ⭐️⭐️⭐️
 # [2021年03月29号]
 # https://www.lintcode.com/problem/coins-in-a-line-iii/description
 # https://www.jiuzhang.com/solution/coins-in-a-line-iii/#tag-lang-python
 # version 使用记忆化搜索的版本
 class Solution:
     def firstWillWin(self, values):
-        if not values: return False
-        # first, second = self.dfs(values, 0, len(values), {})
+        if not values: 
+            return False
+        
         first, second = self.dfs(values, 0, len(values)-1, {})
         return first > second
         
@@ -578,7 +595,7 @@ class Solution:
         first = max(
             values[left] + second1, 
             values[right] + second2
-            )
+        )
         
         memo[(left, right)] = first, total - first
         return first, total - first

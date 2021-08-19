@@ -21,6 +21,7 @@
 ``` bash
 ps auxww | grep 'celery' | awk '{print $2}' | xargs kill -9
 ps auxww | grep 'vscode' | awk '{print $2}' | xargs kill -9
+ps auxww | grep 'ipykernel' | awk '{print $2}' | xargs kill -9
 ```
 
 - Tutorial

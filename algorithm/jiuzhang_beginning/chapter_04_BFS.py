@@ -28,7 +28,8 @@ class Solution:
     @return: Level order a list of lists of integer
     """
     def levelOrder(self, root):
-        if root is None: return []
+        if root is None: 
+            return []
 
         queue, res = deque([root]), []
         while queue:
@@ -36,10 +37,12 @@ class Solution:
             for _ in range(len(queue)):
                 node = queue.popleft()
                 level.append(node.val)
+
                 if node.left:
                     queue.append(node.left)
                 if node.right:
                     queue.append(node.right)
+            
             res.append(level)
         
         return res
@@ -164,7 +167,7 @@ class Solution:
 
 
 """图上的宽度优先搜索"""
-# 137/133. 克隆图 
+# 137/133. 克隆图 ⭐
 # [2020年10月28日 2021年7月29日]
 # https://www.lintcodinfe.com/problem/clone-graph/description
 # https://www.jiuzhang.com/solutions/clone-graph/#tag-lang-python
@@ -185,6 +188,7 @@ class Solution:
             for neighbor in node.neighbors:
                 new_neighbor = mapping[neighbor]
                 new_node.neighbors.append(new_neighbor)
+
         return mapping[root]
 
     def getNodes(self, node):
@@ -195,6 +199,7 @@ class Solution:
                 if neighbor not in nodes:
                     nodes.add(neighbor)
                     queue.append(neighbor)
+
         return nodes
 
 
@@ -221,6 +226,7 @@ class Solution:
                     continue
                 dis[nxtWord] = dis[node] + 1
                 queue.append(nxtWord)
+
         return 0
 
     def get_next_words(self, word, dict):
@@ -261,8 +267,10 @@ class Solution:
                     continue
                 if nxt_word in opposite_visited:
                     return True
+
                 queue.append( nxt_word )
                 visited.add( nxt_word )
+        
         return False
 
     def build_graph(self, dict):
@@ -331,71 +339,7 @@ class Solution:
 # https://www.lintcode.com/problem/word-ladder-ii/description
 # https://www.jiuzhang.com/solution/word-ladder-ii/#tag-lang-python
 # DESC 给出两个单词（start和end）和一个字典，找出`所有`从start到end的最短转换序列
-from collections import deque
-class Solution:
-    """
-    @param: start: a string
-    @param: end: a string
-    @param: dict: a set of string
-    @return: a list of lists of string
-    """
-    def findLadders(self, start, end, words):
-        words.add(start)
-        words.add(end)
-
-        graph = self.build_graph(words)
-        distance = self.bfs(end, graph)
-
-        results=[]
-        self.dfs(start, end, distance, graph, [start], results)
-        
-        return results
-    
-    def build_graph(self, words):
-        graph = {}
-
-        for w in words:
-            for i in range(len(w)):
-                key = w[:i] + '*' + w[i+1:]
-                graph[key] = graph.get(key, set())
-                graph[key].add(w)
-
-        return graph
-    
-    def get_nxt_word(self, word, graph):
-        lst = []
-        for i in range(len(word)):
-            key = word[:i] + '*' + word[i+1:]
-            for w in graph.get(key, []):
-                lst.append(w)
-        
-        return lst
-    
-    def bfs(self, end, graph):
-        distance = {end:0}
-        queue = deque([end])
-
-        while queue:
-            cur = queue.popleft()
-            for nxt in self.get_nxt_word(cur, graph):
-                if nxt in distance:
-                    continue
-                distance[nxt] = distance[cur] + 1
-                queue.append(nxt)
-        
-        return distance
-    
-    def dfs(self, src, dst, distance, graph, path, result):
-        if src == dst:
-            result.append(path[:])
-            return
-        
-        for nxt in self.get_nxt_word(src, graph):
-            if distance[src] -1 != distance[nxt]:
-                continue
-            path.append(nxt)
-            self.dfs(nxt, dst, distance, graph, path, result)
-            path.pop()
+# DESC see `chapter_07_DFS_Permutation` 
 
 
 # 433/200. 岛屿的个数
@@ -440,7 +384,7 @@ class Solution:
         return grid[x][y]
 
 
-# 804 · 不同岛屿的数量II
+# 804 · 不同岛屿的数量II ⭐⭐
 # [2021年8月2日]
 # https://www.lintcode.com/problem/804/description?_from=collection&fromId=208
 # https://www.jiuzhang.com/solution/number-of-distinct-islands-ii/
@@ -481,7 +425,7 @@ class Solution:
         return min( encode(sorted(shape)) for shape in shapes )
 
 
-# 611. 骑士的最短路线
+# 611. 骑士的最短路线 ⭐
 # [2020年11月2日 2021年7月31日]
 # https://www.lintcode.com/problem/knight-shortest-path/description
 # https://www.jiuzhang.com/solutions/knight-shortest-path/#tag-lang-python
@@ -541,6 +485,7 @@ class Solution:
                 l0_val = (abs(destination.x - nxt_x) + abs(destination.y - nxt_y)) / 3
                 dis = distance[(nxt_x, nxt_y)] = distance[(x,y)] + 1
                 heapq.heappush( queue, (l0_val+dis, dis, nxt_x, nxt_y) )
+        
         return -1
     
     def is_valid(self, x, y ,grid):
@@ -822,7 +767,7 @@ class Solution:
         return len(order) == numCourses
 
 
-# 892. 外星人词典
+# 892. 外星人词典 ⭐⭐
 # [2020年11月2日 2021年8月2日]
 # https://www.lintcode.com/problem/alien-dictionary/description
 # https://www.jiuzhang.com/solution/alien-dictionary/#tag-lang-python
@@ -850,7 +795,6 @@ class Solution:
                     graph[words[i][j]] = words[i+1][j]
                     break
 
-                # ! case: ["abc","ab"]
                 if j == j_min-1:
                     if len(words[i]) > len(words[i+1]):
                         return None

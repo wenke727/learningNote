@@ -117,6 +117,13 @@ Return index of first occurrence of maximum over requested axis.
 
     ```
 
+- 将`字典列表`转换DataFrame
+
+    ``` python
+    panos_lst = np.concatenate( gdf_panos.apply( lambda x: _extract_helper(x), axis=1 ).values )
+    panos_lst = pd.DataFrame.from_records(panos_lst)
+    ```
+
 - test
 
     ``` python

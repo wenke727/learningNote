@@ -12,15 +12,17 @@ import sys
 # [2020年11月6日, 2020年11月24日, 2021年3月31日]
 # https://www.lintcode.com/problem/stone-game/description
 # https://www.jiuzhang.com/solution/stone-game/#tag-lang-python
+# DESC 记忆化搜索：从大到小，先考虑 0 ~ n-1 合并的总费用
 # version: DFS
 class Solution:
-    # DESC 记忆化搜索：从大到小，先考虑 0 ~ n-1 合并的总费用
     def stoneGame(self, piles):
         return self.dfs(piles, 0, len(piles)-1, {})
 
     def dfs(self, piles, start, end, memo):
-        if (start, end) in memo: return memo[(start, end)]
-        if start >= end: return 0
+        if (start, end) in memo: 
+            return memo[(start, end)]
+        if start >= end: 
+            return 0
 
         cost = sum(piles[start : end+1])
         mimimun = sys.maxsize
@@ -69,32 +71,39 @@ class Solution:
         return range_sum
 
 
-# 168/312. 吹气球
+# 168/312. 吹气球 ✨✨✨
 # [2020年11月6日 2021年3月31日]
 # https://www.lintcode.com/problem/burst-balloons/description
 # https://www.jiuzhang.com/solution/burst-balloons/#tag-lang-python
 # version 2
 class Solution:
     def maxCoins(self, nums):
-        if not nums: return 0
-        nums = [1, *nums, 1]
-        return self.dfs(nums, 0, len(nums) - 1, {})
+        if not nums:
+            return 0
         
+        nums = [1, *nums, 1]
+
+        return self.dfs(nums, 0, len(nums)-1, {})
+    
     def dfs(self, nums, start, end, memo):
-        if start == end:
-            return 0 
-            
+        # memo[i][j] 代表搓破气球i和j之间（开区间）的所有气球，可以获得的最高分数
         if (start, end) in memo:
             return memo[(start, end)]
         
+        if start == end:
+            return 0
+        
         best = 0
-        for mid in range(start + 1, end):
+        for mid in range(start+1, end):
             left  = self.dfs(nums, start, mid, memo)
             right = self.dfs(nums, mid, end, memo)
-            best  = max(best, left + right + nums[start] * nums[mid] * nums[end])
+            best = max(
+                best,  
+                left + right + nums[start]*nums[mid]*nums[end]
+            )
         
         memo[(start, end)] = best
-        return best
+        return best  
 # version 1
 class Solution:
     def maxCoins(self, nums):
@@ -204,6 +213,19 @@ class Solution:
                     dp[i%2][j] = max(dp[i%2][j-1], dp[(i-1) % 2][j], dp[(i-1) % 2][j-1])
         
         return dp[n % 2][m]
+class Solution:
+    def longestCommonSubsequence(self, A, B):
+        n, m = len(A), len(B)
+        dp = [[0] * (m + 1) for _ in range(n+1)]
+        
+        for i in range(1, n + 1):
+            for j in range(1, m + 1):
+                if A[i-1] == B[j-1]:
+                    dp[i][j] = dp[(i-1)][j-1] + 1
+                else:
+                    dp[i][j] = max(dp[i][j-1], dp[(i-1)][j], dp[(i-1)][j-1])
+        
+        return dp[n][m]
 
 
 # 119. 编辑距离 
@@ -391,7 +413,7 @@ class Solution:
                 self.find(node.children[i], result, k, target, next)
 
 
-# 118. 不同的子序列
+# 118. 不同的子序列 ⭐
 # [2020年11月6日]
 # https://www.lintcode.com/problem/distinct-subsequences/description
 # https://www.jiuzhang.com/solution/distinct-subsequences/#tag-lang-python
@@ -495,11 +517,6 @@ class Solution:
 # 在n个物品中挑选若干物品装入背包，最多能装多满？假设背包的大小为m
 # version 1
 class Solution:
-    """
-    @param m: An integer m denotes the size of a backpack
-    @param A: Given n items with size A[i]
-    @return: The maximum size
-    """
     def backPack(self, m, A):
         n = len(A)
         dp = [[False] * (m + 1) for _ in range(n + 1)]
@@ -518,6 +535,7 @@ class Solution:
         for i in range(m, -1, -1):
             if dp[n][i]:
                 return i
+
         return 0
 # version 3
 class Solution:
@@ -587,6 +605,7 @@ class Solution:
                 if j >= A[i-1]:
                     # ! 仔细品品dp的含义，dp[i][j]: 对于前i个物品，当前书包的容量为w，这个情况下装下的最大价值
                     dp[i][j] = max( dp[i][j], dp[i-1][j - A[i-1]] + V[i-1])
+
         return dp[n][m]
 # version 3
 class Solution:
@@ -619,10 +638,29 @@ class Solution:
 # 每一个物品可以使用无数次
 class Solution:
     def backPackIV(self, nums, target):
-        if not nums: return 0
+        if not nums: 
+            return 0
             
         n = len(nums)
-        dp = [[0] * (target + 1), [0] * (target + 1)]
+        dp = [[0] * (target + 1) for _ in range(target+1)]
+        dp[0][0] = 1
+
+        for i in range(1, n + 1):
+            dp[i][0] = 1
+            for j in range(1, target + 1):
+                dp[i][j] = dp[i-1][j]
+                if j >= nums[i-1]:
+                    dp[i][j] += dp[i][j - nums[i-1]]
+
+        return dp[n][target]
+
+class Solution:
+    def backPackIV(self, nums, target):
+        if not nums: 
+            return 0
+            
+        n = len(nums)
+        dp = [[0] * (target + 1) , [0] * (target + 1)]
         dp[0][0] = 1
 
         for i in range(1, n + 1):
@@ -631,7 +669,29 @@ class Solution:
                 dp[i%2][j] = dp[(i-1) % 2][j]
                 if j >= nums[i-1]:
                     dp[i%2][j] += dp[i%2][j - nums[i-1]]
+
         return dp[n % 2][target]
+
+
+# 740 · 零钱兑换 2
+# https://www.lintcode.com/problem/740/
+class Solution:
+    def change(self, amount, coins):
+        n = len(coins)
+
+        dp = [ [0] * (amount+1) for _ in range(n+1) ]
+        for i in range(n+1):
+            dp[i][0] = 1
+        
+        for i in range(1, n+1):
+            for j in range(1, amount+1):
+                if j < coins[i-1]:
+                    dp[i][j] = dp[i-1][j]
+                else:
+                    # dp[i][j] = dp[i-1][j] + dp[i-1][j - coins[i-1]]
+                    dp[i][j] = dp[i-1][j] + dp[i][j - coins[i-1]]
+        
+        return dp[-1][-1]
 
 
 # 89. K数之和
@@ -679,6 +739,7 @@ class Solution:
                         dp[i%2][j][s] += dp[(i-1) % 2][j-1][s - A[i-1]]
                         
         return dp[n % 2][k][target]
+
 
 # 91. 最小调整代价 # TODO
 # https://www.lintcode.com/problem/minimum-adjustment-cost/description
