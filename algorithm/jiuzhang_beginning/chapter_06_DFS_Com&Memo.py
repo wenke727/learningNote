@@ -1,7 +1,7 @@
 import sys
 
 # 135/39. 数字组合
-# [2020年11月5日 2021年8月7日]
+# [2020年11月5日 2021年8月7日  2021年8月23日]
 # https://www.lintcode.com/problem/combination-sum/description
 # https://www.jiuzhang.com/solutions/combination-sum/#tag-lang-python
 class Solution:
@@ -11,9 +11,11 @@ class Solution:
         
         candidates.sort()
         result = []
+
         self.dfs(candidates, target, 0, [], result)
 
         return result
+
 
     def dfs(self, nums, target, index, combination, res):
         if target == 0:
@@ -86,7 +88,7 @@ class Solution:
 
     def dfs(self, nums, k, target, index, combination, reults):
         if k == 0 and target == 0:
-            reults.append( list(combination) )
+            reults.append( combination[:] )
             return
         
         if k == 0 or target <= 0:
@@ -154,18 +156,13 @@ class Solution:
         return s == s[::-1]
 
 
-"""Memoization Search 记忆化搜索"""
+""" Memoization Search 记忆化搜索 """
 # 192/44. 通配符匹配 ⭐
 # [2020年11月5日, 2020年11月12日 2021年8月7日]
 # https://www.lintcode.com/problem/wildcard-matching/description
 # https://www.jiuzhang.com/solution/wildcard-matching/#tag-lang-python
 #version dfs
 class Solution:
-    """
-    @param s: A string 
-    @param p: A string includes "?" and "*"
-    @return: is Match?
-    """
     def isMatch(self, source, pattern):
         return self.dfs(source, 0, pattern, 0, {})
     
@@ -175,7 +172,6 @@ class Solution:
 
         if len(s) == i:
             return self.is_empty(p, j)
-
         if len(p) == j:
             return False
         
@@ -316,7 +312,7 @@ class Solution:
 # 683. Word Break III ⭐⭐
 # [2020年11月12日 2021年8月7日]
 # https://www.lintcode.com/problem/word-break-iii/description
-# https://www.jiuzhang.com/solution/word-break-iii/#tag-lang-python
+# 给出一个单词表和一条去掉所有空格的句子，根据给出的单词表添加空格, 返回可以构成的句子的数量, 保证构成的句子中所有的单词都可以在单词表中找到.
 class Solution:
     """
     @param: : A string
@@ -340,7 +336,7 @@ class Solution:
             if i + 1 - index > max_length:
                 break
 
-            word = s[index: i + 1]
+            word = s[index: i+1]
             if word not in lower_dict:
                 continue
             
@@ -383,72 +379,21 @@ class Solution:
 # https://www.lintcode.com/problem/longest-increasing-subsequence/description
 # https://www.jiuzhang.com/solution/longest-increasing-subsequence/#tag-lang-python
 # DESC 给定一个整数序列，找到最长上升子序列（LIS），返回LIS的长度
-# version 1
 class Solution:
-    """
-    @param nums: The integer array
-    @return: The length of LIS (longest increasing subsequence)
-    """
     def longestIncreasingSubsequence(self, nums):
-        if nums is None or not nums: return 0
-        
+        if nums is None or not nums: 
+            return 0
+    
+        # state: dp[i] 表示以第 i 个数结尾的 LIS 的长度
         dp = [1] * len(nums)
-        prev = [-1] * len(nums)
         
-        # function dp[i] = max{dp[j] + 1},  j < i and nums[j] < nums[i]
+        # dp[i] = max(dp[j] + 1), j < i && nums[j] < nums[i]
         for i in range(len(nums)):
             for j in range(i):
-                if nums[j] < nums[i] and dp[i] < dp[j] + 1:
-                    dp[i] = dp[j] + 1
-                    prev[i] = j
+                if nums[j] < nums[i]:
+                    dp[i] = max(dp[i], dp[j] + 1)
         
-        # answer: max(dp[0..n-1])
-        longest, last = 0, -1
-        for i in range(len(nums)):
-            if dp[i] > longest:
-                longest = dp[i]
-                last = i
-        
-        path = []
-        while last != -1:
-            path.append(nums[last])
-            last = prev[last]
-        print(path[::-1])
-        
-        return longest
-# version 2
-class Solution:
-    def longestIncreasingSubsequence(self, nums):
-        if nums is None or len(nums) == 0: return 0
-            
-        n = len(nums)
-        res = []
-        for num in nums:
-            if len(res) == 0 or res[-1] < num:
-                res.append(num)
-                continue
-            insert_pos = self.get_insert_pos(num, res)
-            res[insert_pos] = num
-        
-        return len(res)
-            
-    def get_insert_pos(self, target, nums):
-        if len(nums) == 0: return 0
-            
-        start, end = 0, len(nums) - 1
-        while start + 1 < end:
-            mid = (start + end) // 2
-            if nums[mid] >= target:
-                end = mid
-            else:
-                start = mid
-        
-        if target <= nums[start]:
-            return start
-        if target <= nums[end]:
-            return end
-        
-        return len(nums)
+        return max(dp)
 
 
 # 602. 俄罗斯套娃信封
@@ -701,7 +646,8 @@ class Solution:
 DIRECTIONS = [(-1, -2),(1, -2),(-2, -1),(2, -1),]
 class Solution:
     def shortestPath2(self, grid):
-        if not grid or not grid[0]: return -1
+        if not grid or not grid[0]: 
+            return -1
         
         n, m = len(grid), len(grid[0])
         dp = [[sys.maxsize] * m for _ in range(n)]

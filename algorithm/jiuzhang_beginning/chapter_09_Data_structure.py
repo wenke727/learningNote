@@ -1,5 +1,5 @@
 # 6. 合并排序数组 II
-# [2021年8月9日]
+# [2021年8月9日 2021年8月20日]
 # https://www.lintcode.com/problem/merge-two-sorted-arrays/description
 # https://www.jiuzhang.com/solutions/merge-two-sorted-arrays#tag-lang-python
 class Solution:
@@ -30,7 +30,7 @@ class Solution:
 
 
 # 64. 合并排序数组
-# [2021年8月9日]
+# [2021年8月9日 2021年8月20日]
 # https://www.lintcode.com/problem/merge-sorted-array/description
 # https://www.jiuzhang.com/solutions/merge-sorted-array/#tag-lang-python
 class Solution:
@@ -67,7 +67,7 @@ class Solution:
 
 
 # 839. 合并两个排序的间隔列表
-# [2021年8月9日]
+# [2021年8月9日 2021年8月20日]
 # https://www.lintcode.com/problem/merge-two-sorted-interval-lists/description
 # https://www.jiuzhang.com/solutions/merge-two-sorted-interval-lists/#tag-lang-python
 class Solution:
@@ -113,7 +113,7 @@ class Solution:
 
 
 # 486. 合并k个排序数组
-# [2021年8月9日]
+# [2021年8月9日 2021年8月20日]
 # https://www.lintcode.com/problem/merge-k-sorted-arrays/description
 # https://www.jiuzhang.com/solutions/merge-k-sorted-arrays/#tag-lang-python
 import heapq
@@ -127,6 +127,7 @@ class Solution:
         for index, array in enumerate(arrays):
             if len(array) == 0:
                 continue
+            # caution: the order of variables in the tuple
             heapq.heappush(heap, (array[0], index, 0))
         
         while heap:
@@ -140,7 +141,7 @@ class Solution:
 
 
 # 577. 合并K个排序间隔列表
-# [2021年8月9日]
+# [2021年8月9日 2021年8月20日]]
 # https://www.lintcode.com/problem/merge-k-sorted-interval-lists/description
 # https://www.jiuzhang.com/solutions/merge-k-sorted-interval-lists/#tag-lang-python
 from heapq import heappop, heappush
@@ -159,7 +160,7 @@ class Solution:
         
         while lst:
             start, end, i, j = heappop(lst)
-            self.append_and_merge(Interval(start, end), res)
+            self.push_back(Interval(start, end), res)
             
             if j + 1 < len(intervals[i]):
                 heappush(lst, (intervals[i][j+1].start, intervals[i][j+1].end, i, j+1))
@@ -167,8 +168,8 @@ class Solution:
         return res
 
 
-    def append_and_merge(self, interval, res):
-        if not res :
+    def push_back(self, interval, res):
+        if not res:
             res.append(interval)
             return
         
@@ -180,7 +181,7 @@ class Solution:
 
 
 # 47. 两数组的交集
-# [2021年8月9日]
+# [2021年8月9日 2021年8月20日]
 # https://www.lintcode.com/problem/intersection-of-two-arrays/description
 class Solution:
     """
@@ -194,7 +195,7 @@ class Solution:
 
 
 # 548. 两数组的交集 II
-# [2021年8月9日]
+# [2021年8月9日 2021年8月20日]
 # https://www.lintcode.com/problem/intersection-of-two-arrays-ii/description
 # https://www.jiuzhang.com/solutions/intersection-of-two-arrays-ii/#tag-lang-python
 class Solution:
@@ -214,7 +215,7 @@ class Solution:
 
 
 # 793. 多个数组的交集
-# [2021年8月9日]
+# [2021年8月9日  2021年8月20日]
 # https://www.lintcode.com/problem/intersection-of-arrays/description
 # https://www.jiuzhang.com/solutions/intersection-of-arrays/#tag-lang-python
 class Solution:
@@ -265,6 +266,7 @@ class Solution:
                 if val != 0:
                     vector.append((index, val))
             vectors.append(vector)
+
         return vectors
         
     def convert_to_col_vectors(self, matrix):
@@ -276,6 +278,7 @@ class Solution:
                 if matrix[i][j] != 0:
                     vector.append( (i, matrix[i][j]) )
             vectors.append(vector)
+            
         return vectors
 
     def multi_vector(self, v1, v2):
@@ -296,8 +299,8 @@ class Solution:
         
 
 """ Medians """
-# 65. 两个排序数组的中位数（4）
-# []
+# 65. 两个排序数组的中位数 ⭐⭐
+# [2021年8月22日]
 # https://www.lintcode.com/problem/median-of-two-sorted-arrays/description
 # https://www.jiuzhang.com/solution/median-of-two-sorted-arrays/#tag-lang-python
 class Solution:
@@ -328,10 +331,79 @@ class Solution:
             return self.findKth(A, index_a + k//2, B, index_b, k- k//2)
         else:
             return self.findKth(A, index_a, B, index_b + k//2, k- k//2)
+# version  归并法
+class Solution:
+    """
+    @param: A: An integer array
+    @param: B: An integer array
+    @return: a double whose format is *.5 or *.0
+    """
+    def findMedianSortedArrays(self, A, B):
+        m, n = len(A), len(B)
+        p1, p2 = 0, 0
+        left, right = -1, -1 
+        for i in range((m + n) // 2 + 1):
+            left = right
+
+            if p1 >= len(A) or p2 < len(B) and A[p1] > B[p2]:
+                right = B[p2]
+                p2 += 1
+            else:
+                right = A[p1]
+                p1 += 1
+
+        if (m + n) % 2 == 1:
+            return right
+
+        return (left + right) / 2
+# version 二分法，最高境界，去掉不符合条件的一边
+# 建立辅助函数getKth，参数有数组A，A的起始指针start1和终止指针end1, 相对应的有B、start2和end2，以及整数k，目标是找到A[start1:end1]和B[start2:end2]中第k小的元素。
+# 在主程序中，看m + n的奇偶性，并调用getKth函数。如果是奇数，返回数组A和B的第(m + n) // 2 + 1小元素；如果是偶数，返回数组A和B的第(m + n) // 2小和第(m + n) // 2 + 1小元素的均值。
+# getKth(nums1, start1, end1, nums2, start2, end2, k)函数的实现方法： 
+# 如果有数组在[start:end]范围内为空，说明该数组已经排除完毕，第k小的元素一定存在于另一数组中，计算好索引位置返回即可。 
+# 如果k为1，说明已经找到第k小的数，那就是A[start1]和B[start2]中的较小值，直接返回即可。 
+# 定义指针i和j，分别指向A和B，使得A[start1:i]和B[start2:j]的长度分别为k // 2
+# 通过比较A[i]和B[j]的大小，我们就可以确定排除哪段元素。 如果A[i] > B[j]，说明B[start2:j]不可能为第k小元素。我们对A[start1:end1]和B[j + 1:end2]继续送入getKth进行递归，k应该更新为k - (j - start2 + 1)。 * 反之，说明A[start1:i]不可能为第k小元素。我们对A[i + 1:end1]和B[start2:end2]继续送入getKth进行递归，k应该更新为k - (i - start1 + 1)。
+class Solution:
+    """
+    @param: A: An integer array
+    @param: B: An integer array
+    @return: a double whose format is *.5 or *.0
+    """
+    def findMedianSortedArrays(self, A, B):
+        m, n = len(A), len(B)
+        if (m + n) % 2 == 1:
+            return self.getKth(A, 0, m-1, B, 0, n-1, (m+n)//2+1)
+
+        left  = self.getKth(A, 0, m-1, B, 0, n-1, (m+n)//2)
+        right = self.getKth(A, 0, m-1, B, 0, n-1, (m+n)//2+1)
+
+        return (left + right) / 2
+
+
+    def getKth(self, A, a_0, a_1, B, b_0, b_1, k):
+        len_1 = a_1 - a_0 + 1
+        len_2 = b_1 - b_0 + 1
+        if len_1 > len_2:
+            return self.getKth(B, b_0, b_1, A, a_0, a_1, k)
+        
+        if len_1 == 0:
+            return B[b_0 + k - 1]
+        
+        if k == 1:
+            return min(A[a_0], B[b_0])
+        
+        i = a_0 + min(len_1, k//2) - 1
+        j = b_0 + min(len_2, k//2) - 1
+
+        if (A[i] > B[j]):
+            return self.getKth(A, a_0, a_1, B, j+1, b_1, k-(j-b_0+1))
+        else:
+            return self.getKth(A, i+1, a_1, B, b_0, b_1, k-(i-a_0+1))
 
 
 # 931. K 个有序数组的中位数 
-# []
+# [2021年8月22日]
 # https://www.lintcode.com/problem/median-of-k-sorted-arrays/description
 # https://www.jiuzhang.com/solutions/median-of-k-sorted-arrays/#tag-lang-python
 class Solution:
@@ -365,9 +437,6 @@ class Solution:
         return start, end
     
     def get_small_or_equal(self, arrs, val):
-        # count = 0
-        # for arr in arrs:
-        #     count += self.get_small_or_equal_in_arr(arr, val)
         return sum( [self.get_small_or_equal_in_arr(arr, val) for arr in arrs] )
     
     def get_small_or_equal_in_arr(self, arr, val):
@@ -387,9 +456,26 @@ class Solution:
 
 
 # 149. 买卖股票的最佳时机
-# []
+# [2021年8月22日]
 # https://www.lintcode.com/problem/best-time-to-buy-and-sell-stock/description
 # https://www.jiuzhang.com/solutions/best-time-to-buy-and-sell-stock/#tag-lang-python
+class Solution:
+    """
+    @param prices: Given an integer array
+    @return: Maximum profit
+    """
+    def maxProfit(self, prices):
+        total = 0
+        low, high = sys.maxsize, 0
+        
+        for x in prices:
+            if x - low > total:
+                total = x - low
+        
+            if x < low:
+                low = x
+                
+        return total
 
 
 # 405. 和为零的子矩阵
@@ -428,10 +514,11 @@ class Solution:
 # version 2: n**3
 class Solution:
     def submatrixSum(self, matrix):
-        if not matrix or not matrix[0]: return None
+        if not matrix or not matrix[0]: 
+            return None
 
         n, m = len(matrix), len(matrix[0])
-        for top in range( n ):
+        for top in range(n):
             arr = [0] * m
             for bottom in range(top, n):
                 prefix_hash, prefix_sum = {0:-1}, 0
@@ -443,6 +530,7 @@ class Solution:
                     if prefix_sum in prefix_hash:
                         return [(top, prefix_hash[prefix_sum] + 1), (bottom, col)]
                     prefix_hash[prefix_sum] = col
+                    
         return None
 
 
@@ -490,6 +578,7 @@ class NumArray(object):
         :rtype: int
         """
         return self.sum[j+1] - self.sum[i]
+
 
 # 817. 范围矩阵元素和-可变的
 # []

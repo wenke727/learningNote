@@ -62,7 +62,7 @@ class Trie:
 
 '''
 # 589. 连接图  
-# [2020年11月8日 2021年2月22日 2021年8月11日]
+# [2020年11月8日 2021年2月22日 2021年8月11日 2021年8月23日]
 # https://www.lintcode.com/problem/connecting-graph/description
 # https://www.jiuzhang.com/solutions/connecting-graph/#tag-lang-python
 class ConnectingGraph:
@@ -98,9 +98,9 @@ class ConnectingGraph2:
     def __init__(self, n):
         self.father  = {}
         self.nodenum = {}
-        for i in range( n + 1 ):
+        for i in range(n + 1):
             self.father[i] = i
-            self.nodenum[i] = 1 # `self.nodenum = 1`
+            self.nodenum[i] = 1 
 
     def connect(self, a, b):
         root_a, root_b = self.find(a), self.find(b)
@@ -126,6 +126,7 @@ class ConnectingGraph2:
         x2 = x
         if self.father[x] == x:
             return x
+        
         while self.father[x] != x:
             x = self.father[x]
 
@@ -133,6 +134,7 @@ class ConnectingGraph2:
             temp = self.father[x2]
             self.father[x2] = x
             x2 = temp
+        
         return x
 
 
@@ -146,18 +148,18 @@ class ConnectingGraph3:
         self.count = n
         for i in range(n+1):
             self.father[ i ] = i
-    
+
+
     def connect(self, a, b):
         root_a, root_b = self.find(a), self.find(b)
         if root_a  != root_b:
             self.father[root_a] = root_b
             self.count -= 1
-   
+
+
     def query(self):
-        """
-        return: 图中联通区域个数
-        """
         return self.count
+
 
     def find(self,x):
         if self.father[x] == x:
@@ -171,7 +173,6 @@ class ConnectingGraph3:
 # [2020年11月9日 2021年2月22日 2021年8月11日]
 # https://www.lintcode.com/problem/number-of-islands/; https://leetcode-cn.com/problems/number-of-islands/
 # https://www.jiuzhang.com/solutions/number-of-islands/#tag-lang-python
-# version: Union find
 class UnionFind:
     def __init__(self, n):
         self.father = {}
@@ -201,7 +202,6 @@ class Solution:
             return 0
 
         n, m = len(grid), len(grid[0])
-
         uf = UnionFind(n*m)
 
         for i in range(n):
@@ -216,77 +216,6 @@ class Solution:
                     uf.connect( i*m + j, i*m + (j+1) )
         
         return uf.ans                
-# version: BFS
-from collections import deque
-DIRECTIONS = [(1, 0), (0, -1), (-1, 0), (0, 1)]
-class Solution:
-    def numIslands(self, grid):
-        if not grid or not grid[0]: return 0
-
-        isLands, visited = 0, set()
-        for i in range(len(grid)):
-            for j in range(len(grid[0])):
-                if not grid[i][j] or (i,j) in visited:
-                    continue
-                self.bfs(grid, i, j, visited)
-                isLands += 1
-        return isLands
-    
-    def bfs(self, grid, x, y, visited):
-        queue = deque([(x, y)])
-        visited.add((x, y))
-
-        while queue:
-            x, y = queue.popleft()
-            for dx, dy in DIRECTIONS:
-                nxt_x, nxt_y = x + dx, y + dy
-                if not self.isNotValid(grid, nxt_x, nxt_y, visited):
-                    continue
-                queue.append( (nxt_x, nxt_y) )
-                visited.add( (nxt_x, nxt_y) )
-                
-    def isNotValid(self, grid, x, y, visited):
-        n, m = len(grid), len(grid[0])
-        if not ( 0 <= x < n and 0<= y < m ) or (x,y) in visited:
-            return False
-        return grid[x][y] # ! Leetcode & Lintcode Diff `== '1'`
-# version DFS,  深度可能会比较深，容易导致 StackOverflow
-class Solution:
-    def numIslands(self, grid):
-        if not grid or not grid[0]:
-            return 0
-        
-        self.n, self.m = len(grid), len(grid[0])
-        self.visited = [[False] * self.m for _ in range(self.n)]
-        
-        islands = 0
-        for row in range(self.n):
-            for col in range(self.m):
-                if self.is_island(grid, row, col):
-                    self.visited[row][col] = True
-                    self.dfs(grid, row, col)
-                    islands += 1
-                    
-        return islands
-        
-    def is_island(self, grid, x, y):
-        if not (0 <= x < self.n and 0 <= y < self.m):
-            return False
-        if not grid[x][y]:
-            return False
-        return not self.visited[x][y]
-
-    def dfs(self, grid, x, y):
-        dx = [1, 0, -1, 0]
-        dy = [0, 1, 0, -1]
-        for direction in range(4):
-            newx = x + dx[direction]
-            newy = y + dy[direction]
-            
-            if self.is_island(grid, newx, newy):
-                self.visited[newx][newy] = True
-                self.dfs(grid, newx, newy)
-                # no backtracking
 
 
 # 434. 岛屿的个数II 
@@ -320,7 +249,6 @@ class UnionFind:
 class Solution:
     def numIslands2(self, n, m, operators):
         res, island = [], set()
-        
         uf = UnionFind(n*m)
 
         for op in operators:
@@ -397,6 +325,7 @@ class UnionFind:
     def connect(self, a, b):
         roota, rootb = self.find(a), self.find(b)
         if roota != rootb:
+            # cautions
             self.father[min(roota, rootb)] = max(roota, rootb)
 
     def query(self, a, b):
@@ -426,6 +355,7 @@ class Solution:
                 if board[i][j] == 'X':
                     continue
 
+                # case: O
                 if i in (0, m-1) or j in (0, n-1):
                     uf.connect(i*n+j, dummy)
                 
@@ -443,11 +373,12 @@ class Solution:
 # version: 高频题班
 class Solution:
     def surroundedRegions(self, board):
-        if not any(board): return
+        if not any(board): 
+            return
 
         n, m = len(board), len(board[0])
         # obtian the boundary of board
-        queue = [ij for k in range(max(n,m)) for ij in ((0, k), (n-1, k), (k, 0), (k, m-1))]
+        queue = [ ij for k in range(max(n,m)) for ij in ((0, k), (n-1, k), (k, 0), (k, m-1))]
         
         while queue:
             i, j = queue.pop()
@@ -461,15 +392,12 @@ class Solution:
 
 # 1070/721. 账户合并 ⭐⭐
 # [2020年10月21日 2020年11月9日 2021年2月23日 2021年8月11日]
-# https://www.lintcode.com/problem/accounts-merge/description https://leetcode-cn.com/problems/accounts-merge/
+# https://www.lintcode.com/problem/accounts-merge/description
 # https://www.jiuzhang.com/solution/accounts-merge/#tag-lang-python
 # DESC: 1) emails_to_ids; 2) ids union; 3) get_id_to_mail(key: find root user id)
 class UnionFind:
     def __init__(self, n):
         self.father = {i:i for i in range(n)}
-
-    def __str__(self):
-        return str(self.father)
 
     def find(self, x):
         if self.father[x] == x:
@@ -508,6 +436,7 @@ class Solution:
 
     def get_id_to_email_set(self, accounts, uf):
         id_to_email_set = {}
+
         for user_id, record in enumerate( accounts ):
             root_user = uf.find(user_id) # ! key point
             id_to_email_set[root_user] = id_to_email_set.get(root_user, set())
@@ -528,82 +457,81 @@ class Solution:
 
 
 # 629. 最小生成树 ⭐⭐⭐
-# [2021年2月23日 2021年8月11日]
+# [2021年2月23日 2021年8月11日  2021年8月23日]
 # https://www.lintcode.com/problem/minimum-spanning-tree/description
+# functools.cmp_to_key: 两个参数并比较它们，结果为小于则返回一个负数，相等则返回零，大于则返回一个正数。key function则是一个接受一个参数，并返回另一个用以排序的值的可调用对象
+import functools
 class Connection:
     def __init__(self, city1, city2, cost):
         self.city1, self.city2, self.cost = city1, city2, cost
-
 def cmp(a, b):
     if a.cost != b.cost:
-        # return `num` instead `boolean`
         return a.cost - b.cost
     
     if a.city1 != b.city1:
-        if a.city1 < b.city1:
-            return -1
+        if a.city1 > b.city1:
+            return 1
+        
+        return -1 
+    
+    if a.city2 > b.city2:
         return 1
     
-    if a.city2 < b.city2:
-        return -1
-    return 1
+    return -1
 
 class UnionFind:
-    def __init__(self, n):
+    def __init__(self, n) -> None:
         self.father = {i:i for i in range(n)}
     
     def union(self, a, b):
         root_a, root_b = self.find(a), self.find(b)
         if root_a != root_b:
             self.father[root_b] = root_a
+
             return True
-            
-        return False
         
+        return False
+    
     def find(self, x):
-        if x == self.father[x]:
+        if self.father[x] == x:
             return x
         
-        self.father[x] = self.find( self.father[x] )
-        
+        self.father[x] = self.find(self.father[x])
+
         return self.father[x]
 
 class Solution:
     def lowestCost(self, connections):
-        import functools
-        connections.sort(key = functools.cmp_to_key(cmp))
-        # self.printConnections( connections )
-        
-        city_map, city_size = self.create_city_map(connections)
-        uf = UnionFind(len(city_map))
+        connections.sort(key=functools.cmp_to_key(cmp))
 
+        graph, _size = self.create_city_graph(connections)
+        uf = UnionFind(_size)
         res = []
+
         for i in connections:
-            # 若已经连接了，此处返回False
-            if uf.union( city_map[i.city1], city_map[i.city2] ):
+            # if it was connected, the `union` function here would return Fasle
+            if uf.union(graph[i.city1], graph[i.city2]):
                 res.append(i)
         
         root = uf.find(0)
-        for i in range(city_size):
-            if uf.find(i) == root: 
-                continue
-            return []
-        
+        for i in range(_size):
+            if uf.find(i) != root:
+                return []
+
         return res
-
-    def create_city_map(self, connections):
-        city_map, city_index = {}, 0
-
+    
+    
+    def create_city_graph(self, connections):
+        graph, _size = {}, 0
         for i in connections:
-            if i.city1 not in city_map:
-                city_map[i.city1] = city_index
-                city_index += 1
-
-            if i.city2 not in city_map:
-                city_map[i.city2] = city_index
-                city_index += 1
+            for p in  [i.city1, i.city2]:
+                if p in graph:
+                    continue
+                graph[p] = _size
+                _size += 1
         
-        return city_map, city_index
+        return graph, _size
+            
 
     def printConnections(self, lst):
         for c in lst:
@@ -694,12 +622,13 @@ class WordDictionary:
 
 # 132/212. 单词搜索 II 
 # [2021年2月23日 2021年8月11日]
-# https://www.lintcode.com/problem/word-search-ii/description https://leetcode-cn.com/problems/word-search-ii/
+# https://www.lintcode.com/problem/word-search-ii/description
 # version hashmap
 DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
 class Solution:
     def findWords(self, board, words):
-        if not board or not board[0]: return []
+        if not board or not board[0]: 
+            return []
 
         self.word_set, self.prefix_set = set(words), set()
         for word in words:
@@ -714,22 +643,24 @@ class Solution:
 
         return list(result)
 
+
     def dfs(self, board, x, y, word, visited, result):
-        if word not in self.prefix_set: return
+        if word not in self.prefix_set: 
+            return
 
         if word in self.word_set:
             result.add(word)
 
         for dx, dy in DIRECTIONS:
             nxt_x, nxt_y = x+dx, y+dy
-            if not self.isValid(board, nxt_x, nxt_y) or (nxt_x, nxt_y) in visited:
+            if not self.isValid(nxt_x, nxt_y) or (nxt_x, nxt_y) in visited:
                 continue
             
             visited.add((nxt_x, nxt_y))
-            self.dfs(board, nxt_x, nxt_y, word+board[nxt_x][nxt_y], visited, result)
+            self.dfs(board, nxt_x, nxt_y, word + board[nxt_x][nxt_y], visited, result)
             visited.remove((nxt_x, nxt_y))
     
-    def isValid(self, board, x, y):
+    def isValid(self, x, y):
         return 0 <= x < self.m and 0 <= y < self.n
         
 # version 用Trie 版本 # find the difference
@@ -811,7 +742,7 @@ class Solution:
 
 
 # 634/425. 单词矩阵 / 单词方块 ⭐⭐⭐
-# https://www.lintcode.com/problem/word-squares/description https://leetcode-cn.com/problems/word-squares/
+# https://www.lintcode.com/problem/word-squares/description
 # https://www.jiuzhang.com/solution/word-squares/#tag-lang-python
 # Version 1
 class TrieNode:

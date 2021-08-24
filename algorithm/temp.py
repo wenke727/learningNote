@@ -1,18 +1,36 @@
 class Solution:
-    def backPackIV(self, nums, target):
-        if not nums: 
-            return 0
+    """
+    @param candidates: A list of integers
+    @param target: An integer
+    @return: A list of lists of integers
+    """
+    def combinationSum(self, candidates, target):
+        if candidates is None:
+            return []
         
-        n = len(nums)
-        dp = [[0]*(target+1) for _ in (n+1)]
-        dp[0][0] = 1
+        candidates.sort()
+        result = []
 
-        for i in range(1, n+1):
-            dp[i][0] = 1
-            for j in range(1, target+1):
-                dp[i][j] = dp[i-1][j]
-                if j >= nums[i-1]:
-                    dp[i][j] += dp[i][j-nums[i-1]]
+        self.dfs(candidates, target, 0, [], result)
+    
+        return result
+
+
+    def dfs(self, nums, target, index, combination, res):
+        # if index >= len(nums):
+            # return
         
-        return dp[n][target]
-        
+        if target == 0:
+            res.append(combination[:])
+            return
+
+        for i in range(index, len(nums)):
+            if nums[i] > target:
+                continue
+            
+            if i > 0 and nums[i] == nums[i-1]:
+                continue
+
+            combination.append(nums[i])
+            self.dfs(nums, target-nums[i], index+1, combination, res)
+            combination.pop()

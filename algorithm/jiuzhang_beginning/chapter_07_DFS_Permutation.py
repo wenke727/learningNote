@@ -20,16 +20,13 @@ class Solution:
             if visited[i]:
                 continue
 
-            # 去重：不同位置的同样的字符，必须按照顺序用。
-            # 不能跳过一个a选下一个a. a' a" b; => a' a" b => √; => a" a' b => x
+            # ! 不能跳过一个a选下一个a. a' a" b; => a' a" b => √; => a" a' b => x
             if i > 0 and chars[i] == chars[i-1] and not visited[i-1]:
                 continue
 
             visited[i] = True
             permutation.append(chars[i])
-
             self.dfs(chars, visited, permutation, result)
-           
             permutation.pop()
             visited[i] = False
 

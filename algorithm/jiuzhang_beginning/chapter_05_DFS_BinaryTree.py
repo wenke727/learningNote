@@ -124,7 +124,8 @@ class Solution:
 # version Traversal  
 class Solution:
     def isValidBST(self, root):
-        if root is None: return True
+        if root is None: 
+            return True
 
         stack = []
         while root:
@@ -176,16 +177,10 @@ class Solution:
 # https://www.jiuzhang.com/solution/insert-node-in-a-binary-search-tree/#tag-lang-python
 # version: DFS
 class Solution:
-    """
-    @param: root: The root of the binary search tree.
-    @param: node: insert this node into the binary search tree
-    @return: The root of the new binary search tree.
-    """
     def insertNode(self, root, node):
         return self.__helper(root, node)
     
     def __helper(self, root, node):     
-        # helper函数定义成私有属性   
         if root is None:
             return node
 
@@ -195,105 +190,43 @@ class Solution:
             root.right = self.__helper(root.right, node)
         
         return root
-# version
-class Solution:
-    """
-    @param root: The root of the binary search tree.
-    @param node: insert this node into the binary search tree.
-    @return: The root of the new binary search tree.
-    """
-    def insertNode(self, root, node):
-        if root is None:
-            return node
-            
-        curt = root
-        while curt != node:
-            if node.val < curt.val:
-                if curt.left is None:
-                    curt.left = node
-                curt = curt.left
-            else:
-                if curt.right is None:
-                    curt.right = node
-                curt = curt.right
-        return root
 
 
 # 87. 删除二叉查找树的节点
-# [2021年8月6日]
+# [2021年8月6日 2021年8月24日]
 # https://www.lintcode.com/problem/remove-node-in-binary-search-tree/description
 # https://www.jiuzhang.com/solution/remove-node-in-binary-search-tree/#tag-lang-python
-# version: inorder -> build
 class Solution:
-    """
-    @param root: The root of the binary search tree.
-    @param value: Remove the node with given value.
-    @return: The root of the binary search tree after removal.
-    """    
-    ans = []
-    def inorder(self, root, value):
-        if root is None:
-            return
-
-        self.inorder(root.left, value)
-        if root.val != value:
-            self.ans.append(root.val)
-        self.inorder(root.right, value)
-    
-    def build(self, l, r):
-        if l == r:
-            node = TreeNode(self.ans[l])
-            return node
-
-        if l > r:
-            return None
-
-        mid = (l+r) / 2
-        node = TreeNode(self.ans[mid])
-        node.left = self.build(l, mid-1)
-        node.right = self.build(mid+1, r)
-        return node
-    def removeNode(self, root, value):
-        # write your code here
-        self.inorder(root, value)
-        return self.build(0, len(self.ans)-1)
-# version: Divide & Conquer Solution
-class Solution:
-    """
-    @param: root: The root of the binary search tree.
-    @param: value: Remove the node with given value.
-    @return: The root of the binary search tree after removal.
-    """
     def removeNode(self, root, value):
         if root is None:
             return None
-
+        
         # check if node to delete is in left/right subtree
         if value < root.val:
-            # not `self.removeNode(root.left, value)`
             root.left = self.removeNode(root.left, value)
         elif value > root.val:
             root.right = self.removeNode(root.right, value)
         else:
-            # if root is has 2 childs/only one child/leaf node
             if root.left and root.right:
-                max = self.find_left_Max(root)
-                root.val = max.val
-                root.left = self.removeNode(root.left, max.val)
+                _max =self.find_left_max(root)
+                root.val = _max.val
+
+                # self.removeNode(root.left, _max.val)
+                root.left = self.removeNode(root.left, _max.val)
             elif root.left:
                 root = root.left
             elif root.right:
                 root = root.right
             else:
                 root = None
-
+        
         return root
 
-    # find max node in left subtree of root
-    def find_left_Max(self, root):
+    def find_left_max(self, root):
         node = root.left
         while node.right:
             node = node.right
+        
         return node
 
 
@@ -307,11 +240,15 @@ Tree-based Depth First Search
 
 """ 第一类 考察形态"""
 # 596. 最小子树
-# [2020年11月2日 2021年8月6日 2021年8月6日]
+# [2020年11月2日 2021年8月6日 2021年8月6日  2021年8月24日]
 # https://www.lintcode.com/problem/minimum-subtree/description
 # https://www.jiuzhang.com/solutions/minimum-subtree/#tag-lang-python
+import sys
 class Solution:
     def findSubtree(self, root):
+        if not root:
+            return None
+            
         _, node, _ = self.dfs(root)
 
         return node
@@ -320,18 +257,19 @@ class Solution:
         if root is None:
             return sys.maxsize, None, 0
         
-        min_left,  subtree_left,  sum_left  = self.dfs(root.left)
+        min_left, subtree_left, sum_left = self.dfs(root.left)
         min_right, subtree_right, sum_right = self.dfs(root.right)
 
-        sum_root = sum_left + sum_right + root.val
+        _sum = sum_left + sum_right + root.val
+        _min = min(min_left, min_right, _sum)
 
-        if min_left == min(min_left, min_right, sum_root):
-            return min_left, subtree_left, sum_root
 
-        if min_right == min(min_left, min_right, sum_root):
-            return min_right, subtree_right, sum_root
+        if min_left == _min:
+            return min_left, subtree_left, _sum
+        if min_right == _min:
+            return min_right, subtree_right, _sum
 
-        return sum_root, root, sum_root
+        return _sum, root, _sum 
 
 
 # 480. 二叉树的所有路径
@@ -437,7 +375,7 @@ class Solution:
         return None
 
 
-# 578. 最近公共祖先 III
+# 578. 最近公共祖先 III ⭐⭐
 # [2021年8月6日]
 # https://www.lintcode.com/problem/lowest-common-ancestor-iii/description
 # https://www.jiuzhang.com/solution/lowest-common-ancestor-iii/#tag-lang-python
@@ -512,7 +450,7 @@ class Solution:
 
 
 # 246. 二叉树的路径和 II ⭐⭐
-# [2020.11.30, 2020.12.03 2021年8月6日]
+# [2020.11.30, 2020.12.03 2021年8月6日 2021年8月23日]
 # https://www.lintcode.com/problem/binary-tree-path-sum-ii/description
 # https://www.jiuzhang.com/solution/binary-tree-path-sum-ii/#tag-lang-python
 class Solution:
@@ -527,6 +465,7 @@ class Solution:
             return result
     
         self.dfs(root, [], result, 0, target)
+    
         return result
     
     def dfs(self, root, path, result, level, target):
@@ -642,7 +581,6 @@ class Solution:
             root.right = root.left
             root.left  = None
         
-        # ! return 有先后顺序 先right后left，因left在上一步已处理, 
         # 更多的是由先后顺序决定的
         if right is not None:
             return right
@@ -669,8 +607,8 @@ class Solution:
 
 
 """第三类 考察形态"""
-# 902. BST中第K小的元素 ✨
-# [2020年11月3日 2020年01月20日 2021年8月7日]
+# 902. BST中第K小的元素 ⭐
+# [2020年11月3日 2020年01月20日 2021年8月7日 2021年8月23日]
 # https://www.lintcode.com/problem/kth-smallest-element-in-a-bst/description
 # https://www.jiuzhang.com/solution/kth-smallest-element-in-a-bst/#tag-lang-python
 class Solution:
@@ -721,7 +659,7 @@ class BSTIterator:
         return nxt_node
 
 
-# 448. 二叉查找树的中序后继 ✨
+# 448. 二叉查找树的中序后继 
 # [ 2020年01月20日 2021年8月7日]
 # https://www.lintcode.com/problem/inorder-successor-in-bst/description
 # https://www.jiuzhang.com/solution/inorder-successor-in-bst/#tag-lang-python
@@ -797,6 +735,7 @@ class Solution:
                 while node:
                     stack.append(node)
                     node = node.left
+
             if stack:
                 inorder.append(stack[-1].val)
 
@@ -923,8 +862,10 @@ class Solution:
     def is_left_closer(self, nums, left, right, target):
         if left < 0:
             return False
+
         if right >= len(nums):
             return True
+        
         return target - nums[left] < nums[right] - target
 
 
@@ -940,9 +881,10 @@ class Solution:
     @return: return: Return all keys that k1<=key<=k2 in ascending order
     """
     def searchRange(self, root, k1, k2):
-        if root is None: return []
-        results = []
+        if root is None: 
+            return []
 
+        results = []
         dummy = TreeNode(0)
         dummy.right = root
         stack = [dummy]

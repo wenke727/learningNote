@@ -1,4 +1,6 @@
-# [Celery]()
+# [Celery](https://www.celerycn.io/)
+
+- Tutorial
 
 ## 基本操作
 
@@ -21,13 +23,19 @@ config set requirepass ''
 # 切换数据库
 select n
 
+# celery全杀(服务器所有的celery)
+ps auxww | grep 'celery' | awk '{print $2}' | xargs kill -9
+
 ```
 
 ## 教程
 
+- [任务队列神器：Celery 入门到进阶指南](https://blog.csdn.net/chinesehuazhou2/article/details/115153198)
 - [使用celery构建分布式爬虫抓取空气质量指数](https://www.jianshu.com/p/f225fcc3c97d)
 - [Celery手动配置路由](https://www.jianshu.com/p/11b420aea529)
 - [Celery多队列配置][https://blog.csdn.net/sinat_38682860/article/details/104030062]
+- [使用celery构建分布式爬虫抓取空气质量指数](https://www.jianshu.com/p/f225fcc3c97d)
+- [启动关闭 命令](https://blog.csdn.net/qq_42327755/article/details/100670153)
 
 ### aqicn.py
 

@@ -112,7 +112,7 @@ class Solution:
         return start if SVNRepo.isBadVersion(start) else end
 
 
-# 460/658. 在排序数组中找最接近的K个数
+# 460/658. 在排序数组中找最接近的K个数 ⭐
 # [2020年10月22日 2021年8月2日]
 # https://www.lintcode.com/problem/find-k-closest-elements/description
 # version Lintcode
@@ -178,8 +178,11 @@ class Solution:
             else:
                 end = mid
         
-        if reader.get(start) == target: return start
-        if reader.get(end) == target: return end
+        if reader.get(start) == target: 
+            return start
+        if reader.get(end) == target: 
+            return end
+        
         return -1 
 
 
@@ -193,7 +196,7 @@ class Solution:
 
         while start + 1 < end:
             mid = (start + end) // 2
-            # ! compare with the `end`
+            # ! compare with the `end` ???
             if nums[mid] > nums[end]:
                 start = mid
             else:
@@ -281,50 +284,7 @@ class Solution:
         return count
 
 
-# 462. 目标出现总和
-# [2020年10月22日 2021年8月3日]
-# https://www.lintcode.com/problem/total-occurrence-of-target/description
-class Solution:
-    def totalOccurrence(self, A, target):
-        n = len(A) 
-        if not n: 
-            return 0
-        last = self.findLastTargetNum(A, target, n)
-        first = self.findFirstTargetNum(A, target, n)
-        
-        if first == -1 and last == -1:
-            return  0
-        else:
-            return last - first + 1
-
-    def findFirstTargetNum(self, nums, target, n):
-        start, end = 0, n -1
-
-        while start + 1 < end:
-            mid = (start+end) //2
-            if nums[mid] < target:
-                start = mid
-            else:
-                end = mid
-        if nums[start] == target: return start
-        if nums[end] == target: return end
-        return -1 
-
-    def findLastTargetNum(self, nums, target, n):
-        start, end = 0, n -1
-
-        while start + 1 < end:
-            mid = (start+end) //2
-            if nums[mid] > target:
-                end = mid
-            else:
-                start = mid
-        if nums[end] == target: return end
-        if nums[start] == target: return start
-        return -1 
-
-
-# 600/302. 包裹黑色像素点的最小矩形 # TODO
+# 600/302. 包裹黑色像素点的最小矩形 ⭐
 # [2020年10月22日 2021年8月3日]
 # https://www.lintcode.com/problem/smallest-rectangle-enclosing-black-pixels/description
 class Solution:
@@ -433,7 +393,7 @@ class Solution:
 
         start, end = 0, len(nums)-1
         while start+1 < end:
-            # ! DESC Similiar as previous problem, just keep going if duplicate
+            # DESC Similiar as previous problem, just keep going if duplicate
             while start + 1 < end and nums[start] == nums[start+1]:
                 start += 1
             while start + 1 < end and nums[end] == nums[end-1]:

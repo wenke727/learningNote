@@ -103,7 +103,7 @@ import os, sys
 
 """Heap"""
 # 363. 接雨水 ⭐⭐⭐
-# [2021年3月9日 2021年8月12日]
+# [2021年3月9日 2021年8月12日 2021年8月23日]
 # https://www.lintcode.com/problem/trapping-rain-water/description
 # https://www.jiuzhang.com/solution/trapping-rain-water/#tag-lang-python
 # version： _index_stack, 单调栈
@@ -193,12 +193,11 @@ class Solution:
 
 
 # 364/407. 接雨水 II
-# [2020年11月10日 2021年2月24日 2021年8月11日]
+# [2020年11月10日 2021年2月24日 2021年8月11日 2021年8月23日]
 # https://www.lintcode.com/problem/trapping-rain-water-ii/description
 # https://www.jiuzhang.com/solution/trapping-rain-water-ii/#tag-lang-python
 from heapq import heappop, heappush
 DIRECTIONS = [(0, -1), (0, 1), (-1, 0), (1, 0)]
-
 class Solution:
     def trapRainWater(self, heights):
         if not heights or not heights[0]:
@@ -224,7 +223,7 @@ class Solution:
         for dx, dy in DIRECTIONS:
             nxt_x, nxt_y = x+dx, y+dy
 
-            if not ( 0<=nxt_x<self.n and 0<=nxt_y<self.m ):
+            if not (0 <= nxt_x < self.n and 0 <= nxt_y < self.m):
                 continue
             if (nxt_x, nxt_y) in visited:
                 continue
@@ -253,8 +252,9 @@ class Solution:
 
 
 # 81. 数据流中位数
-# [2020年11月11日 2021年2月24日 2021年8月11日]
+# [2020年11月11日 2021年2月24日 2021年8月11日 2021年8月23日]
 # https://www.lintcode.com/problem/find-median-from-data-stream/description, https://leetcode-cn.com/problems/find-median-from-data-stream/
+# idea: 从案例入手[1,2,3,4,5]
 from heapq import heappop, heappush
 class Solution:
     """
@@ -262,16 +262,15 @@ class Solution:
     @return: the median of numbers
     """
     def __init__(self):
-        # 小顶堆放大于中位数的数
-        # 大顶堆放小于中位数的数
+        # 小顶堆放大于中位数的数; 大顶堆放小于中位数的数
         # 最开始中位数是数据流中的第一个数
         self.max_heap = []
         self.min_heap = []
         self.is_first_add = True
 
+
     def add(self, num):
         if self.is_first_add:
-            # 第一个进入数据流的数字是第一个中位数
             self.median = num
             self.is_first_add = False
             return
@@ -288,12 +287,13 @@ class Solution:
             heappush(self.max_heap, self.median)
             self.median = -heappop(self.min_heap)
 
+
     def getMedian(self):
         return self.median
 
 
 # 360. 滑动窗口的中位数 ⭐⭐⭐
-# [2021年3月19日 2021年8月12日]
+# [2021年3月19日 2021年8月12日 2021年8月23日]
 # https://www.lintcode.com/problem/sliding-window-median/description 
 # https://www.jiuzhang.com/solutions/sliding-window-median/#tag-lang-python
 # Version HashHeap
@@ -422,92 +422,10 @@ class Solution:
     def median(self):
         return self.left.top()[0]
 
-#version Heap
-from heapq import *
-class Heap:
-    # q1存储了当前所有元素（包括未删除元素）
-    # q2存储了q1中已删除的元素
-    def __init__(self):
-        self.__q1 = []
-        self.__q2 = []
-
-    # push 操作向 q1 中 push 一个新的元素
-    def push(self, x):
-        heappush(self.__q1, x)
-
-    # q2 中 push 一个元素表示在 q1 中它已经被删除了
-    def remove(self, x):
-        heappush(self.__q2, x)
-
-    # 这里就要用到 q2 里面的元素了，如果堆顶的元素已经被 remove 过，那么它此时应该在 q2 中的堆顶
-    # 此时我们把两个堆一起 pop 就好了，直到堆顶元素不同或者 q2 没元素了
-    def pop(self):
-        while len(self.__q2) != 0 and self.__q1[0] == self.__q2[0]:
-            heappop(self.__q1)
-            heappop(self.__q2)
-        if len(self.__q1) != 0:
-            heappop(self.__q1)
-
-    # 这里就是先进行和 pop 中类似的操作，删除已经 remove 的元素，然后取出堆顶
-    def top(self):
-        while len(self.__q2) != 0 and self.__q1[0] == self.__q2[0]:
-            heappop(self.__q1)
-            heappop(self.__q2)
-        if len(self.__q1) != 0:
-            return self.__q1[0]
-
-    # 这个就是返回堆大小的，可以知道堆当前真实大小就是 q1 大小减去 q2 大小
-    def size(self):
-        return len(self.__q1) - len(self.__q2)
-
-    def sol(self):
-        print(self.__q1)
-        # print(self.q2)
-
-class Solution:
-    def medianSlidingWindow(self, nums, k):
-        # write your code here
-        qmx = Heap()
-        qmn = Heap()
-        ans = []
-        for i in range(len(nums)):
-            x = nums[i]
-            # 堆都为空，直接压入大根堆
-            if i == 0:
-                qmx.push(-x)
-            else:
-                # 根据当前值和大根堆堆顶的值判断，该压入哪个堆里
-                if x <= -qmx.top():
-                    qmx.push(-x)
-                else:
-                    qmn.push(x)
-            # 控制滑动窗口，删除离开滑动窗口的元素
-            if i >= k:
-                # 根据当前要删除的值和大根堆堆顶的值判断，该从哪个堆里删除
-                val = nums[i - k]
-                if val <= -qmx.top():
-                    qmx.remove(-val)
-                else:
-                    qmn.remove(val)
-            if i >= k - 1:
-                # 大根堆的堆顶是中位数所以要保证，大根堆的元素数量是k / 2，向上取整
-                mxnum = (k + 1) // 2
-                while qmx.size() != mxnum:
-                    if qmx.size() > mxnum:
-                        x = -qmx.top()
-                        qmx.pop()
-                        qmn.push(x)
-                    else:
-                        x = -qmn.top()
-                        qmn.pop()
-                        qmx.push(x)
-                ans.append(-qmx.top())
-        return ans
-
 
 """"Stack"""
 # 12/155. 带最小值操作的栈
-# [2020年11月11日 2021年3月3日 2021年8月12日]
+# [2020年11月11日 2021年3月3日 2021年8月12日 2021年8月23日]
 # https://www.lintcode.com/problem/min-stack/description
 # DESC 使用一个 minStack 作为辅助的栈，用来更新目前的最小值序列。 如果发现了一个更小的值就往 minStack 里也 push 
 # DESC 注意如果和最小值相等的情况，也需要往 minStack 里 push, 如果 push 的数比当前的最小值要大，就不需要往 MinStack 里push 了。
@@ -534,32 +452,10 @@ class MinStack:
  
     def min(self):
         return self.min_stack[-1]
-# version Leetcode
-class MinStack:
-    def __init__(self):
-        self.stack = []
-        self.min_stack = []
- 
-    def push(self, number):
-        self.stack.append(number)
-        if not self.min_stack or self.min_stack[-1] >= number:
-            self.min_stack.append(number)
- 
-    def pop(self):
-        number = self.stack.pop()
-        if number == self.min_stack[-1]: 
-            self.min_stack.pop()
-        return number
- 
-    def getMin(self):
-        return self.min_stack[-1]
-
-    def top(self):
-        return self.stack[-1]
 
 
-# 40/232. 用栈实现队列 
-# [2020年11月11日 2021年3月5日 2021年8月12日]
+# 40/232. 用栈实现队列
+# [2020年11月11日 2021年3月5日 2021年8月12日 2021年8月23日]
 # https://www.lintcode.com/problem/implement-queue-by-two-stacks/description
 # https://www.jiuzhang.com/solution/implement-queue-by-two-stacks/#tag-lang-python
 class MyQueue:
@@ -585,7 +481,7 @@ class MyQueue:
 
 
 # 494. 双队列实现栈
-# [2021年3月5日 2021年8月12日]
+# [2021年3月5日 2021年8月12日 2021年8月23日]
 # https://www.lintcode.com/problem/494/
 from collections import deque
 class Stack:
@@ -603,18 +499,21 @@ class Stack:
             
         val = self.queue1.popleft()
         self.queue1, self.queue2 = self.queue2, self.queue1
+        
         return val
 
     def top(self):
         val = self.pop()
         self.push(val)
+        
         return val
 
     def isEmpty(self):
+        
         return not self.queue1
 
 
-# 575/394. 字符串解码 
+# 575/394. 字符串解码
 # [2020年11月11日 2021年3月5日 2021年8月12日]
 # https://www.lintcode.com/problem/decode-string/description
 # https://www.jiuzhang.com/solutions/expression-expand/#tag-lang-python
@@ -640,32 +539,6 @@ class Solution:
             stack.append(''.join(reversed(strs)) * repeats)
         
         return ''.join(stack)
-# version: dfs
-class Solution:
-    def expressionExpand(self, s):
-        if not s:
-            return ''
-        self.end = 0
-
-        return self.dfs(s, 0, '')
-        
-    # Expand from idx to rest. Result expanded before idx is saved in result
-    def dfs(self, s, idx, result):
-        while idx < len(s):
-            if s[idx] == ']':
-                self.end = idx
-                return result
-            
-            elif s[idx].isdigit():
-                num = ''
-                while s[idx] != '[':
-                    num += s[idx]
-                    idx += 1
-                result += int(num) * self.dfs(s, idx+1, '')
-            else:
-                result += s[idx]
-            idx = 1 + max(idx, self.end)
-        return result 
 
 
 """
@@ -675,15 +548,37 @@ class Solution:
     第一个比它自身小/大的元素
     用单调栈来维护
 """
-# 122/84. 直方图最大矩形覆盖 
-# [2021年3月5日 2021年3月9日 2021年8月13日]
+# 122/84. 直方图最大矩形覆盖 ⭐⭐⭐
+# [2021年3月5日 2021年3月9日 2021年8月13日 2021年8月20日]
 # https://www.lintcode.com/problem/largest-rectangle-in-histogram/description
 # https://www.jiuzhang.com/solutions/largest-rectangle-in-histogram#tag-lang-python
-# DESC 用九章算法强化班中讲过的单调栈(stack)。维护一个单调递增栈，逐个将元素 push 到栈里。
-# DESC push 进去之前先把 >= 自己的元素 pop 出来。 每次从栈中 pop 出一个数的时候，就找到了
-# DESC 往左数比它小的第一个数（当前栈顶）和往右数比它小的第一个数（即将入栈的数）， 从而可
-# DESC 以计算出这两个数中间的部分宽度 * 被pop出的数，就是以这个被pop出来的数为最低的那个直
-# DESC 方向两边展开的最大矩阵面积。 因为要计算两个数中间的宽度，因此放在 stack 里的是每个数的下标。
+# DESC 用九章算法强化班中讲过的单调栈(stack)。维护一个单调递增栈，逐个将元素 push 到栈里。push 进去之前先把 >= 自己的元素 pop 出来。 每次从栈中 pop 出一个数的时候，就找到了往左数比它小的第一个数（当前栈顶）和往右数比它小的第一个数（即将入栈的数）， 从而可以计算出这两个数中间的部分宽度 * 被pop出的数，就是以这个被pop出来的数为最低的那个直方向两边展开的最大矩阵面积。 因为要计算两个数中间的宽度，因此放在 stack 里的是每个数的下标
+"""
+ [0, 2, 1, 5, 6, 2, 3, 0]
+
+ [0]  index: [0]
+
+ [0, 2]  index: [0, 1]
+    2, 1, 2
+
+ [0, 1]  index: [0, 2]
+
+ [0, 1, 5]  index: [0, 2, 3]
+
+ [0, 1, 5, 6]  index: [0, 2, 3, 4]
+    6, 2, 6
+    5, 2, 10
+
+ [0, 1, 2]  index: [0, 2, 5]
+
+ [0, 1, 2, 3]  index: [0, 2, 5, 6]
+    3, 0, 3
+    5, 0, 8
+    2, 0, 6
+
+ [0, 0]  index: [0, 7]
+
+"""
 # version classical
 class Solution:
     def largestRectangleArea(self, heights):
@@ -691,6 +586,7 @@ class Solution:
         stack, ans = [], 0
 
         for hi, val in enumerate(heights):
+            # if -> while, 单调递增还是单调递减
             while stack and val < heights[stack[-1]]:
                 h = heights[stack.pop()]
 
@@ -784,7 +680,7 @@ class Solution:
         return ans
 
 
-# 126/654. 最大树 # TODO ⭐⭐⭐ # TODO
+# 126/654. 最大树 # TODO ⭐⭐⭐
 # [2021年8月14日]
 # https://www.lintcode.com/problem/max-tree/description
 # https://www.jiuzhang.com/solution/max-tree/#tag-lang-python

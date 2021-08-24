@@ -1,6 +1,6 @@
 # Algorithm
 
-Tips：
+Tips
 
 - 学习算法的框架思维
 - 穷尽算法：回溯算法，动态规划
@@ -34,7 +34,8 @@ Tips：
 操作： O(1) Push / O(1) Pop / O(1)Top
 
 - [带最小值操作的栈](https://www.lintcode.com/problem/min-stack/description)
-- [字符串解码](https://www.lintcode.com/problem/decode-string/description)
+- [用栈实现队列](https://www.lintcode.com/problem/implement-queue-by-two-stacks/description)
+- [字符串解码](https://www.lintcode.com/problem/decode-string/description): 利用栈结构暂存信息
 
 ### 1.3 单调栈
 
@@ -67,9 +68,11 @@ class Solution:
 例题
 
 - [下一个更大的数 II](https://www.lintcode.com/problem/1201/): % 运算模拟出环形数组
-- ⭐⭐[直方图最大矩形覆盖](https://www.lintcode.com/problem/largest-rectangle-in-histogram/description)
 - [栈排序](https://www.lintcode.com/problem/229/)
-- [max tree](https://www.lintcode.com/problem/126/)
+- TODO ⭐⭐⭐[直方图最大矩形覆盖](https://www.lintcode.com/problem/largest-rectangle-in-histogram/description)
+  idea: find the first smaller numer in the left, and caculate the area between them. And the answer is the maximun of these area.
+- ⭐⭐⭐[最大数](https://www.lintcode.com/problem/126/)
+  理解最大数的构建过程
 
 ### 1.4 单调队列
 
@@ -305,11 +308,17 @@ class UnionFind:
 
 - [连接图](https://www.lintcode.com/problem/connecting-graph/description); [连接图 II](https://www.lintcode.com/problem/connecting-graph-ii/description); [连接图 III](https://www.lintcode.com/problem/connecting-graph-iii/description)
 - [岛屿的个数](https://www.lintcode.com/problem/433/); [岛屿的个数II](https://www.lintcode.com/problem/434/)
-- ⭐[被围绕的区域](https://www.lintcode.com/problem/surrounded-regions/description)
+- ⭐[被围绕的区域](https://www.lintcode.com/problem/surrounded-regions/description): 用`X`替换所有不被包围的`O`
+  idea: 从外围的`O`开始连接到`dummy`
 - ⭐⭐[账户合并](https://www.lintcode.com/problem/accounts-merge/description )
 - ⭐⭐⭐[最小生成树](https://www.lintcode.com/problem/minimum-spanning-tree/description)
 
 ### 1.11 Trie Tree
+
+一个一个字母查找，快速判断前缀
+
+- 利用Trie前缀特征解题
+- 矩阵类字符串一个一个字符深度遍历的问题
 
 模板
 
@@ -354,9 +363,31 @@ class Trie:
 
 - [实现 Trie（前缀树）](https://www.lintcode.com/problem/implement-trie-prefix-tree/description)
 - [单词的添加与查找](https://www.lintcode.com/problem/add-and-search-word-data-structure-design/description)
+- [单词搜索 II](https://www.lintcode.com/problem/word-search-ii/description)
 - ⭐⭐⭐[单词矩阵](https://www.lintcode.com/problem/634/)
 
 ## 2 二分法
+
+二分法常见痛点
+
+- 循环结束条件
+  - start + 1 < end
+- 指针变化
+  - start = mid
+- 死循环的发生
+  - eg: nums = [1, 1], target = 1
+- 第一个/最后一个位置
+  - 分三种情况讨论: <, >, =
+
+二分法深入理解
+
+- 根据判断，保留有解的那一半
+- 二维二分
+- 按照值域二分
+
+例题：
+
+- [在排序数组中找最接近的K个数](https://www.lintcode.com/problem/find-k-closest-elements/description)
 
 ``` python
 # 61. 搜索区间 🌟
@@ -442,8 +473,12 @@ class Solution:
 
 ## 3 双指针
 
+基础
+
 - 同向双指针
 - 反向双指针
+  - Two sum类型
+  - Partition: quick select
 - 链表上的快慢指针
 - 快速排序,  归并排序（有点递归的意思）
 
@@ -488,17 +523,33 @@ def partitionArray(self, nums, k):
 
 例题：
 
-- [无序数组K小元素](https://www.lintcode.com/problem/kth-smallest-numbers-in-unsorted-array/description)
+- ⭐⭐[无序数组K小元素](https://www.lintcode.com/problem/kth-smallest-numbers-in-unsorted-array/description)
+- [排颜色](https://www.lintcode.com/problem/sort-colors/description)
+  易错点：color为2的时候，和left指针对调时，cur是否需要+1
 - [排颜色 II](https://www.lintcode.com/problem/sort-colors-ii/)
+  Three cases: <, >, ==
+  The idea of divide conquer
+- [两个排序数组的中位数](https://www.lintcode.com/problem/median-of-two-sorted-arrays/description)
 
 ----
 
 ## 4 BFS
 
+把一些问题抽象成图，从一个点开始，向四周扩散。一般来说，写BFS都使用队列这种数据结构，每次将一个节点周边的所有节点加入到队列中。
+
+算法优化
+
+- 启发式算法 A*
+- 双向BFS
+  - 传统的BFS是从起点向四周扩散，遇到终点停止；双向BFS则是从起点和终点同时开始扩散，当两边有交集的时候停止
+
 应用场景
 
-- 图的遍历；
-- 最短路径；
+- 图的遍历
+  - 层次遍历（size = queue.size）
+  - 由点及面
+  - 拓扑排序
+- 最短路径
 - 非递归的方式找所有方案
 
 拓扑排序
@@ -511,6 +562,7 @@ def partitionArray(self, nums, k):
 例题
 
 - [克隆图](https://www.lintcodinfe.com/problem/clone-graph/description)
+- [单词接龙](https://www.lintcode.com/problem/word-ladder/description)
 - [不同岛屿的数量II](https://www.lintcode.com/problem/804/description?_from=collection&fromId=208)
 - [骑士的最短路线](https://www.lintcode.com/problem/knight-shortest-path/description)
 
@@ -565,48 +617,46 @@ class Solution:
             return ""
 
         return self.topological_sort(graph)
+
     
     def build_graph(self, words):
-        graph = collections.defaultdict(set)
-
+        graph = {}
         for w in words:
             for c in w:
                 graph[c] = set()
 
-        n = len(words)
-        for i in range(n-1):
-            j_min = min( len(words[i]), len(words[i+1]) )
+        for i in range(len(words)-1):
+            j_min = min(len(words[i]), len(words[i+1]))
             for j in range(j_min):
                 if words[i][j] != words[i+1][j]:
-                    graph[words[i][j]] = words[i+1][j]
+                    graph[words[i][j]].add( words[i+1][j] )
                     break
 
-                if j == j_min-1:
-                    if len(words[i]) > len(words[i+1]):
-                        return None
+                if j == j_min - 1 and len(words[i]) > len(words[i+1]):
+                    return None
+
         return graph
 
 
     def topological_sort(self, graph):
-        indegree = { node: 0 for node in graph }
-
+        indegree = {node: 0 for node in graph}
         for node in graph:
             for nxt in graph[node]:
                 indegree[nxt] += 1
-
-        queue = [ node for node in indegree if indegree[node] == 0 ]
+        
+        queue = [ node for node in indegree if indegree[node]==0 ]
         heapify(queue)
 
-        topo_order = ""
+        topo_order = ''
         while queue:
-            node = heappop(queue)
-            topo_order += node
+            cur = heappop(queue)
+            topo_order += cur
 
-            for nxt in graph[node]:
+            for nxt in graph[cur]:
                 indegree[nxt] -= 1
                 if indegree[nxt] == 0:
                     heappush(queue, nxt)
-
+        
         return topo_order if len(topo_order) == len(graph) else ""
 ```
 
@@ -902,6 +952,7 @@ class Solution:
 
 例题
 
+- [数字组合 II](https://www.lintcode.com/problem/combination-sum-ii/description)
 - [k数和 II](https://www.lintcode.com/problem/k-sum-ii/description)
 - [分割回文串](https://www.lintcode.com/problem/palindrome-partitioning/description)
 
@@ -977,7 +1028,8 @@ class Solution:
 
 ## 9 Memoization searching
 
-将函数的结果保存下来，下次通过同样的参数访问时，可以直接返回保存下来的结果；本质上: 动态规划， `从大到小`；动态规划就是解决了重复计算的搜索
+本质上: 动态规划， `从大到小`；
+动态规划就是解决了重复计算的搜索, 将函数的结果保存下来，下次通过同样的参数访问时，可以直接返回保存下来的结果；
 
 什么时候用记忆化搜索：
 
@@ -990,9 +1042,6 @@ class Solution:
 - 先思考最小状态
 - 然后思考大的状态 -> 往小的递推，归纳总结
 
-```python
-```
-
 例题
 
 - ⭐[通配符匹配](https://www.lintcode.com/problem/wildcard-matching/description)
@@ -1000,7 +1049,6 @@ class Solution:
 - ⭐⭐[Word Break III](https://www.lintcode.com/problem/word-break-iii/description)
 - ⭐⭐[最长上升连续子序列 II](https://www.lintcode.com/problem/longest-continuous-increasing-subsequence-ii/description)
 - [硬币排成线 II](https://www.lintcode.com/problem/coins-in-a-line-ii/description)
-- []()
 
 ----
 
@@ -1018,11 +1066,28 @@ class Solution:
 最大的那个状态是什么，终点
 
 ```python
+# Longest Increasing Subsequence
+class Solution:
+    def longestIncreasingSubsequence(self, nums):
+        if nums is None or not nums: 
+            return 0
+    
+        # state: dp[i] 表示以第 i 个数结尾的 LIS 的长度
+        dp = [1] * len(nums)
+        
+        # dp[i] = max(dp[j] + 1), j < i && nums[j] < nums[i]
+        for i in range(len(nums)):
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    dp[i] = max(dp[i], dp[j] + 1)
+        
+        return max(dp)
 ```
 
 ### 例题
 
 - [编辑距离](https://www.lintcode.com/problem/edit-distance/description)
+- [Longest Increasing Subsequence](https://www.lintcode.com/problem/longest-increasing-subsequence/description)
 
 ### 区间类DP
 
@@ -1058,10 +1123,13 @@ class Solution:
 
 例题
 
+- [背包问题](https://www.lintcode.com/problem/92)
 - [0-1 背包问题](https://www.lintcode.com/problem/backpack-ii/description)
 - [划分和相等的子集](https://www.lintcode.com/problem/588/)
 - [零钱兑换2](https://www.lintcode.com/problem/coin-change-2/description)
-- []()
+- [组合总和 IV](https://www.lintcode.com/problem/564/)
+- [会议室4](https://www.lintcode.com/problem/300/description)
+- [凑 N 分钱的方案数](https://www.lintcode.com/problem/279/description)
 
 ### 算法小抄
 

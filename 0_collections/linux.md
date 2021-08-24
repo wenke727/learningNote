@@ -210,6 +210,14 @@
   -C 允许压缩
   ```
 
+- 关闭程序（服务器某一关键字）
+
+  ``` bash
+  ps auxww | grep 'celery' | awk '{print $2}' | xargs kill -9
+  ps auxww | grep 'vscode' | awk '{print $2}' | xargs kill -9
+  ps auxww | grep 'ipykernel' | awk '{print $2}' | xargs kill -9
+  ```
+
 ## Github
 
 - check the lines

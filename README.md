@@ -1,9 +1,10 @@
 # learningNote
+
 Doing by learnig
-****
 
+Ref:
 
-Ref: https://github.com/wois/ai-roadmap
+- [ai-roadmap](https://github.com/wois/ai-roadmap)
+
 ![road map](./.fig/RoadToDataScientist.png)
 ![road map](./.fig/metro_map.jpg)
-

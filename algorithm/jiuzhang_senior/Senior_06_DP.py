@@ -511,88 +511,36 @@ class Solution:
 
 """背包类Dp"""
 # 92. 背包问题
-# [2020年11月6日 2021年4月7日]
+# [2020年11月6日 2021年4月7日 2021年8月22日]
 # https://www.lintcode.com/problem/backpack/description
 # https://www.jiuzhang.com/solution/backpack/#tag-lang-python
 # 在n个物品中挑选若干物品装入背包，最多能装多满？假设背包的大小为m
-# version 1
 class Solution:
     def backPack(self, m, A):
         n = len(A)
-        dp = [[False] * (m + 1) for _ in range(n + 1)]
+        dp = [[False]*(m+1) for _ in range(n+1) ]
         dp[0][0] = True
 
         for i in range(1, n+1):
-            dp[i][0] = True
-
-        for i in range(1, n+1):
-            for j in range(1, m+1):
+            for j in range(m+1):
+                dp[i][j] = dp[i-1][j]
+                # caution: `>=` not `>`
                 if j >= A[i-1]:
-                    dp[i][j] = dp[i-1][j] or dp[i-1][j - A[i-1] ]
-                else:
-                    dp[i][j] = dp[i-1][j] 
+                    dp[i][j] = dp[i][j] or dp[i-1][j-A[i-1]]
         
         for i in range(m, -1, -1):
             if dp[n][i]:
                 return i
-
+        
         return 0
-# version 3
-class Solution:
-    def backPack(self, m, A):
-        A.sort()
-        intervals = [[0, 0]]
-        for item in A:
-            new_intervals = []
-            for interval in intervals:
-                new_intervals.append([interval[0] + item, interval[1] + item])
-                
-            intervals = self.merge_intervals(intervals, new_intervals)
-
-        max_size = 0
-        for interval in intervals:
-            if interval[0] <= m <= interval[1]:
-                return m
-            if interval[0] > m:
-                break
-            max_size = max(max_size, interval[1])
-        return max_size
-            
-    def merge_intervals(self, list1, list2):
-        i, j = 0, 0
-        intervals = []
-        while i < len(list1) and j < len(list2):
-            if list1[i] < list2[j]:
-                self.push_to_intervals(intervals, list1[i])
-                i += 1
-            else:
-                self.push_to_intervals(intervals, list2[j])
-                j += 1
-                
-        while i < len(list1):
-            self.push_to_intervals(intervals, list1[i])
-            i += 1
-        
-        while j < len(list2):
-            self.push_to_intervals(intervals, list2[j])
-            j += 1
-            
-        return intervals
-        
-    def push_to_intervals(self, intervals, interval):
-        if not intervals or intervals[-1][1] + 1 < interval[0]:
-            intervals.append(interval)
-            return
-        
-        intervals[-1][1] = max(intervals[-1][1], interval[1])
 
 
 # 125. 背包问题 II
-# [2020年11月6日 2020年1月5号 2021年4月8日]
+# [2020年11月6日 2020年1月5号 2021年4月8日 2021年8月22日]
 # https://www.lintcode.com/problem/backpack-ii/description
 # https://www.jiuzhang.com/solution/backpack-ii/#tag-lang-python
 # 有 n 个物品和一个大小为 m 的背包. 给定数组 A 表示每个物品的大小和数组 V
-# version 1
+# ! 仔细品品dp的含义，dp[i][j]: 对于前i个物品，当前书包的容量为w，这个情况下装下的最大价值
 class Solution:
     def backPackII(self, m, A, V):
         n = len(A)
@@ -603,78 +551,41 @@ class Solution:
             for j in range(1, m+1):
                 dp[i][j] = dp[i-1][j] 
                 if j >= A[i-1]:
-                    # ! 仔细品品dp的含义，dp[i][j]: 对于前i个物品，当前书包的容量为w，这个情况下装下的最大价值
                     dp[i][j] = max( dp[i][j], dp[i-1][j - A[i-1]] + V[i-1])
 
         return dp[n][m]
-# version 3
-class Solution:
-    """
-    @param m: An integer m denotes the size of a backpack
-    @param A: Given n items with size A[i]
-    @param V: Given n items with value V[i]
-    @return: The maximum value
-    """
-    def backPackII(self, m, A, V):
-        n = len(A)
-        dp = [[0] * (m + 1), [0] * (m + 1)]
-
-        for i in range(1, n + 1):
-            dp[i%2][0] = 0
-        
-            for j in range(1, m + 1):
-                dp[i%2][j] = dp[(i-1) % 2][j]
-                if A[i-1] <= j:
-                    dp[i%2][j] = max( dp[i%2][j], dp[(i-1) % 2][j - A[i-1]] + V[i-1] )
-        
-        return dp[n % 2][m]
 
 
 # 562. 背包问题 IV
-# [2020年11月7日  2021年4月8日]
+# [2020年11月7日  2021年4月8日 2021年8月22日]
 # https://www.lintcode.com/problem/backpack-iv/description
 # https://www.jiuzhang.com/solution/backpack-iv/#tag-lang-python
-# 给出 n 个物品, 以及一个数组, nums[i]代表第i个物品的大小, 保证大小均为正数并且没有重复, 正整数 target 表示背包的大小, 找到能填满背包的方案数
-# 每一个物品可以使用无数次
 class Solution:
+    """
+    @param nums: an integer array and all positive numbers, no duplicates
+    @param target: An integer
+    @return: An integer
+    """
     def backPackIV(self, nums, target):
-        if not nums: 
+        if not nums:
             return 0
-            
+        
         n = len(nums)
-        dp = [[0] * (target + 1) for _ in range(target+1)]
+        dp = [[0]*(target+1) for _ in range(n+1)]
         dp[0][0] = 1
 
-        for i in range(1, n + 1):
-            dp[i][0] = 1
-            for j in range(1, target + 1):
+        for i in range(1, n+1):
+            for j in range(target+1):
                 dp[i][j] = dp[i-1][j]
                 if j >= nums[i-1]:
-                    dp[i][j] += dp[i][j - nums[i-1]]
+                    dp[i][j] += dp[i][j-nums[i-1]]
 
-        return dp[n][target]
-
-class Solution:
-    def backPackIV(self, nums, target):
-        if not nums: 
-            return 0
-            
-        n = len(nums)
-        dp = [[0] * (target + 1) , [0] * (target + 1)]
-        dp[0][0] = 1
-
-        for i in range(1, n + 1):
-            dp[i%2][0] = 1
-            for j in range(1, target + 1):
-                dp[i%2][j] = dp[(i-1) % 2][j]
-                if j >= nums[i-1]:
-                    dp[i%2][j] += dp[i%2][j - nums[i-1]]
-
-        return dp[n % 2][target]
+        return dp[-1][-1]
 
 
 # 740 · 零钱兑换 2
 # https://www.lintcode.com/problem/740/
+# DESC 其实和上边时一样的
 class Solution:
     def change(self, amount, coins):
         n = len(coins)
@@ -704,7 +615,9 @@ class Solution:
     def kSum(self, A, k, target):
         n = len(A)
         dp = [
-            [[0] * (target + 1) for _ in range(k + 1)] for i in range(n+1)
+            [[0] * (target + 1) 
+                for _ in range(k + 1)] 
+                    for i in range(n+1)
         ]
 
         for i in range(n+1):

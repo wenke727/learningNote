@@ -199,7 +199,7 @@ class Solution:
 
 """双指针"""
 # 539/283. 移动零
-# [2020年10月27日 2021年8月4日]
+# [2020年10月27日 2021年8月4日 2021年8月22日]
 # https://www.lintcode.com/problem/move-zeroes/description 
 # https://leetcode-cn.com/problems/move-zeroes/
 class Solution:
@@ -254,10 +254,12 @@ class Solution:
         left, right = self.twoPointer(s, 0, len(s) - 1)
         if left >= right:
             return True
+
         return self.isPalindrome(s, left + 1, right) or self.isPalindrome(s, left, right - 1) 
 
     def isPalindrome(self, s, left, right):
         left, right = self.twoPointer(s, left, right)
+
         return left >= right
 
     def twoPointer(self, s, left, right):
@@ -266,6 +268,7 @@ class Solution:
                 return left, right
             left += 1
             right -= 1
+
         return left, right
 
 
@@ -329,7 +332,7 @@ class Solution:
 
 
 # 587. 两数之和 - 不同组成
-# [2020年10月27日 2021年8月4日]
+# [2020年10月27日 2021年8月4日 2021年8月22日]
 # https://www.lintcode.com/problem/two-sum-unique-pairs/description
 # https://www.jiuzhang.com/solutions/two-sum-unique-pairs/#tag-lang-python
 class Solution:
@@ -344,7 +347,7 @@ class Solution:
         
         nums.sort()
         start, end = 0, len(nums) - 1
-        count, last_pair = 0, (None, None) 
+        count = 0
 
         while start < end:
             val_sum = nums[start] + nums[end]
@@ -363,11 +366,12 @@ class Solution:
                 start += 1
             else:
                 end -= 1
+        
         return count
 
 
 # 57/15. 三数之和
-# [2020年10月27日 2021年8月4日]
+# [2020年10月27日 2021年8月4日 2021年8月22日]
 # https://www.lintcode.com/problem/3sum/description
 # https://www.jiuzhang.com/solutions/3sum/#tag-lang-python
 class Solution:
@@ -380,10 +384,11 @@ class Solution:
         res = []
 
         for i in range(length - 2):
-            # caution: border jedgement
-            if i - 1 >= 0 and nums[i] == nums[i-1]:
+            # caution: border judgement
+            if i >= 1 and nums[i] == nums[i-1]:
                 continue
             self.findTwoSum(nums, i+1, length-1, -nums[i], res)
+        
         return res
     
     def findTwoSum(self, nums, start, end, target, res):
@@ -403,11 +408,12 @@ class Solution:
                 start += 1
             else:
                 end -= 1
+
         return
 
 
 # 382. 三角形计数
-# [2020年10月27日 2021年8月4日]
+# [2020年10月27日 2021年8月4日 2021年8月22日]
 # https://www.lintcode.com/problem/triangle-count/description
 # https://www.jiuzhang.com/solutions/triangle-count/#tag-lang-python
 class Solution:
@@ -418,7 +424,6 @@ class Solution:
         
         nums.sort()
         count = 0
-        # ! the maximum value after sorting the nums
         for i in range(2, n):
             left, right = 0, i - 1
             while left < right:
@@ -521,7 +526,7 @@ class Solution:
         numbers.sort()
         ans = None
 
-        for i in range(len(numbers)):
+        for i in range(len(numbers)-2):
             left, right = i + 1, len(numbers) - 1
             while left < right:
                 sum = numbers[left] + numbers[right] + numbers[i]
@@ -608,7 +613,6 @@ class Solution:
                 left += 1
             else:
                 right -= 1
-        return pairs
 
 
 """Partition Array"""
@@ -631,14 +635,15 @@ def partitionArray(self, nums, k):
 
     return left
 ```
-"""# 31. 数组划分
-# [2020年10月29日 2021年8月4日]
+"""
+# 31. 数组划分
+# [2020年10月29日 2021年8月4日 2021年8月22日]
 # https://www.lintcode.com/problem/partition-array/description
 # https://www.jiuzhang.com/solutions/partition-array/#tag-lang-python
 class Solution:
     def partitionArray(self, nums, k):
         left, right =  0, len(nums) - 1
-        # ! `left < right` -> `left <= right`
+
         while left <= right:
             while left <= right and nums[left] < k:
                 left += 1
@@ -655,7 +660,7 @@ class Solution:
 
 
 # 461. 无序数组K小元素 ⭐⭐
-# [2020年10月29日, 2020年11月13日]
+# [2020年10月29日, 2020年11月13日 2021年8月22日]
 # https://www.lintcode.com/problem/kth-smallest-numbers-in-unsorted-array/description
 # https://www.lintcode.com/problem/kth-smallest-numbers-in-unsorted-array/description#tag-lang-python
 # DESC 对一个数组进行partition的时间复杂度为O(n)。分治，选择一边继续进行partition。所以总的复杂度为T(n) = T(n / 2) + O(n)，总时间复杂度依然为O(n)
@@ -672,7 +677,7 @@ class Solution:
             return
         
         left, right = start, end
-        pivot = (nums[left] + nums[right]) // 2
+        pivot = (nums[left]+nums[right]) // 2
         
         while left <= right:
             while left <= right and nums[left] < pivot:
@@ -693,29 +698,6 @@ class Solution:
             self.quickSort(nums, start, right, k)
 
         return
-
-
-# 373. 奇偶分割数组
-# [2020年10月29日 2021年8月6日]
-# https://www.lintcode.com/problem/partition-array-by-odd-and-even/description
-# https://www.jiuzhang.com/solutions/partition-array-by-odd-and-even/#tag-lang-python
-class Solution:
-    def partitionArray(self, nums):
-        left, right = 0, len(nums) - 1
-
-        while left <= right:
-            while left <= right and nums[left] % 2 == 1:
-                left += 1
-        
-            while left <= right and nums[right] % 2 == 0:
-                right -= 1
-        
-            if left <= right:
-                nums[left], nums[right] = nums[right], nums[left]
-                left += 1
-                right -= 1
-
-        return nums
 
 
 # 144. 交错正负数
@@ -762,49 +744,29 @@ class Solution:
         return
 
 
-# 49. 字符大小写排序
-# [2020年11月1日]
-# https://www.lintcode.com/problem/sort-letters-by-case/description
-# https://www.jiuzhang.com/solutions/sort-letters-by-case/#tag-lang-python
-class Solution:
-    def sortLetters(self, chars):
-        left, right = 0, len(chars) - 1
-        while left <= right:
-            while left <= right and chars[left] >= 'a' and chars[left] <= 'z':
-                left += 1
-
-            while left <= right and chars[right] >= 'A' and chars[right] <= 'Z':
-                right -= 1
-
-            if left <= right:
-                chars[left], chars[right] = chars[right], chars[left]
-                left += 1
-                right -= 1
-
-
 # 148. 颜色分类
-# [2020年10月30日 2021年8月6日]
+# [2020年10月30日 2021年8月6日 2021年8月22日]
 # https://www.lintcode.com/problem/sort-colors/description
 # https://www.jiuzhang.com/solutions/sort-colors/#tag-lang-python
 class Solution:
     def sortColors(self, nums):
         left, cur, right = 0, 0, len(nums)-1
 
-        # ! `<=` not  `<`
         while cur <= right:
-            if nums[cur] == 0:
+            if nums[cur] == 1:
+                cur += 1
+            elif nums[cur] == 0:
                 nums[left], nums[cur] = nums[cur], nums[left]
                 left += 1
                 cur += 1
-            elif nums[cur] == 2:
+            else:
                 nums[right], nums[cur] = nums[cur], nums[right]
                 right -= 1
-            else:
-                cur += 1
+                # cur += 1 # caution
 
 
 # 143. 排颜色 II ⭐⭐
-# [2020年10月30日 2021年8月6日]
+# [2020年10月30日 2021年8月6日 2021年8月22日]
 # https://www.lintcode.com/problem/sort-colors-ii/
 # https://www.jiuzhang.com/solutions/sort-colors-ii/#tag-lang-python
 class Solution:
@@ -821,7 +783,7 @@ class Solution:
         pivot = (color_from + color_to) // 2
         
         while left <= right:
-            # nums[left] < pivot
+            # idea: three cases <, >, =
             while left <= right and nums[left] <= pivot: 
                 left += 1
 
@@ -834,7 +796,6 @@ class Solution:
                 right -= 1
         
         self.sort( nums, color_from, pivot, index0, right )
-        # pivot+1, not pivot
         self.sort( nums, pivot+1, color_to, left,  index1 ) 
 
 
